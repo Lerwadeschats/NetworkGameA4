@@ -7,21 +7,38 @@ using UnityEngine;
 
 public class DCMapGen : MonoBehaviour
 {
-    public int _nbOfRoom = 30;
+    public int _nbMaxOfRoom = 30;
+    public int _nbMinOfRoom = 25;
+
     public int _nbOfRoomBranch = 4;
     public int _branchNumber = 2;
     public float _timeBetweenRoom = .1f;
     public int _chanceToBranch = 50;
     public List<GameObject> _rooms = new List<GameObject>();
 
+    public bool _GenerateSeed = false;
+
+    public int seed = 0;
+
+    bool _hasMainFinish = false;
+
     List<Room> _branches = new List<Room>();
 
     Cam _camera;
 
+    System.Random _rand;
+
+    List<Exit> _focusToGenerate;
+
+
     private void Start()
     {
+        _focusToGenerate = new List<Exit>();
+        if (_GenerateSeed) seed = Random.Range(0, 999999);
+        _rand = new System.Random(seed);
+        
         _camera = Camera.main.GetComponent<Cam>();
-        StartCoroutine(GenerateBranch(true , transform.GetChild(0).GetChild(Random.Range(0, 4)).GetComponent<Exit>(),Color.red,_timeBetweenRoom));
+        GenerateBranch(true , transform.GetChild(0).GetChild(_rand.Next(0, 4)).GetComponent<Exit>(),Color.red);
         //Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
 
     }
@@ -29,19 +46,27 @@ public class DCMapGen : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.Space)) 
         {
-            StopAllCoroutines();
-            _camera.Targets.Clear();
-            for(int i = transform.childCount- 1; i>0; i--) { Destroy(transform.GetChild(i).gameObject); }
-            _camera.Targets.Add(transform.GetChild(0).gameObject);
-            StartCoroutine(GenerateBranch(true, transform.GetChild(0).GetChild(Random.Range(0, 2)).GetComponent<Exit>(), Color.red, _timeBetweenRoom));
+            Regenerate(false);
         }
 
     }
+    void Regenerate(bool changeSeed)
+    {
+        if (_GenerateSeed || changeSeed) seed = Random.Range(0, 999999);
+        _rand = new System.Random(seed);
 
-    private IEnumerator GenerateBranch(bool isMain,Exit focus, Color endCol, float timeToWait)
+        StopAllCoroutines();
+        _focusToGenerate.Clear();
+        _camera.Targets.Clear();
+        for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
+        _camera.Targets.Add(transform.GetChild(0).gameObject);
+        GenerateBranch(true, transform.GetChild(0).GetChild(_rand.Next(0, 2)).GetComponent<Exit>(), Color.red);
+    }
+
+    private void GenerateBranch(bool isMain,Exit focus, Color endCol)
     {
         Physics2D.simulationMode = SimulationMode2D.Script;
-        int numberOfRooms = isMain? _nbOfRoom: _nbOfRoomBranch;
+        int numberOfRooms = isMain? _nbMaxOfRoom: _nbOfRoomBranch;
         int numberOfbranchCreated = 0;
         Transform parent = isMain? focus.transform.parent.parent: focus.transform.parent;
         for (int i = 1; i <= numberOfRooms; i++)
@@ -51,10 +76,14 @@ public class DCMapGen : MonoBehaviour
             if(possibleRoom.Count == 0) 
             {
                 print("OutOfRooms " + isMain);
+                if (isMain)
+                {
+                    if (transform.childCount < _nbMinOfRoom) Regenerate(true);
+                }
                 break;
             }
 
-            int roomSeed = Random.Range(0, possibleRoom.Count);
+            int roomSeed = _rand.Next(0, possibleRoom.Count);
             GameObject go = Instantiate(possibleRoom[roomSeed]);
             GameObject goCopy = possibleRoom[roomSeed];
             Room room = go.GetComponent<Room>();
@@ -68,9 +97,9 @@ public class DCMapGen : MonoBehaviour
                 goto RetryRoom;
             }
 
-            int exitSeed = Random.Range(0, matchingExits.Count);
+            int exitSeed = _rand.Next(0, matchingExits.Count);
             Exit exit = matchingExits[exitSeed];
-            go.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, endCol, (float)i / _nbOfRoom);
+            go.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, endCol, isMain? (float)i / _nbMaxOfRoom : (float)i / _nbOfRoomBranch);
             go.transform.parent = parent;
             go.transform.position = focus.transform.position - exit.transform.position;
             go.name += " "+ i;
@@ -114,14 +143,30 @@ public class DCMapGen : MonoBehaviour
             _camera.Targets.Add(go);
             focus = roomExits[exitIndex];
             roomExits.RemoveAt(exitIndex);
-            if (roomExits.Count > 0 && isMain && Random.Range(0f,100) < _chanceToBranch && numberOfbranchCreated <_branchNumber)
+            int chanetobranch = _rand.Next(0, 100);
+            if (roomExits.Count > 0 && isMain && chanetobranch < _chanceToBranch && numberOfbranchCreated <_branchNumber)
             {
+
                 numberOfbranchCreated++;
-                exitIndex = Random.Range(0, roomExits.Count);
-                StartCoroutine(GenerateBranch(false,roomExits[exitIndex],Color.blue, timeToWait));
+                exitIndex = _rand.Next(0, roomExits.Count);
+                _focusToGenerate.Add(roomExits[exitIndex]);
             }
-            yield return new WaitForSeconds(timeToWait);
         }
+        if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
+        _hasMainFinish = isMain;
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
+    }
+
+
+    private void OnGUI()
+    {
+        GUIStyle guistyle = new GUIStyle
+        {
+            fontSize = 122
+        };
+        GUILayout.Label(seed.ToString(), guistyle);
+        GUILayout.Label(_GenerateSeed.ToString(), guistyle);
+
+
     }
 }
