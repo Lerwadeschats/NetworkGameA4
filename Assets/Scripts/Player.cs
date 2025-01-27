@@ -9,9 +9,9 @@ public class Player : MonoBehaviour
     private Vector2 _position;
     private string _name;
     private Color _color;
-    private Stats _stats;
+    private PlayerStats _stats;
 
-    public struct Stats
+    public struct PlayerStats
     {
         public float attackValue;
         public float hpValue;
@@ -19,14 +19,36 @@ public class Player : MonoBehaviour
         public float speed;
     }
 
-
-    public Player(string name, Color color, Vector2 position)
+    public Vector2 Velocity
     {
-        _name = name;
-        _color = color;
-        _position = position;
-        _stats = NewStats();
+        get { return _velocity; }
+        set { _velocity = value; }
     }
+
+    public Vector2 Position
+    {
+        get { return _position; }
+        set { _position = value; }
+    }
+
+    public Color Color
+    {
+        get { return _color; }
+        set { _color = value; }
+    }
+
+    public string Name
+    {
+        get { return _name; }
+        set { _name = value; }
+    }
+
+    public PlayerStats Stats
+    {
+        get { return _stats; }
+        set { _stats = value; }
+    }
+
 
     public void SetNewPlayerInfos(string name, Color color, Vector2 position)
     {
@@ -36,39 +58,21 @@ public class Player : MonoBehaviour
         _stats = NewStats();
     }
 
-    private Stats NewStats()
+    private void Start()
     {
-        Stats stats = new Stats();
+        SetNewPlayerInfos("Name", Color.white, Vector2.zero);
+    }
+
+    private PlayerStats NewStats()
+    {
+        PlayerStats stats = new PlayerStats();
         stats.attackValue = 10f;
         stats.hpValue = 100f;
         stats.maxHpValue = 100f;
-        stats.speed = 100f;
+        stats.speed = 20f;
         return stats;
     }
 
-    public string GetName()
-    {
-        return _name;
-    }
-
-    public Color GetColor()
-    {
-        return _color;
-    }
-    public Vector2 GetPosition()
-    {
-        return _position;
-    }
-
-    public Vector2 GetVelocity()
-    {
-        return _velocity;
-    }
-
-    public Stats GetStats()
-    {
-        return _stats;
-    }
 
     private void UpdateVelocity(Vector2 velocity)
     {
@@ -80,7 +84,7 @@ public class Player : MonoBehaviour
         _position = position;
     }
 
-    private void UpdateStats(Stats stats)
+    private void UpdateStats(PlayerStats stats)
     {
         this._stats.attackValue = stats.attackValue;
         this._stats.hpValue = stats.hpValue;
