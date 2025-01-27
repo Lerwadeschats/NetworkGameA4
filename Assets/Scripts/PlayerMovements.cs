@@ -42,6 +42,7 @@ public class PlayerMovements : MonoBehaviour
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _baseGravityScale = _rb.gravityScale;
         _canDash = true;
+        _moveDirection = 1;
 
     }
 
@@ -71,11 +72,13 @@ public class PlayerMovements : MonoBehaviour
         if(moveInput > 0)
         {
             _moveDirection = 1;
+           
         }
-        else
+        else if (moveInput < 0)
         {
             _moveDirection = -1;
         }
+        gameObject.transform.localScale = new Vector3(_moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
 

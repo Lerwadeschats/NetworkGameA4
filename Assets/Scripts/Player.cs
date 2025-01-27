@@ -17,6 +17,14 @@ public class Player : MonoBehaviour
         public float hpValue;
         public float maxHpValue;
         public float speed;
+
+        public PlayerStats(float atk, float hp, float maxHp, float spd)
+        {
+            attackValue = atk;
+            hpValue = hp;
+            maxHpValue = maxHp;
+            speed = spd;
+        }
     }
 
     public Vector2 Velocity
@@ -55,7 +63,7 @@ public class Player : MonoBehaviour
         _name = name;
         _color = color;
         _position = position;
-        _stats = NewStats();
+        _stats = new PlayerStats(10f, 100f, 100f, 20f);
     }
 
     private void Start()
@@ -63,32 +71,24 @@ public class Player : MonoBehaviour
         SetNewPlayerInfos("Name", Color.white, Vector2.zero);
     }
 
-    private PlayerStats NewStats()
-    {
-        PlayerStats stats = new PlayerStats();
-        stats.attackValue = 10f;
-        stats.hpValue = 100f;
-        stats.maxHpValue = 100f;
-        stats.speed = 20f;
-        return stats;
-    }
 
-
-    private void UpdateVelocity(Vector2 velocity)
+    public void UpdateVelocity(Vector2 velocity)
     {
         _velocity = velocity;
     }
 
-    private void UpdatePosition(Vector2 position)
+    public void UpdatePosition(Vector2 position)
     {
         _position = position;
     }
 
-    private void UpdateStats(PlayerStats stats)
+    public void UpdateStats(PlayerStats stats)
     {
+        
         this._stats.attackValue = stats.attackValue;
         this._stats.hpValue = stats.hpValue;
         this._stats.maxHpValue = stats.maxHpValue;
+        this._stats.speed = stats.speed;
     }
 
     
