@@ -11,6 +11,8 @@ public class PlayerMovements : MonoBehaviour
 
     Rigidbody2D _rb;
 
+    float _moveDirection;
+
     [SerializeField]
     private InputActionReference _movement;
 
@@ -19,6 +21,7 @@ public class PlayerMovements : MonoBehaviour
     float _jumpForce, _jumpThreshold;
 
     bool _canJump;
+    
 
     [SerializeField]
     float _gravityScaleFall = -1;
@@ -26,12 +29,19 @@ public class PlayerMovements : MonoBehaviour
     float _baseGravityScale;
 
 
+    //Dash
+    bool _canDash;
+
+    [SerializeField]
+    float _dashForce;
+
 
     private void Awake()
     {
         _player = gameObject.GetComponent<Player>();
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _baseGravityScale = _rb.gravityScale;
+        _canDash = true;
 
     }
 
@@ -44,9 +54,28 @@ public class PlayerMovements : MonoBehaviour
         }
     }
 
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.performed && _canDash)
+        {
+            Vector2 newForce = Vector2.right * _moveDirection * _dashForce;
+            _rb.velocity = Vector2.zero;
+            _rb.AddForce(newForce);
+        }
+    }
+
     private void FixedUpdate()
     {
         float moveInput = _movement.action.ReadValue<float>();
+
+        if(moveInput > 0)
+        {
+            _moveDirection = 1;
+        }
+        else
+        {
+            _moveDirection = -1;
+        }
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
 
