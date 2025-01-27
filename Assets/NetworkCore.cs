@@ -20,7 +20,7 @@ public class NetworkCore : MonoBehaviour
 
         Debug.Log("connecting to " + address.GetIP());
 
-        address.Port = 14769;
+        address.Port = 25565;
 
         // On recréé l'host à la connexion pour l'avoir en IPv4 / IPv6 selon l'adresse
         if (enetHost != null)
