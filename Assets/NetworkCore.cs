@@ -1,11 +1,16 @@
 using ENet6;
+using Protocols;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class NetworkCore : MonoBehaviour
 {
+    public TMP_InputField m_InputField;
+
     private ENet6.Host enetHost = null;
     private ENet6.Peer? serverPeer = null;
 
@@ -56,8 +61,14 @@ public class NetworkCore : MonoBehaviour
         if (!ENet6.Library.Initialize())
             throw new Exception("Failed to initialize ENet");
 
-        Connect("localhost");
+        //Connect("localhost");
     }
+
+    public void ConnectToWrittenIP()
+    {
+        Connect(m_InputField.text);
+    }
+
     private void OnApplicationQuit()
     {
         ENet6.Library.Deinitialize();
@@ -67,7 +78,8 @@ public class NetworkCore : MonoBehaviour
     void FixedUpdate()
     {
         ENet6.Event evt = new ENet6.Event();
-        if (enetHost.Service(0, out evt) > 0)
+        //if (enetHost != null) print("enetHost is null");
+        if (enetHost != null && enetHost.Service(0, out evt) > 0)
         {
             do
             {
@@ -88,6 +100,10 @@ public class NetworkCore : MonoBehaviour
 
                     case ENet6.EventType.Receive:
                         Debug.Log("Receive");
+                        byte[] data = new byte[evt.Packet.Length];
+                        evt.Packet.CopyTo(data);
+                        int offset = 0;
+                        Debug.Log(Protocole.Deserialize_str(data.ToList(),ref offset));
                         break;
 
                     case ENet6.EventType.Timeout:

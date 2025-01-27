@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ENet6;
+using Protocols;
 using TMPro;
 using UnityEngine;
 using Event = ENet6.Event;
@@ -57,6 +59,7 @@ public class Server : MonoBehaviour
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
                         print($"Peer # {eNetEvent.Peer.ID} connected!");
+                        SendDataToClient(eNetEvent.Peer, "Welcome to the server!");
                         break;
 
                     // Un joueur s'est déconnecté
@@ -82,10 +85,26 @@ public class Server : MonoBehaviour
         }
     }
 
+    private void SendDataToClient(Peer peer, string message)
+    {
+        List<byte> data = new List<byte>();
+        Protocole.Serialize_str(ref data,message);
+
+        // Create an ENet packet with the data
+        Packet packet = default;
+        packet.Create(data.ToArray(), PacketFlags.Reliable); // Use Reliable if you want guaranteed delivery
+
+        // Send the packet to the client
+        peer.Send(0, ref packet); // Use channel 0 (or another channel if you want)
+    }
+
+
     //Tick function
     private void Tick(ref ServerData servData)
     {
-        //TBD
+
+
+
     }
 
     private void OnApplicationQuit()
@@ -112,7 +131,18 @@ public class Server : MonoBehaviour
     {
         string toddebug = logString.Replace("UnityEngine", "||");
         toddebug = toddebug.Split("||")[0];
-        textLogger.text = toddebug + "\n" + stack;
+        textLogger.text = "> " + toddebug + "\n" + stack;
         stack = toddebug + "\n" + stack;
+    }
+
+    public void DebugRandom()
+    {
+        Debug.Log("aaaaaa UwU aaaaaa");
+    }
+    public void ClearConsole()
+    {
+        stack = "";
+        Debug.Log("Console Cleared");
+
     }
 }
