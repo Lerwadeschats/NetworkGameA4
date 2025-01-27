@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using ENet6;
 using Protocols;
 using TMPro;
 using UnityEngine;
+using static Protocols.Protocole;
 using Event = ENet6.Event;
 using EventType = ENet6.EventType;
 
@@ -41,6 +43,7 @@ public class Server : MonoBehaviour
         }
 
         print("Server is Runnin' on port : " + address.Port);
+
     }
 
     // Update is called once per frame
@@ -58,8 +61,9 @@ public class Server : MonoBehaviour
                 {
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
-                        print($"Peer # {eNetEvent.Peer.ID} connected!");
-                        SendStringToClient(eNetEvent.Peer, "Welcome to the server!");
+
+                        SendSeedToClient(eNetEvent.Peer);
+                        print($"Peer # {eNetEvent.Peer.ID} connected! \n Sended Seed To Client");
                         break;
 
                     // Un joueur s'est déconnecté
@@ -69,8 +73,14 @@ public class Server : MonoBehaviour
 
                     // On a reçu des données d'un joueur
                     case EventType.Receive:
-                        print($"Peer # {eNetEvent.Peer.ID} sent data ({eNetEvent.Packet.Length} bytes)");
-                        eNetEvent.Packet.Dispose();
+                        {
+                            print($"Peer # {eNetEvent.Peer.ID} sent a data of ({eNetEvent.Packet.Length} bytes)");
+                            byte[] bytes = new byte[eNetEvent.Packet.Length];
+                            eNetEvent.Packet.CopyTo(bytes);
+                            HandleFromClient(eNetEvent.Peer.ID, bytes);
+
+                            eNetEvent.Packet.Dispose();
+                        }
                         break;
                 }
             }
@@ -85,17 +95,33 @@ public class Server : MonoBehaviour
         }
     }
 
-    private void SendStringToClient(Peer peer, string message)
+    private void HandleFromClient(uint peer, byte[] bytes)
+    {
+        List<byte> data = bytes.ToList();
+        int offset = 0;
+        Protocole.Opcode opcode = (Protocole.Opcode)Protocole.Deserialize_Uint8(data, ref offset);
+
+        switch (opcode)
+        {
+            case Opcode.C_PlayerName:
+                {
+                    PlayerNamePacket playerNameInfo = PlayerNamePacket.Deserialize(data, offset);
+                    Debug.Log("Player " + playerNameInfo.name + " get index(peer) :" + peer);
+                }
+                break;
+        }
+    }
+
+    private void SendSeedToClient(Peer peer)
     {
         List<byte> data = new List<byte>();
-        Protocole.Serialize_str(ref data,message);
+        WorldInitPacket info = new() { seed = 123456789 };
+        info.Serialize(ref data);
 
-        // Create an ENet packet with the data
         Packet packet = default;
-        packet.Create(data.ToArray(), PacketFlags.Reliable); // Use Reliable if you want guaranteed delivery
+        packet.Create(data.ToArray(), PacketFlags.Reliable);
 
-        // Send the packet to the client
-        peer.Send(0, ref packet); // Use channel 0 (or another channel if you want)
+        peer.Send(0, ref packet);
     }
 
 
@@ -129,10 +155,10 @@ public class Server : MonoBehaviour
 
     void HandleLog(string logString, string stackTrace, LogType type)
     {
-        string toddebug = logString.Replace("UnityEngine", "||");
-        toddebug = toddebug.Split("||")[0];
-        textLogger.text = "> " + toddebug + "\n" + stack;
-        stack = toddebug + "\n" + stack;
+        logString = logString.Replace("UnityEngine", "||");
+        logString = logString.Split("||")[0];
+        textLogger.text = "> " + logString + "\n" + stack;
+        stack = logString + "\n" + stack;
     }
 
     public void DebugRandom()
@@ -142,7 +168,7 @@ public class Server : MonoBehaviour
     public void ClearConsole()
     {
         stack = "";
-        Debug.Log("Console Cleared");
+        Debug.Log("\nConsole Cleared");
 
     }
 }

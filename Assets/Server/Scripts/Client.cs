@@ -1,17 +1,18 @@
 using ENet6;
 using Protocols;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.XR;
+using static Protocols.Protocole;
 
 public class Client : MonoBehaviour
 {
-    public TMP_InputField m_InputField;
+    public TMP_InputField hostIP_Field;
+    public TMP_InputField playerName_Field;
+
 
     private ENet6.Host enetHost = null;
     private ENet6.Peer? serverPeer = null;
@@ -54,6 +55,18 @@ public class Client : MonoBehaviour
             return false;
         }
 
+        PlayerNamePacket playerNamePacket = new()
+        {
+            name = playerName_Field.text
+        };
+
+        List<byte> data = new List<byte>();
+        playerNamePacket.Serialize(ref data);
+
+        Packet packet = default;
+        packet.Create(data.ToArray(), PacketFlags.Reliable);
+        serverPeer.Value.Send(0, ref packet);
+
         return true;
     }
 
@@ -68,7 +81,8 @@ public class Client : MonoBehaviour
 
     public void ConnectToWrittenIP()
     {
-        Connect(m_InputField.text);
+        if (playerName_Field.text == "") playerName_Field.text = "poule";
+        Connect(hostIP_Field.text);
     }
 
     private void OnApplicationQuit()
@@ -80,7 +94,6 @@ public class Client : MonoBehaviour
     void FixedUpdate()
     {
         ENet6.Event evt = new ENet6.Event();
-        //if (enetHost != null) print("enetHost is null");
         if (enetHost != null && enetHost.Service(0, out evt) > 0)
         {
             do
@@ -88,14 +101,16 @@ public class Client : MonoBehaviour
                 switch (evt.Type)
                 {
                     case ENet6.EventType.None:
-                        Debug.Log("?");
+                        {
+                            Debug.Log("?");
+                        }
                         break;
 
                     case ENet6.EventType.Connect:
-                        Debug.Log("Connect");
-
-                        //evt.Peer.Send(0,);
-                        break;
+                        {
+                            Debug.Log("Connect");
+                            break;
+                        }
 
                     case ENet6.EventType.Disconnect:
                         Debug.Log("Disconnect");
@@ -103,11 +118,12 @@ public class Client : MonoBehaviour
                         break;
 
                     case ENet6.EventType.Receive:
-                        Debug.Log("Receive");
-                        byte[] data = new byte[evt.Packet.Length];
-                        evt.Packet.CopyTo(data);
-                        HandleFromServer(data);
-                        break;
+                        {
+                            byte[] bytes = new byte[evt.Packet.Length];
+                            evt.Packet.CopyTo(bytes);
+                            HandleFromServer(bytes);
+                            break;
+                        }
 
                     case ENet6.EventType.Timeout:
                         Debug.Log("Timeout");
@@ -117,21 +133,20 @@ public class Client : MonoBehaviour
             while (enetHost.CheckEvents(out evt) > 0);
         }
     }
-    void HandleFromServer(byte[] bdata)
+    void HandleFromServer(byte[] bytes)
     {
-        List<byte> data = bdata.ToList();
+        List<byte> data = bytes.ToList();
         int offset = 0;
-        Protocole.Opcode opcode = (Protocole.Opcode)Protocole.Deserialize_Uint8(data, ref offset);
-        
+        Opcode opcode = (Protocole.Opcode)Protocole.Deserialize_Uint8(data, ref offset);
+
         switch (opcode)
         {
-            case Protocole.Opcode.C_PlayerName:{
-
-
-
+            case Opcode.S_WorldInit:
+                {
+                    WorldInitPacket info = WorldInitPacket.Deserialize(data, offset);
+                    Debug.Log("World Sedd : " + info.seed);
+                }
                 break;
-            }
-            //case 0: break;
         }
     }
 }
