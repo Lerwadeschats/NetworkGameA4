@@ -144,6 +144,50 @@ namespace Protocols
             return c;
         }
         #endregion
+        #region OPCODES
+        enum Opcode : byte
+        {
+            C_PlayerName,
+            C_PlayerInputs,
+            S_GameData,
+            S_WorldInit,
+            S_PlayerDeath,
+            S_PlayerList,
+            S_PlayersPosition,
+        };
+        #endregion
+        #region packets
+        struct PlayerInputsPacket
+        {
+            static Opcode opcode = Opcode.C_PlayerInputs;
+
+            //PlayerInputs inputs;
+
+            void Serialize(List<byte> byteArray)
+            {
+                byte inputByte = 0;
+                /* if (inputs.moveLeft)
+                     inputByte |= 1 << 0;
+
+                 if (inputs.moveRight)
+                     inputByte |= 1 << 1;
+
+                 if (inputs.jump)
+                     inputByte |= 1 << 2;*/
+                Serialize_Uint8(ref byteArray, inputByte);
+            }
+            static PlayerInputsPacket Deserialize(List<byte> byteArray, int offset)
+            {
+                byte inputByte = Deserialize_Uint8(byteArray, ref offset);
+
+                PlayerInputsPacket packet;
+                /*packet.inputs.moveLeft = (inputByte & (1 << 0)) != 0;
+                packet.inputs.moveRight = (inputByte & (1 << 1)) != 0;
+                packet.inputs.jump = (inputByte & (1 << 2)) != 0;*/
+                return packet;
+            }
+        }
+        #endregion
     }
 }
 
