@@ -145,7 +145,7 @@ namespace Protocols
         }
         #endregion
         #region OPCODES
-        enum Opcode : byte
+        public enum Opcode : byte
         {
             C_PlayerName,
             C_PlayerInputs,

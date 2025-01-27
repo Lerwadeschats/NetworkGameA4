@@ -59,7 +59,7 @@ public class Server : MonoBehaviour
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
                         print($"Peer # {eNetEvent.Peer.ID} connected!");
-                        SendDataToClient(eNetEvent.Peer, "Welcome to the server!");
+                        SendStringToClient(eNetEvent.Peer, "Welcome to the server!");
                         break;
 
                     // Un joueur s'est déconnecté
@@ -85,7 +85,7 @@ public class Server : MonoBehaviour
         }
     }
 
-    private void SendDataToClient(Peer peer, string message)
+    private void SendStringToClient(Peer peer, string message)
     {
         List<byte> data = new List<byte>();
         Protocole.Serialize_str(ref data,message);

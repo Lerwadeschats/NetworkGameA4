@@ -4,10 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
-public class NetworkCore : MonoBehaviour
+public class Client : MonoBehaviour
 {
     public TMP_InputField m_InputField;
 
@@ -91,6 +93,8 @@ public class NetworkCore : MonoBehaviour
 
                     case ENet6.EventType.Connect:
                         Debug.Log("Connect");
+
+                        //evt.Peer.Send(0,);
                         break;
 
                     case ENet6.EventType.Disconnect:
@@ -102,8 +106,7 @@ public class NetworkCore : MonoBehaviour
                         Debug.Log("Receive");
                         byte[] data = new byte[evt.Packet.Length];
                         evt.Packet.CopyTo(data);
-                        int offset = 0;
-                        Debug.Log(Protocole.Deserialize_str(data.ToList(),ref offset));
+                        HandleFromServer(data);
                         break;
 
                     case ENet6.EventType.Timeout:
@@ -112,6 +115,23 @@ public class NetworkCore : MonoBehaviour
                 }
             }
             while (enetHost.CheckEvents(out evt) > 0);
+        }
+    }
+    void HandleFromServer(byte[] bdata)
+    {
+        List<byte> data = bdata.ToList();
+        int offset = 0;
+        Protocole.Opcode opcode = (Protocole.Opcode)Protocole.Deserialize_Uint8(data, ref offset);
+        
+        switch (opcode)
+        {
+            case Protocole.Opcode.C_PlayerName:{
+
+
+
+                break;
+            }
+            //case 0: break;
         }
     }
 }
