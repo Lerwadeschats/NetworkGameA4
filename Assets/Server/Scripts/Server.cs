@@ -9,6 +9,7 @@ using UnityEngine;
 using static Protocols.Protocole;
 using Event = ENet6.Event;
 using EventType = ENet6.EventType;
+using Random = UnityEngine.Random;
 
 public class Server : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class Server : MonoBehaviour
 
     private ServerData _serverData = new ServerData();
     private UInt32 nextTick = ENet6.Library.Time;
+
+    private ulong seed;
 
     private void Start()
     {
@@ -43,6 +46,8 @@ public class Server : MonoBehaviour
         }
 
         print("Server is Runnin' on port : " + address.Port);
+
+        seed = (ulong)Random.Range(0, 999999);
 
     }
 
@@ -87,7 +92,7 @@ public class Server : MonoBehaviour
             while (_serverData.host.Service(1, out eNetEvent) > 0);
         }
 
-        // On déclenche un tick si suffisamment de temps s'est écoulé
+        // Serveur or Physique ?
         if (now >= nextTick)
         {
             Tick(ref _serverData);
@@ -109,13 +114,19 @@ public class Server : MonoBehaviour
                     Debug.Log("Player " + playerNameInfo.name + " get index(peer) :" + peer);
                 }
                 break;
+                case Opcode.C_PlayerInputs:
+                {
+                    PlayerInputsPacket inputsPackets = PlayerInputsPacket.Deserialize(data, offset);
+                    //do inputeri
+                }
+                break;
         }
     }
 
     private void SendSeedToClient(Peer peer)
     {
         List<byte> data = new List<byte>();
-        WorldInitPacket info = new() { seed = 123456789 };
+        WorldInitPacket info = new() { seed = seed };
         info.Serialize(ref data);
 
         Packet packet = default;
@@ -130,7 +141,7 @@ public class Server : MonoBehaviour
     {
 
 
-
+        //Send PlayerPos
     }
 
     private void OnApplicationQuit()

@@ -7,6 +7,17 @@ using UnityEngine;
 
 public class DCMapGen : MonoBehaviour
 {
+    public static DCMapGen instance;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else Destroy(this);
+
+    }
+
     public int _nbMaxOfRoom = 30;
     public int _nbMinOfRoom = 25;
 
@@ -15,15 +26,14 @@ public class DCMapGen : MonoBehaviour
     public int _chanceToBranch = 50;
     public List<GameObject> _rooms = new List<GameObject>();
 
-    public bool _GenerateSeed = false;
+    Cam _camera;
 
-    public int seed = 0;
+    public ulong seed = 0;
 
     bool _hasMainFinish = false;
 
     List<Room> _branches = new List<Room>();
 
-    Cam _camera;
 
     System.Random _rand;
 
@@ -32,31 +42,13 @@ public class DCMapGen : MonoBehaviour
     public bool DebugSeed = false;
 
 
-    private void Start()
+    public void Regenerate(bool changeSeed)
     {
         _focusToGenerate = new List<Exit>();
-        if (_GenerateSeed) seed = Random.Range(0, 999999);
-        _rand = new System.Random(seed);
-        
         _camera = Camera.main.GetComponent<Cam>();
-        GenerateBranch(true , transform.GetChild(0).GetChild(_rand.Next(0, 4)).GetComponent<Exit>(),Color.red);
-        //Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
-
-    }
-    private void Update()
-    {
-        if(Input.GetKeyUp(KeyCode.Space)) 
-        {
-            Regenerate(false);
-        }
-
-    }
-    void Regenerate(bool changeSeed)
-    {
-        if (_GenerateSeed || changeSeed) seed = Random.Range(0, 999999);
-        _rand = new System.Random(seed);
-
-        StopAllCoroutines();
+        if (changeSeed) seed = (ulong)Random.Range(0, 999999);
+        _rand = new System.Random((int)seed);
+        print((int)seed);
         _focusToGenerate.Clear();
         _camera.Targets.Clear();
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
@@ -175,7 +167,6 @@ public class DCMapGen : MonoBehaviour
         if (DebugSeed)
         {
             GUILayout.Label(seed.ToString(), guistyle);
-            GUILayout.Label(_GenerateSeed.ToString(), guistyle);
         }
 
 

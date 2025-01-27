@@ -10,6 +10,7 @@ using static Protocols.Protocole;
 
 public class Client : MonoBehaviour
 {
+
     public TMP_InputField hostIP_Field;
     public TMP_InputField playerName_Field;
 
@@ -75,7 +76,7 @@ public class Client : MonoBehaviour
     {
         if (!ENet6.Library.Initialize())
             throw new Exception("Failed to initialize ENet");
-
+            
         //Connect("localhost");
     }
 
@@ -145,6 +146,12 @@ public class Client : MonoBehaviour
                 {
                     WorldInitPacket info = WorldInitPacket.Deserialize(data, offset);
                     Debug.Log("World Sedd : " + info.seed);
+
+                    SceneMerger.instance.MergeScene();
+
+                    DCMapGen.instance.seed = info.seed;
+                    DCMapGen.instance.Regenerate(false);
+
                 }
                 break;
         }
