@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
-using ENet6;
 
 namespace Protocols
 {
@@ -191,15 +190,15 @@ namespace Protocols
         {
             static Opcode opcode = Opcode.C_PlayerName;
 
-            string name;
+            public string name;
 
-            void Serialize(List<byte> byteArray)
+            public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_str(ref byteArray, name);
 
             }
-            static PlayerNamePacket Deserialize(List<byte> byteArray,int offset)
+            public static PlayerNamePacket Deserialize(List<byte> byteArray,int offset)
             {
                 PlayerNamePacket packet;
                 packet.name=Deserialize_str(byteArray, ref offset);
@@ -209,9 +208,9 @@ namespace Protocols
         public struct ListPlayersNamePacket
         {
             static Opcode opcode = Opcode.C_PlayerName;
-            List<string> names;
+            public List<string> names;
 
-            void Serialize(List<byte> byteArray)
+            public void Serialize(List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_int32(ref byteArray, names.Count);
@@ -220,7 +219,7 @@ namespace Protocols
                     Serialize_str(ref byteArray, name);
                 }
             }
-            static ListPlayersNamePacket Deserialize(List<byte> byteArray, int offset)
+            public static ListPlayersNamePacket Deserialize(List<byte> byteArray, int offset)
             {
                 ListPlayersNamePacket packet;
                 packet.names = new List<string>();
@@ -267,17 +266,17 @@ namespace Protocols
                 return packet;
             }
         }
-       public  struct WorldInitPacket
+       public struct WorldInitPacket
         {
             static Opcode opcode = Opcode.S_WorldInit;
-            ulong seed;
+            public ulong seed;
 
-            void Serialize(List<byte> byteArray)
+            public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_Uint64(ref byteArray, seed);
             }
-            static WorldInitPacket Deserialize(List<byte>byteArray,int offset)
+            public static WorldInitPacket Deserialize(List<byte>byteArray,int offset)
             {
                 WorldInitPacket packet;
                 packet.seed = Deserialize_Uint64(byteArray, ref offset);
@@ -298,7 +297,7 @@ namespace Protocols
 
             List<PlayerData> players;
             byte positionIndex;
-            void Serialize(List<byte> byteArray)
+            public void Serialize(List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_int32(ref byteArray, players.Count);
@@ -313,7 +312,7 @@ namespace Protocols
                 }
                 Serialize_Uint8(ref byteArray, positionIndex);
             }
-            static PlayerPositionPacket Deserialize(List<byte> byteArray, int offset)
+            public static PlayerPositionPacket Deserialize(List<byte> byteArray, int offset)
             {
                 PlayerPositionPacket packet;
                 packet.players = new List<PlayerData>();
