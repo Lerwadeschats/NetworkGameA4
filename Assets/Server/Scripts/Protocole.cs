@@ -238,7 +238,7 @@ namespace Protocols
 
             //PlayerInputs inputs;
 
-            void Serialize(List<byte> byteArray)
+            public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 byte inputByte = 0;
@@ -254,7 +254,7 @@ namespace Protocols
                      inputByte |= 1 << 3;*/
                 Serialize_Uint8(ref byteArray, inputByte);
             }
-            static PlayerInputsPacket Deserialize(List<byte> byteArray, int offset)
+            public static PlayerInputsPacket Deserialize(List<byte> byteArray, int offset)
             {
                 byte inputByte = Deserialize_Uint8(byteArray, ref offset);
 
