@@ -12,7 +12,6 @@ public class DCMapGen : MonoBehaviour
 
     public int _nbOfRoomBranch = 4;
     public int _branchNumber = 2;
-    public float _timeBetweenRoom = .1f;
     public int _chanceToBranch = 50;
     public List<GameObject> _rooms = new List<GameObject>();
 
@@ -29,6 +28,8 @@ public class DCMapGen : MonoBehaviour
     System.Random _rand;
 
     List<Exit> _focusToGenerate;
+
+    public bool DebugSeed = false;
 
 
     private void Start()
@@ -79,6 +80,7 @@ public class DCMapGen : MonoBehaviour
                 if (isMain)
                 {
                     if (transform.childCount < _nbMinOfRoom) Regenerate(true);
+                    return;
                 }
                 break;
             }
@@ -104,7 +106,7 @@ public class DCMapGen : MonoBehaviour
             go.transform.position = focus.transform.position - exit.transform.position;
             go.name += " "+ i;
             Physics2D.simulationMode = SimulationMode2D.Script;
-            Physics2D.Simulate(_timeBetweenRoom);
+            Physics2D.Simulate(0f);
 
             Collider2D[] contact = Physics2D.OverlapBoxAll(go.transform.position, go.transform.localScale, 0f);
             contact = contact.Where(col => col.name != go.name).ToArray();
@@ -152,6 +154,11 @@ public class DCMapGen : MonoBehaviour
                 _focusToGenerate.Add(roomExits[exitIndex]);
             }
         }
+        if (transform.childCount < _nbMinOfRoom)
+        {
+            Regenerate(true);
+            return;
+        }
         if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
         _hasMainFinish = isMain;
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
@@ -164,8 +171,11 @@ public class DCMapGen : MonoBehaviour
         {
             fontSize = 122
         };
-        GUILayout.Label(seed.ToString(), guistyle);
-        GUILayout.Label(_GenerateSeed.ToString(), guistyle);
+        if (DebugSeed)
+        {
+            GUILayout.Label(seed.ToString(), guistyle);
+            GUILayout.Label(_GenerateSeed.ToString(), guistyle);
+        }
 
 
     }

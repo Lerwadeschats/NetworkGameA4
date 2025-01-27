@@ -159,9 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nbMaxOfRoom: 50
   _nbMinOfRoom: 35
-  _nbOfRoomBranch: 4
+  _nbOfRoomBranch: 15
   _branchNumber: 12
-  _timeBetweenRoom: 0
   _chanceToBranch: 20
   _rooms:
   - {fileID: 695298301670951213, guid: 7796140879ab79f4eabbdac025108164, type: 3}
@@ -174,6 +173,7 @@ MonoBehaviour:
   - {fileID: 695298301670951213, guid: 8d305a5382ab8654f9467ab140938f2a, type: 3}
   _GenerateSeed: 0
   seed: 3
+  DebugSeed: 0
 --- !u!4 &593118155
 Transform:
   m_ObjectHideFlags: 0
