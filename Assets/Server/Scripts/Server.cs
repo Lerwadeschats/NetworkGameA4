@@ -1,11 +1,13 @@
 using System;
 using ENet6;
+using TMPro;
 using UnityEngine;
 using Event = ENet6.Event;
 using EventType = ENet6.EventType;
 
 public class Server : MonoBehaviour
 {
+    public TextMeshProUGUI textLogger;
     class ServerData
     {
         public ENet6.Host host;
@@ -53,17 +55,17 @@ public class Server : MonoBehaviour
                 {
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
-                        Debug.Log($"Peer # {eNetEvent.Peer.ID} connected!");
+                        print($"Peer # {eNetEvent.Peer.ID} connected!");
                     break;
 
                     // Un joueur s'est déconnecté
                     case EventType.Disconnect:
-                        Debug.Log($"Peer # {eNetEvent.Peer.ID} disconnected!");
+                        print($"Peer # {eNetEvent.Peer.ID} disconnected!");
                     break;
 
                     // On a reçu des données d'un joueur
                     case EventType.Receive:
-                        Debug.Log($"Peer # {eNetEvent.Peer.ID} sent data ({eNetEvent.Packet.Length} bytes)");
+                        print($"Peer # {eNetEvent.Peer.ID} sent data ({eNetEvent.Packet.Length} bytes)");
                         eNetEvent.Packet.Dispose();
                     break;
                 }
@@ -89,5 +91,27 @@ public class Server : MonoBehaviour
     {
         ENet6.Library.Deinitialize();
         _serverData.host.Dispose();
+    }
+
+
+
+    string stack = "";
+
+    void OnEnable()
+    {
+        Application.logMessageReceived += HandleLog;
+    }
+
+    void OnDisable()
+    {
+        Application.logMessageReceived -= HandleLog;
+    }
+
+    void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        string toddebug = logString.Replace("UnityEngine", "||");
+        toddebug = toddebug.Split("||")[0];
+        textLogger.text = stack + "\n" + toddebug;
+        stack += "\n" + toddebug;
     }
 }
