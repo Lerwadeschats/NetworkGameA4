@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 6912913361108989573}
   - component: {fileID: 8503392244878076575}
   - component: {fileID: 4528585162642115254}
-  - component: {fileID: 5889964506432461317}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -129,10 +128,10 @@ MonoBehaviour:
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5889964506432461317}
+      - m_Target: {fileID: 7142529444902356166}
         m_TargetAssemblyTypeName: PlayerAttacks, Assembly-CSharp
         m_MethodName: OnAttack
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -282,19 +281,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 1170345465485081684}
---- !u!114 &5889964506432461317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 177958793565933148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 858f10046586ae14a9865d514459d55e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hitCollider: {fileID: 7173193030511456927}
 --- !u!1 &201989577876626837
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +291,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7817441606869214912}
   - component: {fileID: 7173193030511456927}
+  - component: {fileID: 7142529444902356166}
   m_Layer: 0
   m_Name: CollisionHit
   m_TagString: Untagged
@@ -321,7 +308,7 @@ Transform:
   m_GameObject: {fileID: 201989577876626837}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.11, y: 0, z: 0}
+  m_LocalPosition: {x: 1.12, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -356,7 +343,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -372,6 +359,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7142529444902356166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201989577876626837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858f10046586ae14a9865d514459d55e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 4382313959816505132}
+  _hittedEntities: []
 --- !u!1 &2067065275165209472
 GameObject:
   m_ObjectHideFlags: 0

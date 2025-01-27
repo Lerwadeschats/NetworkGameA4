@@ -17,6 +17,7 @@ public class PlayerDamageManager : DamageManager
     public override void OnBeingAttacked(float damages)
     {
         base.OnBeingAttacked(damages);
+        OnTakingDamanges(damages);
     }
 
     public override void OnTakingDamanges(float damages)

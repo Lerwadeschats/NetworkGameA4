@@ -18,26 +18,27 @@ public class EnemyDamageManager : DamageManager
     public override void OnBeingAttacked(float damages)
     {
         base.OnBeingAttacked(damages);
+        OnTakingDamanges(damages);
     }
 
     public override void OnTakingDamanges(float damages)
     {
         base.OnTakingDamanges(damages);
 
-        float newHp = _enemy.hpValue - damages;
+        float newHp = _enemy.HpValue - damages;
         if (newHp <= 0)
         {
             _enemy.Death();
             newHp = 0;
         }
             
-        _enemy.hpValue = newHp;
+        _enemy.HpValue = newHp;
 
         
     }
 
     private void Update()
     {
-        _slider.value = _enemy.hpValue / _enemy.maxHpValue;
+        _slider.value = _enemy.HpValue / _enemy.MaxHpValue;
     }
 }

@@ -24,7 +24,7 @@ public class PlayerAttacks : MonoBehaviour
             for (int i = 0; i < _hittedEntities.Count; i++)
             {
 
-                _hittedEntities[i].OnTakingDamanges(_player.Stats.attackValue);
+                _hittedEntities[i].OnBeingAttacked(_player.Stats.attackValue);
             }
 
         }

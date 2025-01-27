@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
         _color = color;
         _position = position;
         _stats = new PlayerStats(10f, 100f, 100f, 20f);
+        _inputs = new PlayerInputs();
     }
 
     private void Start()
