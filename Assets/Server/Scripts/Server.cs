@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using ENet6;
 using TMPro;
 using UnityEngine;
@@ -29,7 +30,7 @@ public class Server : MonoBehaviour
         ENet6.Address address = ENet6.Address.BuildAny(AddressType.IPv6);
 
         address.Port = 25565;
-        
+
         _serverData.host = new Host();
         _serverData.host.Create(AddressType.Any, address, 10, 10, 0, 0);
         if (!_serverData.host.IsSet)
@@ -49,25 +50,25 @@ public class Server : MonoBehaviour
         // On gère les événements ENet
         while (_serverData.host.Service(1, out Event eNetEvent) > 0)
         {
-            do 
+            do
             {
                 switch (eNetEvent.Type)
                 {
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
                         print($"Peer # {eNetEvent.Peer.ID} connected!");
-                    break;
+                        break;
 
                     // Un joueur s'est déconnecté
                     case EventType.Disconnect:
                         print($"Peer # {eNetEvent.Peer.ID} disconnected!");
-                    break;
+                        break;
 
                     // On a reçu des données d'un joueur
                     case EventType.Receive:
                         print($"Peer # {eNetEvent.Peer.ID} sent data ({eNetEvent.Packet.Length} bytes)");
                         eNetEvent.Packet.Dispose();
-                    break;
+                        break;
                 }
             }
             while (_serverData.host.Service(1, out eNetEvent) > 0);
@@ -111,7 +112,7 @@ public class Server : MonoBehaviour
     {
         string toddebug = logString.Replace("UnityEngine", "||");
         toddebug = toddebug.Split("||")[0];
-        textLogger.text = stack + "\n" + toddebug;
-        stack += "\n" + toddebug;
+        textLogger.text = toddebug + "\n" + stack;
+        stack = toddebug + "\n" + stack;
     }
 }
