@@ -151,6 +151,7 @@ public class DCMapGen : MonoBehaviour
 
                 numberOfbranchCreated++;
                 exitIndex = _rand.Next(0, roomExits.Count);
+                //Save to Generate branch later
                 _focusToGenerate.Add(roomExits[exitIndex]);
             }
         }
