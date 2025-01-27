@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
+using ENet6;
 
 namespace Protocols
 {
@@ -33,11 +34,21 @@ namespace Protocols
             byte[] ar = BitConverter.GetBytes(htoni);
             byteArray.AddRange(ar);
         }
-        public static void Serialize_int32(ref List<byte> byteArray, short value)
+        public static void Serialize_int32(ref List<byte> byteArray, int value)
         {
-            Serialize_Uint32(ref byteArray, (ushort)value);
+            Serialize_Uint32(ref byteArray, (uint)value);
         }
-        public static void Seriailize_f(ref List<byte> byteArray, float value)
+        public static void Serialize_Uint64(ref List<byte> byteArray, ulong value)
+        {
+            long htonl = IPAddress.HostToNetworkOrder((long)value);
+            byte[] ar = BitConverter.GetBytes(htonl);
+            byteArray.AddRange(ar);
+        }
+        public static void Serialize_int64(ref List<byte> byteArray, long value)
+        {
+            Serialize_Uint64(ref byteArray, (ulong)value);
+        }
+        public static void Serialize_f(ref List<byte> byteArray, float value)
         {
             int htonf = IPAddress.HostToNetworkOrder((int)value);
             byte[] ar = BitConverter.GetBytes(htonf);
@@ -54,10 +65,10 @@ namespace Protocols
         }
         public static void Serialize_color(ref List<byte> byteArray, Color value)
         {
-            Seriailize_f(ref byteArray, value.r);
-            Seriailize_f(ref byteArray, value.g);
-            Seriailize_f(ref byteArray, value.b);
-            Seriailize_f(ref byteArray, value.a);
+            Serialize_f(ref byteArray, value.r);
+            Serialize_f(ref byteArray, value.g);
+            Serialize_f(ref byteArray, value.b);
+            Serialize_f(ref byteArray, value.a);
         }
         #endregion
         #region Base Deserialize
@@ -108,6 +119,24 @@ namespace Protocols
             uint value = Deserialize_Uint32(byteArray, ref offset);
             return unchecked((int)value);
         }
+        public static ulong Deserialize_Uint64(List<byte> byteArray, ref int offset)
+        {
+            long value;
+            byte[] ar = new byte[8];
+            for (int i = 0; i < 8; i++)
+            {
+                ar[i] = byteArray[offset + i];
+            }
+            value = BitConverter.ToInt64(ar);
+            ulong ntohl = (ulong)IPAddress.NetworkToHostOrder(value);
+            offset += 8;
+            return ntohl;
+        }
+        public static long Deserialize_int64(List<byte> byteArray, ref int offset)
+        {
+            ulong value = Deserialize_Uint64(byteArray, ref offset);
+            return unchecked((long)value);
+        }
         public static float Deserialize_f(List<byte> byteArray, ref int offset)
         {
             int val;
@@ -149,6 +178,7 @@ namespace Protocols
         {
             C_PlayerName,
             C_PlayerInputs,
+            S_PlayerNames,
             S_GameData,
             S_WorldInit,
             S_PlayerDeath,
@@ -157,7 +187,53 @@ namespace Protocols
         };
         #endregion
         #region packets
-        struct PlayerInputsPacket
+        public struct PlayerNamePacket
+        {
+            static Opcode opcode = Opcode.C_PlayerName;
+
+            string name;
+
+            void Serialize(List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_str(ref byteArray, name);
+
+            }
+            static PlayerNamePacket Deserialize(List<byte> byteArray,int offset)
+            {
+                PlayerNamePacket packet;
+                packet.name=Deserialize_str(byteArray, ref offset);
+                return packet;
+            }
+        };
+        public struct ListPlayersNamePacket
+        {
+            static Opcode opcode = Opcode.C_PlayerName;
+            List<string> names;
+
+            void Serialize(List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_int32(ref byteArray, names.Count);
+                foreach(string name in names)
+                {
+                    Serialize_str(ref byteArray, name);
+                }
+            }
+            static ListPlayersNamePacket Deserialize(List<byte> byteArray, int offset)
+            {
+                ListPlayersNamePacket packet;
+                packet.names = new List<string>();
+                string[] nameArray = new string[Deserialize_int32(byteArray, ref offset)];
+                for(int i=0;i<nameArray.Length;i++)
+                {
+                   nameArray[i] = Deserialize_str(byteArray, ref offset);
+                }
+                packet.names.AddRange(nameArray);
+                return packet;
+            }
+        };
+        public struct PlayerInputsPacket
         {
             static Opcode opcode = Opcode.C_PlayerInputs;
 
@@ -165,15 +241,18 @@ namespace Protocols
 
             void Serialize(List<byte> byteArray)
             {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
                 byte inputByte = 0;
-                /* if (inputs.moveLeft)
+             /* if (inputs.moveLeft)
                      inputByte |= 1 << 0;
 
                  if (inputs.moveRight)
                      inputByte |= 1 << 1;
 
                  if (inputs.jump)
-                     inputByte |= 1 << 2;*/
+                     inputByte |= 1 << 2;
+                if (inputs.atk)
+                     inputByte |= 1 << 3;*/
                 Serialize_Uint8(ref byteArray, inputByte);
             }
             static PlayerInputsPacket Deserialize(List<byte> byteArray, int offset)
@@ -181,13 +260,79 @@ namespace Protocols
                 byte inputByte = Deserialize_Uint8(byteArray, ref offset);
 
                 PlayerInputsPacket packet;
-                /*packet.inputs.moveLeft = (inputByte & (1 << 0)) != 0;
+              /*packet.inputs.moveLeft = (inputByte & (1 << 0)) != 0;
                 packet.inputs.moveRight = (inputByte & (1 << 1)) != 0;
-                packet.inputs.jump = (inputByte & (1 << 2)) != 0;*/
+                packet.inputs.jump = (inputByte & (1 << 2)) != 0;
+                packet.inputs.atk = (inputByte & (1 << 3)) != 0;*/
                 return packet;
             }
         }
-        #endregion
+       public  struct WorldInitPacket
+        {
+            static Opcode opcode = Opcode.S_WorldInit;
+            ulong seed;
+
+            void Serialize(List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_Uint64(ref byteArray, seed);
+            }
+            static WorldInitPacket Deserialize(List<byte>byteArray,int offset)
+            {
+                WorldInitPacket packet;
+                packet.seed = Deserialize_Uint64(byteArray, ref offset);
+                return packet;
+            }
+        }
+        public struct PlayerPositionPacket
+        {
+            static Opcode opcode = Opcode.S_PlayersPosition;
+
+            struct PlayerData
+            {
+                public byte playerIndex;
+                public Vector2 position;
+                public Vector2 velocity;
+                //public PlayerInputs inputs;
+            };
+
+            List<PlayerData> players;
+            byte positionIndex;
+            void Serialize(List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_int32(ref byteArray, players.Count);
+                foreach (PlayerData player in players)
+                {
+                    Serialize_Uint8(ref byteArray, player.playerIndex);
+                    Serialize_f(ref byteArray, player.position.x);
+                    Serialize_f(ref byteArray, player.position.y);
+                    Serialize_f(ref byteArray, player.velocity.x);
+                    Serialize_f(ref byteArray, player.position.y);
+                    //serialize player input.
+                }
+                Serialize_Uint8(ref byteArray, positionIndex);
+            }
+            static PlayerPositionPacket Deserialize(List<byte> byteArray, int offset)
+            {
+                PlayerPositionPacket packet;
+                packet.players = new List<PlayerData>();
+                PlayerData[] playersArray = new PlayerData[Deserialize_int32(byteArray, ref offset)];
+                for(int i = 0; i < playersArray.Length; i++)
+                {
+                    playersArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
+                    playersArray[i].position.x = Deserialize_f(byteArray, ref offset);
+                    playersArray[i].position.y = Deserialize_f(byteArray, ref offset);
+                    playersArray[i].velocity.x = Deserialize_f(byteArray, ref offset);
+                    playersArray[i].velocity.y = Deserialize_f(byteArray, ref offset);
+                    //inputs
+                }
+                packet.positionIndex = Deserialize_Uint8(byteArray, ref offset);
+                return packet;
+            }
+
+        }
     }
+    #endregion
 }
 
