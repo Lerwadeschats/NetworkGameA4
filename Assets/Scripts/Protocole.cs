@@ -74,13 +74,13 @@ namespace Protocols
         }
         public static ushort Deserialize_Uint16(List<byte> byteArray, ref int offset)
         {
-            ushort value;
+            short value;
             byte[] ar = new byte[2];
             for (int i = 0; i < 2; i++)
             {
                 ar[i] = byteArray[offset + i];
             }
-            value = BitConverter.ToUInt16(ar);
+            value = BitConverter.ToInt16(ar);
             ushort ntohs = (ushort)IPAddress.NetworkToHostOrder(value);
             offset += 2;
             return ntohs;
@@ -92,13 +92,13 @@ namespace Protocols
         }
         public static uint Deserialize_Uint32(List<byte> byteArray, ref int offset)
         {
-            uint value;
+            int value;
             byte[] ar = new byte[4];
             for (int i = 0; i < 4; i++)
             {
                 ar[i] = byteArray[offset + i];
             }
-            value = BitConverter.ToUInt32(ar);
+            value = BitConverter.ToInt32(ar);
             uint ntohi = (uint)IPAddress.NetworkToHostOrder(value);
             offset += 4;
             return ntohi;
@@ -127,7 +127,8 @@ namespace Protocols
             char[] str = new char[length];
             for (int i = 0; i < length; i++)
             {
-                str[i] = (char)byteArray[i + offset];
+                int j = i * 2;
+                str[i] = (char)byteArray[j + offset];
             }
             string val = new string(str);
             offset += (int)length;
