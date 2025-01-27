@@ -50,8 +50,14 @@ public class PlayerMovements : MonoBehaviour
     {
         if (context.performed && _canJump)
         {
+            _player.Inputs.jump = true;
             Vector2 newForce = _player.Velocity + Vector2.up * _jumpForce;
             _rb.AddForce(newForce);
+            
+        }
+        else if (context.canceled)
+        {
+            _player.Inputs.jump = false;
         }
     }
 
@@ -59,9 +65,15 @@ public class PlayerMovements : MonoBehaviour
     {
         if (context.performed && _canDash)
         {
+            _player.Inputs.dash = true;
             Vector2 newForce = Vector2.right * _moveDirection * _dashForce;
             _rb.velocity = Vector2.zero;
             _rb.AddForce(newForce);
+            
+        }
+        else if (context.canceled)
+        {
+            _player.Inputs.dash = false;
         }
     }
 
@@ -72,12 +84,22 @@ public class PlayerMovements : MonoBehaviour
         if(moveInput > 0)
         {
             _moveDirection = 1;
-           
+            _player.Inputs.moveRight = true;
+            _player.Inputs.moveLeft = false;
+
         }
         else if (moveInput < 0)
         {
             _moveDirection = -1;
+            _player.Inputs.moveRight = false;
+            _player.Inputs.moveLeft = true;
         }
+        else
+        {
+            _player.Inputs.moveRight = false;
+            _player.Inputs.moveLeft = false;
+        }
+
         gameObject.transform.localScale = new Vector3(_moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;

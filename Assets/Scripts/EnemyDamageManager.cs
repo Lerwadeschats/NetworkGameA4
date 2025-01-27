@@ -33,6 +33,11 @@ public class EnemyDamageManager : DamageManager
             
         _enemy.hpValue = newHp;
 
-        _slider.value = newHp / _enemy.maxHpValue;
+        
+    }
+
+    private void Update()
+    {
+        _slider.value = _enemy.hpValue / _enemy.maxHpValue;
     }
 }

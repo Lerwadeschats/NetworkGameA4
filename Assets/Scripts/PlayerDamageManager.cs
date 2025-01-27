@@ -29,7 +29,12 @@ public class PlayerDamageManager : DamageManager
         Player.PlayerStats newStats = new Player.PlayerStats(_player.Stats.attackValue, newHp, _player.Stats.maxHpValue, _player.Stats.speed);
         _player.Stats = newStats;
 
-        _slider.value = newHp / _player.Stats.maxHpValue;
+        
     }
-    
+
+    private void Update()
+    {
+        _slider.value = _player.Stats.hpValue / _player.Stats.maxHpValue;
+    }
+
 }

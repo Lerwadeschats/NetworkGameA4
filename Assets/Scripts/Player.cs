@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     private Color _color;
     private PlayerStats _stats;
 
+    private PlayerInputs _inputs;
+    
     public struct PlayerStats
     {
         public float attackValue;
@@ -57,6 +59,11 @@ public class Player : MonoBehaviour
         set { _stats = value; }
     }
 
+    public PlayerInputs Inputs
+    {
+        get { return _inputs; }
+        set { _inputs = value; }
+    }
 
     public void SetNewPlayerInfos(string name, Color color, Vector2 position)
     {
@@ -92,4 +99,25 @@ public class Player : MonoBehaviour
     }
 
     
+}
+
+
+public class PlayerInputs
+{
+    public bool moveRight;
+    public bool moveLeft;
+    public bool jump;
+    public bool attack;
+    public bool block;
+    public bool dash;
+
+    /*public PlayerInputs(bool moveRightInput, bool moveLeftInput, bool jumpInput, bool attackInput, bool blockInput, bool dashInput)
+    {
+        moveRight = moveRightInput;
+        moveLeft = moveLeftInput;
+        jump = jumpInput;
+        attack = attackInput;
+        block = blockInput;
+        dash = dashInput;
+    }*/
 }

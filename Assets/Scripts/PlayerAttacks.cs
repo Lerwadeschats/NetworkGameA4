@@ -11,19 +11,39 @@ public class PlayerAttacks : MonoBehaviour
 
 
     bool _canHit = false;
+    bool _canBlock = true;
 
     [SerializeField]
     List<DamageManager> _hittedEntities = new List<DamageManager>();
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if(context.performed && _canHit)
+        if (context.performed && _canHit)
         {
+            _player.Inputs.attack = true;
             for (int i = 0; i < _hittedEntities.Count; i++)
             {
+
                 _hittedEntities[i].OnTakingDamanges(_player.Stats.attackValue);
             }
-            
+
+        }
+        else if (context.canceled)
+        {
+
+            _player.Inputs.attack = false;
+        }
+    }
+
+    public void OnBlock(InputAction.CallbackContext context)
+    {
+        if(context.performed && _canBlock)
+        {
+            _player.Inputs.block = true;
+        }
+        else if(context.canceled) 
+        {
+            _player.Inputs.block = false;
         }
     }
 
