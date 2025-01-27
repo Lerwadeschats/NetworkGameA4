@@ -25,7 +25,7 @@ public class EnemyDamageManager : DamageManager
         base.OnTakingDamanges(damages);
 
         float newHp = _enemy.hpValue - damages;
-        if (newHp < 0)
+        if (newHp <= 0)
         {
             _enemy.Death();
             newHp = 0;

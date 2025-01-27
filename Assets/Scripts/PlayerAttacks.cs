@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerAttacks : MonoBehaviour
 {
@@ -18,10 +19,11 @@ public class PlayerAttacks : MonoBehaviour
     {
         if(context.performed && _canHit)
         {
-            foreach(DamageManager entity in _hittedEntities)
+            for (int i = 0; i < _hittedEntities.Count; i++)
             {
-                entity.OnTakingDamanges(_player.Stats.attackValue);
+                _hittedEntities[i].OnTakingDamanges(_player.Stats.attackValue);
             }
+            
         }
     }
 
@@ -39,6 +41,7 @@ public class PlayerAttacks : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy" || (other.gameObject.tag == "Player" && other.gameObject != _player.gameObject))
         {
+            
             if (_hittedEntities.Count == 1)
             {
                 _canHit = false;
