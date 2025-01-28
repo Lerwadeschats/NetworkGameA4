@@ -24,6 +24,14 @@ public class Server : MonoBehaviour
 
     private ulong seed;
 
+    private List<PlayerData> players = new List<PlayerData>();
+
+    struct PlayerData
+    {
+        public int index;
+        public Player playerObject;
+    }
+
     private void Start()
     {
         // Initialisation d'enet
@@ -69,6 +77,7 @@ public class Server : MonoBehaviour
                     case EventType.Connect:
 
                         SendSeedToClient(eNetEvent.Peer);
+                        CreatePlayer(eNetEvent.Peer);
                         print($"Peer # {eNetEvent.Peer.ID} connected! \n Sended Seed To Client");
                         break;
 
@@ -136,6 +145,17 @@ public class Server : MonoBehaviour
 
         peer.Send(0, ref packet);
     }
+
+    private void CreateAndSendPlayer(Peer peer)
+    {
+        Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+        PlayerData newPlayer = new PlayerData();
+        newPlayer.index = (int)peer.ID;
+        newPlayer.playerObject = player;
+
+        players.Add(newPlayer);
+    }
+
 
 
     //Tick function

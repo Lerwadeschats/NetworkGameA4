@@ -41,7 +41,10 @@ public class DCMapGen : MonoBehaviour
 
     public bool DebugSeed = false;
 
-
+    private void Start()
+    {
+        GameManager.instance.Lobby = gameObject.transform.GetChild(0).gameObject.GetComponent<Room>();
+    }
     public void Regenerate(ulong newSeed)
     {
         _focusToGenerate = new List<Exit>();

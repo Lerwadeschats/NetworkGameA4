@@ -67,19 +67,13 @@ public class Player : MonoBehaviour
         set { _inputs = value; }
     }
 
-    public void SetNewPlayerInfos(int id, string name, Color color)
+    public void SetNewPlayerInfos(int id)
     {
-        _name = name;
-        _color = color;
         _position = gameObject.transform.position;
         _stats = new PlayerStats(10f, 100f, 100f, 20f);
         _inputs = new PlayerInputs();
     }
 
-    private void Start()
-    {
-        SetNewPlayerInfos(0, "Name", Color.white);
-    }
 
 
     public void UpdateVelocity(Vector2 velocity)

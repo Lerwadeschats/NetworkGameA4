@@ -18,6 +18,8 @@ public class Client : MonoBehaviour
     private ENet6.Host enetHost = null;
     private ENet6.Peer? serverPeer = null;
 
+    private Player _player;
+
     public bool Connect(string addressString)
     {
         ENet6.Address address = new ENet6.Address();
@@ -58,7 +60,9 @@ public class Client : MonoBehaviour
 
         PlayerNamePacket playerNamePacket = new()
         {
-            name = playerName_Field.text
+            name = playerName_Field.text,
+            index = (uint)_player.index
+            
         };
 
         List<byte> data = new List<byte>();

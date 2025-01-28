@@ -199,16 +199,20 @@ namespace Protocols
 
             public string name;
 
+            public uint index;
+
             public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_str(ref byteArray, name);
+                Serialize_Uint32(ref byteArray, index);
 
             }
             public static PlayerNamePacket Deserialize(List<byte> byteArray, int offset)
             {
                 PlayerNamePacket packet;
                 packet.name = Deserialize_str(byteArray, ref offset);
+                packet.index = Deserialize_Uint32(byteArray, ref offset);
                 return packet;
             }
         };
@@ -217,7 +221,7 @@ namespace Protocols
             static Opcode opcode = Opcode.C_PlayerName;
             public List<string> names;
 
-            public void Serialize(List<byte> byteArray)
+            public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_int32(ref byteArray, names.Count);
@@ -310,7 +314,7 @@ namespace Protocols
 
             List<PlayerData> players;
             byte positionIndex;
-            public void Serialize(List<byte> byteArray)
+            public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_int32(ref byteArray, players.Count);
@@ -339,6 +343,7 @@ namespace Protocols
                     playersArray[i].velocity.y = Deserialize_f(byteArray, ref offset);
                     //inputs
                 }
+                packet.players.AddRange(playersArray);
                 packet.positionIndex = Deserialize_Uint8(byteArray, ref offset);
                 return packet;
             }
@@ -353,7 +358,7 @@ namespace Protocols
                 }
                 byte statsindex;
 
-                public void Serialize(List<byte> byteArray)
+                public void Serialize(ref List<byte> byteArray)
                 {
                     Serialize_Uint8(ref byteArray, (byte)opcode);
                     Serialize_int32(ref byteArray, playerStatsList.Count);
@@ -381,6 +386,7 @@ namespace Protocols
                         playersArray[i].playerStats.attackValue = Deserialize_f(byteArray, ref offset);
                         //inputs
                     }
+                    packet.playerStatsList.AddRange(playersArray);
                     packet.statsindex = Deserialize_Uint8(byteArray, ref offset);
                     return packet;
                 }
