@@ -14,6 +14,9 @@ public class Client : MonoBehaviour
     public TMP_InputField hostIP_Field;
     public TMP_InputField playerName_Field;
 
+    [SerializeField]
+    private Transform _canvas;
+
 
     private ENet6.Host enetHost = null;
     private ENet6.Peer? serverPeer = null;
@@ -59,6 +62,10 @@ public class Client : MonoBehaviour
             Debug.LogError("connection to \"" + addressString + "\" failed");
             return false;
         }
+        
+        //On désactive l'UI affreuse svp
+        _canvas.gameObject.SetActive(false); 
+
 
         _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
         _player.Name = playerName_Field.text;
@@ -165,7 +172,7 @@ public class Client : MonoBehaviour
 
                     _player.index = gameData.playerIndex;
 
-                    Debug.Log("Received index #" +  gameData.playerIndex + " from server.");
+                    //Debug.Log("Received index #" +  gameData.playerIndex + " from server.");
                 }
                 break;
 
@@ -183,5 +190,30 @@ public class Client : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void Update()
+    {
+        if(_player != null && _player.Inputs != null)
+        {
+            PlayerInputsPacket inputsPacket;
+            inputsPacket.inputs = _player.Inputs;
+
+            List<byte> data = new List<byte>();
+            inputsPacket.Serialize(ref data);
+
+            Packet packet = default;
+            packet.Create(data.ToArray(), PacketFlags.Reliable);
+            serverPeer.Value.Send(0, ref packet);
+
+            // On simule la physique côté client, de la même façon que le serveur
+            foreach (Player player in _allPlayers)
+            {
+                PlayerInputs inputs = player.Inputs;
+
+                player._playerMovements.UpdatePhysics();
+            }
+        }
+        
     }
 }

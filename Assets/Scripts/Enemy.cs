@@ -49,12 +49,13 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     float _minDetectionRange = 10f;
 
-    
+    float _baseScaleX = 1;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         NewEnemySetup();
+        _baseScaleX = gameObject.transform.localScale.x;
     }
 
     private void Update()
@@ -74,7 +75,7 @@ public class Enemy : MonoBehaviour
         }
         if(dirMovement != 0)
         {
-            gameObject.transform.localScale = new Vector3(dirMovement, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+            gameObject.transform.localScale = new Vector3(dirMovement * _baseScaleX, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
         }
         
         Vector2 newVelocity = new Vector2(dirMovement * _speed, _rb.velocity.y);

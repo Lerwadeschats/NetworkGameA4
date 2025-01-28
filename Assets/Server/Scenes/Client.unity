@@ -1816,7 +1816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targets: []
-  _offset: {x: 0, y: 0, z: -300}
+  _offset: {x: 0, y: 0, z: -15}
   _velocity: {x: 0, y: 0, z: 0}
   _SmoothTime: 0.5
   _minZoom: 5
@@ -1879,6 +1879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostIP_Field: {fileID: 1356238246}
   playerName_Field: {fileID: 1825605712}
+  _canvas: {fileID: 1164845968}
 --- !u!4 &1996209525
 Transform:
   m_ObjectHideFlags: 0

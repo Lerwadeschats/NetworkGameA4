@@ -91,7 +91,7 @@ public class Server : MonoBehaviour
                     // On a reçu des données d'un joueur
                     case EventType.Receive:
                         {
-                            print($"Peer # {eNetEvent.Peer.ID} sent a data of ({eNetEvent.Packet.Length} bytes)");
+                            //print($"Peer # {eNetEvent.Peer.ID} sent a data of ({eNetEvent.Packet.Length} bytes)");
                             byte[] bytes = new byte[eNetEvent.Packet.Length];
                             eNetEvent.Packet.CopyTo(bytes);
                             HandleFromClient(eNetEvent.Peer.ID, bytes);

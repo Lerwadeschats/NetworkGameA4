@@ -112,6 +112,7 @@ public class PlayerMovements : MonoBehaviour
 
         if (_player.Inputs.moveRight && !_player.Inputs.moveLeft)   
         {
+            
             moveDirection = 1;
             moveInput = 1;
         }
@@ -128,6 +129,10 @@ public class PlayerMovements : MonoBehaviour
         gameObject.transform.localScale = new Vector3(moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
+
+        print("moveRight : " + _player.Inputs.moveRight);
+        print("moveLeft : " + _player.Inputs.moveLeft);
+        print("moveRight : " + _player.Inputs.moveRight);
 
         if (Mathf.Abs(_player.Velocity.y) > _jumpThreshold)
         {
