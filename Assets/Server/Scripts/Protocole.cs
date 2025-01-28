@@ -146,7 +146,7 @@ namespace Protocols
             {
                 ar[i] = byteArray[offset + i];
             }
-            
+
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(ar);
@@ -189,6 +189,7 @@ namespace Protocols
             S_PlayerDeath,
             S_PlayerList,
             S_PlayersPosition,
+            S_PlayerStats
         };
         #endregion
         #region packets
@@ -204,10 +205,10 @@ namespace Protocols
                 Serialize_str(ref byteArray, name);
 
             }
-            public static PlayerNamePacket Deserialize(List<byte> byteArray,int offset)
+            public static PlayerNamePacket Deserialize(List<byte> byteArray, int offset)
             {
                 PlayerNamePacket packet;
-                packet.name=Deserialize_str(byteArray, ref offset);
+                packet.name = Deserialize_str(byteArray, ref offset);
                 return packet;
             }
         };
@@ -220,7 +221,7 @@ namespace Protocols
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_int32(ref byteArray, names.Count);
-                foreach(string name in names)
+                foreach (string name in names)
                 {
                     Serialize_str(ref byteArray, name);
                 }
@@ -230,9 +231,9 @@ namespace Protocols
                 ListPlayersNamePacket packet;
                 packet.names = new List<string>();
                 string[] nameArray = new string[Deserialize_int32(byteArray, ref offset)];
-                for(int i=0;i<nameArray.Length;i++)
+                for (int i = 0; i < nameArray.Length; i++)
                 {
-                   nameArray[i] = Deserialize_str(byteArray, ref offset);
+                    nameArray[i] = Deserialize_str(byteArray, ref offset);
                 }
                 packet.names.AddRange(nameArray);
                 return packet;
@@ -242,22 +243,25 @@ namespace Protocols
         {
             static Opcode opcode = Opcode.C_PlayerInputs;
 
-            //PlayerInputs inputs;
+            PlayerInputs inputs;
 
             public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 byte inputByte = 0;
-             /* if (inputs.moveLeft)
-                     inputByte |= 1 << 0;
+                if (inputs.moveLeft)
+                    inputByte |= 1 << 0;
 
-                 if (inputs.moveRight)
-                     inputByte |= 1 << 1;
-
-                 if (inputs.jump)
-                     inputByte |= 1 << 2;
-                if (inputs.atk)
-                     inputByte |= 1 << 3;*/
+                if (inputs.moveRight)
+                    inputByte |= 1 << 1;
+                if (inputs.jump)
+                    inputByte |= 1 << 2;
+                if (inputs.attack)
+                    inputByte |= 1 << 3;
+                if (inputs.dash)
+                    inputByte |= 1 << 4;
+                if (inputs.block)
+                    inputByte |= 1 << 5;
                 Serialize_Uint8(ref byteArray, inputByte);
             }
             public static PlayerInputsPacket Deserialize(List<byte> byteArray, int offset)
@@ -265,14 +269,17 @@ namespace Protocols
                 byte inputByte = Deserialize_Uint8(byteArray, ref offset);
 
                 PlayerInputsPacket packet;
-              /*packet.inputs.moveLeft = (inputByte & (1 << 0)) != 0;
+                packet.inputs = new PlayerInputs();
+                packet.inputs.moveLeft = (inputByte & (1 << 0)) != 0;
                 packet.inputs.moveRight = (inputByte & (1 << 1)) != 0;
                 packet.inputs.jump = (inputByte & (1 << 2)) != 0;
-                packet.inputs.atk = (inputByte & (1 << 3)) != 0;*/
+                packet.inputs.attack = (inputByte & (1 << 3)) != 0;
+                packet.inputs.dash = (inputByte & (1 << 4)) != 0;
+                packet.inputs.block = (inputByte & (1 << 5)) != 0;
                 return packet;
             }
         }
-       public struct WorldInitPacket
+        public struct WorldInitPacket
         {
             static Opcode opcode = Opcode.S_WorldInit;
             public ulong seed;
@@ -282,7 +289,7 @@ namespace Protocols
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_Uint64(ref byteArray, seed);
             }
-            public static WorldInitPacket Deserialize(List<byte>byteArray,int offset)
+            public static WorldInitPacket Deserialize(List<byte> byteArray, int offset)
             {
                 WorldInitPacket packet;
                 packet.seed = Deserialize_Uint64(byteArray, ref offset);
@@ -323,7 +330,7 @@ namespace Protocols
                 PlayerPositionPacket packet;
                 packet.players = new List<PlayerData>();
                 PlayerData[] playersArray = new PlayerData[Deserialize_int32(byteArray, ref offset)];
-                for(int i = 0; i < playersArray.Length; i++)
+                for (int i = 0; i < playersArray.Length; i++)
                 {
                     playersArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
                     playersArray[i].position.x = Deserialize_f(byteArray, ref offset);
@@ -335,9 +342,50 @@ namespace Protocols
                 packet.positionIndex = Deserialize_Uint8(byteArray, ref offset);
                 return packet;
             }
+            public struct PlayerStatsPacket
+            {
+                static Opcode opcode = Opcode.S_PlayerStats;
+                List<PlayerStatData> playerStatsList;
+                struct PlayerStatData
+                {
+                    public byte playerIndex;
+                    public Player.PlayerStats playerStats;
+                }
+                byte statsindex;
 
+                public void Serialize(List<byte> byteArray)
+                {
+                    Serialize_Uint8(ref byteArray, (byte)opcode);
+                    Serialize_int32(ref byteArray, playerStatsList.Count);
+                    foreach (PlayerStatData player in playerStatsList)
+                    {
+                        Serialize_Uint8(ref byteArray, player.playerIndex);
+                        Serialize_f(ref byteArray, player.playerStats.hpValue);
+                        Serialize_f(ref byteArray, player.playerStats.maxHpValue);
+                        Serialize_f(ref byteArray, player.playerStats.speed);
+                        Serialize_f(ref byteArray, player.playerStats.attackValue);
+                    }
+                    Serialize_Uint8(ref byteArray, statsindex);
+                }
+                public static PlayerStatsPacket Deserialize(List<byte> byteArray, int offset)
+                {
+                    PlayerStatsPacket packet;
+                    packet.playerStatsList = new List<PlayerStatData>();
+                    PlayerStatData[] playersArray = new PlayerStatData[Deserialize_int32(byteArray, ref offset)];
+                    for (int i = 0; i < playersArray.Length; i++)
+                    {
+                        playersArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
+                        playersArray[i].playerStats.hpValue = Deserialize_f(byteArray, ref offset);
+                        playersArray[i].playerStats.maxHpValue = Deserialize_f(byteArray, ref offset);
+                        playersArray[i].playerStats.speed = Deserialize_f(byteArray, ref offset);
+                        playersArray[i].playerStats.attackValue = Deserialize_f(byteArray, ref offset);
+                        //inputs
+                    }
+                    packet.statsindex = Deserialize_Uint8(byteArray, ref offset);
+                    return packet;
+                }
+            }
         }
     }
     #endregion
-}
-
+ }
