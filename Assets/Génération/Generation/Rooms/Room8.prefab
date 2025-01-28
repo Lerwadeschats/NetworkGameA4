@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7800797411348012462}
   - component: {fileID: 6792738291433724389}
   - component: {fileID: 6769261581947194953}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Room8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,6 +105,7 @@ MonoBehaviour:
   _exits:
   - {fileID: 170313034863325364}
   - {fileID: 4520047750307109904}
+  - {fileID: 8854828612985739727}
 --- !u!61 &6769261581947194953
 BoxCollider2D:
   m_ObjectHideFlags: 0

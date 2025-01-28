@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 806922846447585972}
   - component: {fileID: -7398601612308974169}
   - component: {fileID: 8132480036757367661}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Room4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,9 +198,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boxCollider: {fileID: 8132480036757367661}
   _exits:
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 1904366056330811721}
+  - {fileID: 2846257310533320355}
+  - {fileID: 4971554157289153307}
+  - {fileID: 3592610923664108188}
 --- !u!61 &8132480036757367661
 BoxCollider2D:
   m_ObjectHideFlags: 0

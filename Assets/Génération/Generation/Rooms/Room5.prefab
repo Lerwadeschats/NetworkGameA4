@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 1955862496512242899}
   - component: {fileID: -1010134485646847595}
   - component: {fileID: -8320654112835628179}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Room5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,9 +198,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boxCollider: {fileID: -8320654112835628179}
   _exits:
-  - {fileID: 0}
-  - {fileID: 4460621657904252289}
-  - {fileID: 0}
+  - {fileID: 2714272260717554766}
+  - {fileID: 526915882908996998}
+  - {fileID: 891199774038438505}
+  - {fileID: 3995884891074549632}
 --- !u!61 &-8320654112835628179
 BoxCollider2D:
   m_ObjectHideFlags: 0
