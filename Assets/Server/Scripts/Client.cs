@@ -61,10 +61,10 @@ public class Client : MonoBehaviour
         }
 
         _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
-        _player.name = playerName_Field.text;
+        _player.Name = playerName_Field.text;
         PlayerNamePacket playerNamePacket = new()
         {
-            name = _player.name,
+            name = _player.Name,
         };
 
         List<byte> data = new List<byte>();
@@ -165,7 +165,7 @@ public class Client : MonoBehaviour
 
                     _player.index = gameData.playerIndex;
 
-                    
+                    Debug.Log("Received index #" +  gameData.playerIndex + " from server.");
                 }
                 break;
 

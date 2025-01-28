@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class DamageManager : MonoBehaviour
 {
 
-
     public virtual void OnTakingDamanges(float damages) { }
     
 

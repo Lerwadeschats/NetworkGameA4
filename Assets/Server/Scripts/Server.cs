@@ -30,7 +30,6 @@ public class Server : MonoBehaviour
     {
         public Peer peer;
         public Player player;
-        
 
     }
 
@@ -140,10 +139,10 @@ public class Server : MonoBehaviour
                     gameDataPacket.Serialize(ref dataIndex);
 
                     Packet packet = default;
-                    packet.Create(data.ToArray(), PacketFlags.Reliable);
+                    packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
                     playerFromIndex.peer.Send(0, ref packet);
 
-                    Debug.Log("Sent index to player #" + gameDataPacket.playerIndex);
+                    Debug.Log("Sent index '" + gameDataPacket.playerIndex + "' to player : " + playerFromIndex.player.index);
                 }
                 break;
             case Opcode.C_PlayerInputs:

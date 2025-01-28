@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 
     private PlayerInputs _inputs;
 
-    public uint index;
+    public uint index = 255;
 
 
     public PlayerMovements _playerMovements;
@@ -86,9 +86,6 @@ public class Player : MonoBehaviour
         _stats = new PlayerStats(10f, 100f, 100f, 20f);
         _inputs = new PlayerInputs();
     }
-
-
-    
 }
 
 
