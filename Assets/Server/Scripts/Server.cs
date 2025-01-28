@@ -49,6 +49,7 @@ public class Server : MonoBehaviour
 
         seed = (ulong)Random.Range(0, 999999);
 
+        StartCoroutine(SceneMerger.instance.CreateAndMergeSceneServerSide(seed));
     }
 
     // Update is called once per frame
@@ -96,6 +97,7 @@ public class Server : MonoBehaviour
         if (now >= nextTick)
         {
             Tick(ref _serverData);
+            //TOMIDIFYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyy
             nextTick += 1;
         }
     }
@@ -114,7 +116,7 @@ public class Server : MonoBehaviour
                     Debug.Log("Player " + playerNameInfo.name + " get index(peer) :" + peer);
                 }
                 break;
-                case Opcode.C_PlayerInputs:
+            case Opcode.C_PlayerInputs:
                 {
                     PlayerInputsPacket inputsPackets = PlayerInputsPacket.Deserialize(data, offset);
                     //do inputeri
@@ -128,7 +130,7 @@ public class Server : MonoBehaviour
         List<byte> data = new List<byte>();
         WorldInitPacket info = new() { seed = seed };
         info.Serialize(ref data);
-
+        Debug.Log((ulong)seed);
         Packet packet = default;
         packet.Create(data.ToArray(), PacketFlags.Reliable);
 

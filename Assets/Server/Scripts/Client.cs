@@ -148,9 +148,7 @@ public class Client : MonoBehaviour
                     Debug.Log("World Sedd : " + info.seed);
 
                     SceneMerger.instance.MergeScene();
-
-                    DCMapGen.instance.seed = info.seed;
-                    DCMapGen.instance.Regenerate(false);
+                    DCMapGen.instance.Regenerate(info.seed);
 
                 }
                 break;
