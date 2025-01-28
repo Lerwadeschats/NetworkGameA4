@@ -328,7 +328,7 @@ namespace Protocols
                 public byte playerIndex;
                 public Vector2 position;
                 public Vector2 velocity;
-                //public PlayerInputs inputs;
+                public PlayerInputs inputs;
             };
 
             public List<PlayerData> players;
@@ -344,7 +344,22 @@ namespace Protocols
                     Serialize_f(ref byteArray, player.position.y);
                     Serialize_f(ref byteArray, player.velocity.x);
                     Serialize_f(ref byteArray, player.position.y);
-                    //serialize player input.
+                    Serialize_Uint8(ref byteArray, (byte)opcode);
+                    byte inputByte = 0;
+                    if (player.inputs.moveLeft)
+                        inputByte |= 1 << 0;
+
+                    if (player.inputs.moveRight)
+                        inputByte |= 1 << 1;
+                    if (player.inputs.jump)
+                        inputByte |= 1 << 2;
+                    if (player.inputs.attack)
+                        inputByte |= 1 << 3;
+                    if (player.inputs.dash)
+                        inputByte |= 1 << 4;
+                    if (player.inputs.block)
+                        inputByte |= 1 << 5;
+                    Serialize_Uint8(ref byteArray, inputByte);
                 }
                 Serialize_Uint8(ref byteArray, positionIndex);
             }
@@ -360,7 +375,14 @@ namespace Protocols
                     playersArray[i].position.y = Deserialize_f(byteArray, ref offset);
                     playersArray[i].velocity.x = Deserialize_f(byteArray, ref offset);
                     playersArray[i].velocity.y = Deserialize_f(byteArray, ref offset);
-                    //inputs
+                    byte inputByte = Deserialize_Uint8(byteArray, ref offset);
+                    playersArray[i].inputs = new PlayerInputs();
+                    playersArray[i].inputs.moveLeft = (inputByte & (1 << 0)) != 0;
+                    playersArray[i].inputs.moveRight = (inputByte & (1 << 1)) != 0;
+                    playersArray[i].inputs.jump = (inputByte & (1 << 2)) != 0;
+                    playersArray[i].inputs.attack = (inputByte & (1 << 3)) != 0;
+                    playersArray[i].inputs.dash = (inputByte & (1 << 4)) != 0;
+                    playersArray[i].inputs.block = (inputByte & (1 << 5)) != 0;
                 }
                 packet.players.AddRange(playersArray);
                 packet.positionIndex = Deserialize_Uint8(byteArray, ref offset);
