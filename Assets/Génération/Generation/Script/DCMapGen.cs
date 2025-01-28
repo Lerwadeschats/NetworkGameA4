@@ -28,7 +28,7 @@ public class DCMapGen : MonoBehaviour
 
     Cam _camera;
 
-    public ulong seed = 0;
+    ulong seed = 0;
 
     bool _hasMainFinish = false;
 
@@ -42,13 +42,16 @@ public class DCMapGen : MonoBehaviour
     public bool DebugSeed = false;
 
 
-    public void Regenerate(bool changeSeed)
+    public void Regenerate(ulong newSeed)
     {
         _focusToGenerate = new List<Exit>();
         _camera = Camera.main.GetComponent<Cam>();
-        if (changeSeed) seed = (ulong)Random.Range(0, 999999);
-        _rand = new System.Random((int)seed);
+
+        seed = newSeed;
+        _rand = new System.Random((int)newSeed);
+        print(_rand.Next(0, 100));
         print((int)seed);
+
         _focusToGenerate.Clear();
         _camera.Targets.Clear();
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
@@ -71,7 +74,7 @@ public class DCMapGen : MonoBehaviour
                 print("OutOfRooms " + isMain);
                 if (isMain)
                 {
-                    if (transform.childCount < _nbMinOfRoom) Regenerate(true);
+                    if (transform.childCount < _nbMinOfRoom) Regenerate(seed);
                     return;
                 }
                 break;
@@ -149,7 +152,7 @@ public class DCMapGen : MonoBehaviour
         }
         if (transform.childCount < _nbMinOfRoom)
         {
-            Regenerate(true);
+            Regenerate(seed);
             return;
         }
         if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
