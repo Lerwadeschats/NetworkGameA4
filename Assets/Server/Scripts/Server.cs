@@ -30,6 +30,7 @@ public class Server : MonoBehaviour
     {
         public Peer peer;
         public Player player;
+        
 
     }
 
@@ -115,6 +116,8 @@ public class Server : MonoBehaviour
 
     private void HandleFromClient(uint peer, byte[] bytes)
     {
+
+        PlayerClient playerFromIndex = players.Find(player => player.player.index == peer); // on trouve le joueur de l'index
         List<byte> data = bytes.ToList();
         int offset = 0;
         Protocole.Opcode opcode = (Protocole.Opcode)Protocole.Deserialize_Uint8(data, ref offset);
@@ -126,11 +129,6 @@ public class Server : MonoBehaviour
                     PlayerNamePacket playerNameInfo = PlayerNamePacket.Deserialize(data, offset);
 
                     Debug.Log("Player " + playerNameInfo.name + " get index(peer) :" + peer);
-
-
-                    PlayerClient playerFromIndex = players.Find(player => player.player.index == peer);
-
-
                     //envoi de l'index
                     GameDataPacket gameDataPacket = new()
                     {
@@ -151,7 +149,11 @@ public class Server : MonoBehaviour
             case Opcode.C_PlayerInputs:
                 {
                     PlayerInputsPacket inputsPackets = PlayerInputsPacket.Deserialize(data, offset);
-                    //do inputeri
+
+                    // PlayerInputs inputs = inputsPackets.inputs;
+                    PlayerInputs inputs = inputsPackets.inputs;
+
+                    playerFromIndex.player.Inputs = inputs;
                 }
                 break;
         }
@@ -191,9 +193,44 @@ public class Server : MonoBehaviour
     //Tick function
     private void Tick(ref ServerData servData)
     {
-
+        foreach (PlayerClient clientPlayer in players)
+        {
+            clientPlayer.player._playerMovements.UpdatePhysics();
+        }
 
         //Send PlayerPos
+    }
+
+    void SendPositionStatesPlayer()
+    {
+        PlayerPositionPacket posPacket = new PlayerPositionPacket();
+
+        foreach (PlayerClient clientData in players)
+        {
+            if (clientData.peer.IsSet && clientData.player != null)
+            {
+                PlayerPositionPacket.PlayerData packetPlayer = new PlayerPositionPacket.PlayerData();
+
+                packetPlayer.playerIndex = (byte)clientData.player.index;
+                packetPlayer.position = clientData.player.Position;
+                packetPlayer.velocity = clientData.player.Velocity;
+                posPacket.players.Add(packetPlayer);
+
+
+            }
+        }
+
+        List<byte> data = new List<byte>();
+
+        Packet packet = default;
+        packet.Create(data.ToArray(), PacketFlags.Reliable);
+
+        
+
+        foreach (PlayerClient clientPlayer in players)
+        {
+            clientPlayer.peer.Send(0, ref packet);
+        }
     }
 
     private void OnApplicationQuit()

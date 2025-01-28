@@ -266,7 +266,7 @@ namespace Protocols
         {
             static Opcode opcode = Opcode.C_PlayerInputs;
 
-            PlayerInputs inputs;
+            public PlayerInputs inputs;
 
             public void Serialize(ref List<byte> byteArray)
             {
@@ -323,7 +323,7 @@ namespace Protocols
         {
             static Opcode opcode = Opcode.S_PlayersPosition;
 
-            struct PlayerData
+            public struct PlayerData
             {
                 public byte playerIndex;
                 public Vector2 position;
@@ -331,7 +331,7 @@ namespace Protocols
                 //public PlayerInputs inputs;
             };
 
-            List<PlayerData> players;
+            public List<PlayerData> players;
             byte positionIndex;
             public void Serialize(ref List<byte> byteArray)
             {

@@ -20,6 +20,8 @@ public class Client : MonoBehaviour
 
     private Player _player;
 
+    private List<Player> _allPlayers = new List<Player>();
+
     public bool Connect(string addressString)
     {
         ENet6.Address address = new ENet6.Address();
@@ -164,6 +166,20 @@ public class Client : MonoBehaviour
                     _player.index = gameData.playerIndex;
 
                     
+                }
+                break;
+
+            case Opcode.S_PlayersPosition:
+                {
+                    PlayerPositionPacket playerPositionPacket = PlayerPositionPacket.Deserialize(data, offset);
+
+                    foreach (PlayerPositionPacket.PlayerData playerPositionData in playerPositionPacket.players)
+                    {
+                        Player _currentPlayer = _allPlayers.Find(Player => Player.index == playerPositionData.playerIndex);
+
+                        _currentPlayer._playerMovements.UpdatePosition(playerPositionData.position);
+                        _currentPlayer._playerMovements.UpdateVelocity(playerPositionData.velocity);
+                    }
                 }
                 break;
         }

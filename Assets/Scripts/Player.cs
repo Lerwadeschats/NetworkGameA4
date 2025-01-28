@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     private PlayerInputs _inputs;
 
     public uint index;
+
+
+    public PlayerMovements _playerMovements;
+
+
     
     public struct PlayerStats
     {
@@ -66,7 +71,10 @@ public class Player : MonoBehaviour
         get { return _inputs; }
         set { _inputs = value; }
     }
-
+    private void Awake()
+    {
+        _playerMovements = GetComponent<PlayerMovements>();
+    }
     private void Start()
     {
         SetNewPlayerInfos();
@@ -79,26 +87,6 @@ public class Player : MonoBehaviour
         _inputs = new PlayerInputs();
     }
 
-
-
-    public void UpdateVelocity(Vector2 velocity)
-    {
-        _velocity = velocity;
-    }
-
-    public void UpdatePosition(Vector2 position)
-    {
-        _position = position;
-    }
-
-    public void UpdateStats(PlayerStats stats)
-    {
-        
-        this._stats.attackValue = stats.attackValue;
-        this._stats.hpValue = stats.hpValue;
-        this._stats.maxHpValue = stats.maxHpValue;
-        this._stats.speed = stats.speed;
-    }
 
     
 }

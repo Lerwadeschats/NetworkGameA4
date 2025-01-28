@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Player;
+using UnityEngine.UIElements;
 
 public class PlayerMovements : MonoBehaviour
 {
@@ -79,54 +81,8 @@ public class PlayerMovements : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float moveInput = _movement.action.ReadValue<float>();
-
-        if(moveInput > 0)
-        {
-            _moveDirection = 1;
-            _player.Inputs.moveRight = true;
-            _player.Inputs.moveLeft = false;
-
-        }
-        else if (moveInput < 0)
-        {
-            _moveDirection = -1;
-            _player.Inputs.moveRight = false;
-            _player.Inputs.moveLeft = true;
-        }
-        else
-        {
-            _player.Inputs.moveRight = false;
-            _player.Inputs.moveLeft = false;
-        }
-
-        gameObject.transform.localScale = new Vector3(_moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-        Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
-        _rb.velocity = newVelocity;
-
-        if (Mathf.Abs(_player.Velocity.y) > _jumpThreshold)
-        {
-            _canJump = false;
-            if (_player.Velocity.y < 0)
-            {
-
-                _rb.gravityScale = _gravityScaleFall;
-            }
-            else
-            {
-                _rb.gravityScale = _baseGravityScale;
-            }
-            
-        }
-        else
-        {
-            _rb.gravityScale = _baseGravityScale;
-            _canJump = true;
-        }
-
-        _player.Velocity = _rb.velocity;
-        _player.Position = _rb.position;
-        
+        _rb.velocity = _player.Velocity;
+        _rb.position = _player.Position;
     }
 
     public void UpdatePhysics()
@@ -199,5 +155,21 @@ public class PlayerMovements : MonoBehaviour
         _player.Position = _rb.position;
 
         
+    }
+
+    public void UpdateVelocity(Vector2 velocity)
+    {
+        _player.Velocity = velocity;
+    }
+
+    public void UpdatePosition(Vector2 position)
+    {
+        _player.Position = position;
+    }
+
+    public void UpdateStats(PlayerStats stats)
+    {
+        PlayerStats newStats = new PlayerStats(stats.attackValue, stats.hpValue, stats.maxHpValue, stats.speed);
+        _player.Stats = newStats;
     }
 }
