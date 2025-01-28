@@ -128,4 +128,76 @@ public class PlayerMovements : MonoBehaviour
         _player.Position = _rb.position;
         
     }
+
+    public void UpdatePhysics()
+    {
+
+        float moveDirection = 1;
+
+        float moveInput = 1;
+
+        if (_player.Inputs.moveRight && !_player.Inputs.moveLeft)
+        {
+            moveDirection = 1;
+            moveInput = 1;
+        }
+        else if (!_player.Inputs.moveRight && _player.Inputs.moveLeft)
+        {
+            moveDirection = -1;
+            moveInput = -1;
+        }
+        else if(!_player.Inputs.moveRight && !_player.Inputs.moveLeft)
+        {
+            moveInput = 0;
+        }
+
+        gameObject.transform.localScale = new Vector3(moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+        Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
+        _rb.velocity = newVelocity;
+
+        if (Mathf.Abs(_player.Velocity.y) > _jumpThreshold)
+        {
+            _canJump = false;
+            if (_player.Velocity.y < 0)
+            {
+
+                _rb.gravityScale = _gravityScaleFall;
+            }
+            else
+            {
+                _rb.gravityScale = _baseGravityScale;
+            }
+
+        }
+        else
+        {
+            _rb.gravityScale = _baseGravityScale;
+            _canJump = true;
+        }
+
+        if (_canJump)
+        {
+
+        }
+
+        if (_canDash && _player.Inputs.dash)
+        {
+            Vector2 newForce = Vector2.right * _moveDirection * _dashForce;
+            _rb.velocity = Vector2.zero;
+            _rb.AddForce(newForce);
+        }
+
+        if (_canJump && _player.Inputs.jump)
+        {
+            Vector2 newForce = _player.Velocity + Vector2.up * _jumpForce;
+            _rb.AddForce(newForce);
+        }
+
+        
+
+        _player.Velocity = _rb.velocity;
+        _player.Position = _rb.position;
+
+        
+    }
 }
