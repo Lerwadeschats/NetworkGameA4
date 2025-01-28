@@ -235,30 +235,42 @@ namespace Protocols
 
         }
 
-        public struct ListPlayersNamePacket
+        public struct ListPlayersPacket
         {
-            static Opcode opcode = Opcode.C_PlayerName;
-            public List<string> names;
+            static Opcode opcode = Opcode.S_PlayerList;
+
+            public struct PlayerData
+            {
+                public string playerName;
+                public byte playerIndex;
+                public Color playerColor;
+            }
+            public List<PlayerData> playersData;
 
             public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
-                Serialize_int32(ref byteArray, names.Count);
-                foreach (string name in names)
+
+                Serialize_Uint32(ref byteArray, (uint)playersData.Count);
+                foreach (PlayerData data in playersData)
                 {
-                    Serialize_str(ref byteArray, name);
+                    Serialize_str(ref byteArray, data.playerName);
+                    Serialize_Uint8(ref byteArray, data.playerIndex);
+                    Serialize_color(ref byteArray, data.playerColor);
                 }
             }
-            public static ListPlayersNamePacket Deserialize(List<byte> byteArray, int offset)
+            public static ListPlayersPacket Deserialize(List<byte> byteArray, int offset)
             {
-                ListPlayersNamePacket packet;
-                packet.names = new List<string>();
-                string[] nameArray = new string[Deserialize_int32(byteArray, ref offset)];
-                for (int i = 0; i < nameArray.Length; i++)
+                ListPlayersPacket packet;
+                packet.playersData = new List<PlayerData>();
+                PlayerData[] playerDataArray = new PlayerData[Deserialize_int32(byteArray, ref offset)];
+                for (int i = 0; i < playerDataArray.Length; i++)
                 {
-                    nameArray[i] = Deserialize_str(byteArray, ref offset);
+                    playerDataArray[i].playerName = Deserialize_str(byteArray, ref offset);
+                    playerDataArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
+                    playerDataArray[i].playerColor = Deserialize_color(byteArray, ref offset);
                 }
-                packet.names.AddRange(nameArray);
+                packet.playersData.AddRange(playerDataArray);
                 return packet;
             }
         };

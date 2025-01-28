@@ -189,7 +189,41 @@ public class Client : MonoBehaviour
                     }
                 }
                 break;
+
+            case Opcode.S_PlayerList:
+                {
+                    ListPlayersPacket playerPositionPacket = ListPlayersPacket.Deserialize(data, offset);
+
+                    for (int i = 0; i < _allPlayers.Count; i++)
+                    {
+                        ListPlayersPacket.PlayerData playerData = playerPositionPacket.playersData.Find(playerFromIndex => playerFromIndex.playerIndex == _allPlayers[i].index);
+
+                        
+                    }
+
+                    foreach (ListPlayersPacket.PlayerData packetPlayer in playerPositionPacket.playersData)
+                    {
+
+                        Player playerData = _allPlayers.Find(player => player.index == packetPlayer.playerIndex);
+                        if (playerData == null)
+                        {
+                            Player player = new Player();
+                            
+                            player.Color = packetPlayer.playerColor;
+                            player.Name = packetPlayer.playerName;
+                            player.index = packetPlayer.playerIndex;
+
+                            //TODO: update les noms des joueurs visuellement
+                        }
+                    }
+
+                }
+                break;
+                
         }
+
+                
+        
     }
 
     private void Update()

@@ -85,6 +85,39 @@ public class Server : MonoBehaviour
 
                     // Un joueur s'est déconnecté
                     case EventType.Disconnect:
+
+                        ListPlayersPacket playerListPacket = new();
+                        
+                        foreach (PlayerClient player in players)
+	{
+                            if (player.peer.IsSet && player.player.Name != "") 
+                            {
+                                // Oui, rajoutons-le à la liste
+
+                                ListPlayersPacket.PlayerData packetPlayer = new()
+                                {
+                                    playerName = player.player.Name, 
+                                    playerIndex = (byte)player.player.index, 
+                                    playerColor = player.player.Color
+                                };
+
+                                playerListPacket.playersData.Add(packetPlayer);
+                            }
+                        }
+                        foreach (PlayerClient player in players)
+						{
+                            if (player.peer.IsSet && player.player.Name != "")
+                            {
+                                List<byte> dataIndex = new List<byte>();
+                                playerListPacket.Serialize(ref dataIndex);
+
+                                Packet packet = default;
+                                packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
+
+                                player.peer.Send(0, ref packet);
+                            }
+                                
+                        }
                         print($"Peer # {eNetEvent.Peer.ID} disconnected!");
                         break;
 
@@ -143,6 +176,42 @@ public class Server : MonoBehaviour
                     playerFromIndex.peer.Send(0, ref packet);
 
                     Debug.Log("Sent index '" + gameDataPacket.playerIndex + "' to player : " + playerFromIndex.player.index);
+
+
+
+                    //On envoie la liste des joueurs
+                    ListPlayersPacket playerListPacket = new();
+
+                    foreach (PlayerClient player in players)
+                    {
+                        if (player.peer.IsSet && player.player.Name != "")
+                        {
+                            // Oui, rajoutons-le à la liste
+
+                            ListPlayersPacket.PlayerData packetPlayer = new()
+                            {
+                                playerName = player.player.Name,
+                                playerIndex = (byte)player.player.index,
+                                playerColor = player.player.Color
+                            };
+
+                            playerListPacket.playersData.Add(packetPlayer);
+                        }
+                    }
+                    foreach (PlayerClient player in players)
+                    {
+                        if (player.peer.IsSet && player.player.Name != "")
+                        {
+                            List<byte> dataPlayers = new List<byte>();
+                            playerListPacket.Serialize(ref dataPlayers);
+
+                            Packet packetPlayers = default;
+                            packetPlayers.Create(dataPlayers.ToArray(), PacketFlags.Reliable);
+
+                            player.peer.Send(0, ref packetPlayers);
+                        }
+
+                    }
                 }
                 break;
             case Opcode.C_PlayerInputs:
