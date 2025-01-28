@@ -8,7 +8,6 @@ namespace Protocols
     public static class Protocole
     {
         #region Base Serialize
-
         public static void Serialize_Uint8(ref List<byte> byteArray, byte value)
         {
             byteArray.Add(value);
@@ -49,9 +48,12 @@ namespace Protocols
         }
         public static void Serialize_f(ref List<byte> byteArray, float value)
         {
-            int htonf = IPAddress.HostToNetworkOrder((int)value);
-            byte[] ar = BitConverter.GetBytes(htonf);
-            byteArray.AddRange(ar);
+            byte[] bytes = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(bytes);
+            }
+            byteArray.AddRange(bytes);
         }
         public static void Serialize_str(ref List<byte> byteArray, string value)
         {
@@ -138,16 +140,20 @@ namespace Protocols
         }
         public static float Deserialize_f(List<byte> byteArray, ref int offset)
         {
-            int val;
+            float val;
             byte[] ar = new byte[4];
             for (int i = 0; i < 4; i++)
             {
                 ar[i] = byteArray[offset + i];
             }
-            val = BitConverter.ToInt32(ar);
-            float ntohf = (float)IPAddress.NetworkToHostOrder(val);
-            offset += 4;
-            return ntohf;
+            
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(ar);
+            }
+            val = BitConverter.ToSingle(ar);
+            offset += sizeof(Single);
+            return val;
         }
         public static string Deserialize_str(List<byte> byteArray, ref int offset)
         {
