@@ -6,7 +6,7 @@ public class Builder
 {
     public static int serverVersion = 0;
 
-    public static string serverPath = "/Builds/Serv/Server.exe ";
+    public static string serverPath = "/Builds/Server/Server.exe ";
     public static string clientPath = "/Builds/client/Client.exe ";
 
 
@@ -21,32 +21,32 @@ public class Builder
     [MenuItem("Build/Build Server")]
     public static void CreateServerBuild()
     {
-        PlayerSettings.productName = "Serv V: 0.0" + serverVersion;
+        PlayerSettings.productName = "Server";
 
         icon = AssetDatabase.LoadAssetAtPath<Texture2D>(serverIconPath);
         Texture2D[] t = new Texture2D[8] { icon, null, null, null, null, null, null, null };
 
         PlayerSettings.SetIcons(NamedBuildTarget.Standalone, t,IconKind.Any);
             
-        BuildPipeline.BuildPlayer(serverScenesPath, serverPath, BuildTarget.StandaloneWindows, BuildOptions.AutoRunPlayer);
+        BuildPipeline.BuildPlayer(serverScenesPath, serverPath, BuildTarget.StandaloneWindows64, BuildOptions.AutoRunPlayer);
 
-        Debug.Log("Server built in C:/Builds/Server/");
+        Debug.Log("Server built in 'Your Disk':/Builds/Server/");
     }
 
 
     [MenuItem("Build/Build Client")]
     public static void CreateClientBuild()
     {
-        PlayerSettings.productName = "Client V: 0.0" + serverVersion;
+        PlayerSettings.productName = "Client";
 
         icon = AssetDatabase.LoadAssetAtPath<Texture2D>(clientIconPath);
         Texture2D[] t = new Texture2D[8] { icon, null, null, null, null, null, null, null };
 
         PlayerSettings.SetIcons(NamedBuildTarget.Standalone, t, IconKind.Any);
 
-        BuildPipeline.BuildPlayer(clientScenesPath, clientPath, BuildTarget.StandaloneWindows, BuildOptions.AutoRunPlayer);
+        BuildPipeline.BuildPlayer(clientScenesPath, clientPath, BuildTarget.StandaloneWindows64, BuildOptions.AutoRunPlayer);
 
-        Debug.Log("Client built in C:/Builds/Client/");
+        Debug.Log("Client built in 'Your Disk':/Builds/Client/");
     }
 
 
