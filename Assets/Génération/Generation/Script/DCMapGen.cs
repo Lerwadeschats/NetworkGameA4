@@ -86,6 +86,10 @@ public class DCMapGen : MonoBehaviour
             int roomSeed = _rand.Next(0, possibleRoom.Count);
             GameObject go = Instantiate(possibleRoom[roomSeed]);
             GameObject goCopy = possibleRoom[roomSeed];
+            if (roomSeed == possibleRoom.Count - 1)
+            {
+                Debug.Log(roomSeed);
+            }
             Room room = go.GetComponent<Room>();
             List<Exit> roomExits = room.GetExits().ToList();
             List<Exit> matchingExits = roomExits.Where(ex => ex._type == focus._compatibleType).ToList();

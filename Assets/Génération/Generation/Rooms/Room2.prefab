@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 6835606304018888680}
   - component: {fileID: -944175812278684316}
   - component: {fileID: 1899352394454540899}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Room2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,9 +245,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boxCollider: {fileID: 1899352394454540899}
   _exits:
-  - {fileID: 0}
   - {fileID: 6157497076278169751}
-  - {fileID: 0}
+  - {fileID: 7044559141127543763}
+  - {fileID: 4765613965469869091}
+  - {fileID: 6651876520218997494}
 --- !u!61 &1899352394454540899
 BoxCollider2D:
   m_ObjectHideFlags: 0
