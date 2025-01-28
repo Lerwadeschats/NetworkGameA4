@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
+using System.Reflection;
 
 namespace Protocols
 {
@@ -199,23 +200,41 @@ namespace Protocols
 
             public string name;
 
-            public uint index;
-
             public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
                 Serialize_str(ref byteArray, name);
-                Serialize_Uint32(ref byteArray, index);
 
             }
             public static PlayerNamePacket Deserialize(List<byte> byteArray, int offset)
             {
                 PlayerNamePacket packet;
                 packet.name = Deserialize_str(byteArray, ref offset);
-                packet.index = Deserialize_Uint32(byteArray, ref offset);
                 return packet;
             }
         };
+
+        public struct GameDataPacket
+        {
+            static Opcode opcode = Opcode.S_GameData;
+
+            public uint playerIndex;
+
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_Uint32(ref byteArray, playerIndex);
+
+            }
+            public static GameDataPacket Deserialize(List<byte> byteArray, int offset)
+            {
+                GameDataPacket packet;
+                packet.playerIndex = Deserialize_Uint32(byteArray, ref offset);
+                return packet;
+            }
+
+        }
+
         public struct ListPlayersNamePacket
         {
             static Opcode opcode = Opcode.C_PlayerName;

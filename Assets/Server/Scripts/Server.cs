@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
+//using System.Numerics;
 using ENet6;
 using Protocols;
 using TMPro;
@@ -24,13 +24,15 @@ public class Server : MonoBehaviour
 
     private ulong seed;
 
-    private List<PlayerData> players = new List<PlayerData>();
+    private List<PlayerClient> players = new List<PlayerClient>();
 
-    struct PlayerData
+    struct PlayerClient
     {
-        public int index;
-        public Player playerObject;
+        public Peer peer;
+        public Player player;
+
     }
+
 
     private void Start()
     {
@@ -77,7 +79,7 @@ public class Server : MonoBehaviour
                     case EventType.Connect:
 
                         SendSeedToClient(eNetEvent.Peer);
-                        CreatePlayer(eNetEvent.Peer);
+                        CreateNewPlayer(eNetEvent.Peer);
                         print($"Peer # {eNetEvent.Peer.ID} connected! \n Sended Seed To Client");
                         break;
 
@@ -122,7 +124,28 @@ public class Server : MonoBehaviour
             case Opcode.C_PlayerName:
                 {
                     PlayerNamePacket playerNameInfo = PlayerNamePacket.Deserialize(data, offset);
+
                     Debug.Log("Player " + playerNameInfo.name + " get index(peer) :" + peer);
+
+
+                    PlayerClient playerFromIndex = players.Find(player => player.player.index == peer);
+
+
+                    //envoi de l'index
+                    GameDataPacket gameDataPacket = new()
+                    {
+                        playerIndex = peer
+                    };
+
+
+                    List<byte> dataIndex = new List<byte>();
+                    gameDataPacket.Serialize(ref dataIndex);
+
+                    Packet packet = default;
+                    packet.Create(data.ToArray(), PacketFlags.Reliable);
+                    playerFromIndex.peer.Send(0, ref packet);
+
+                    Debug.Log("Sent index to player #" + gameDataPacket.playerIndex);
                 }
                 break;
             case Opcode.C_PlayerInputs:
@@ -146,14 +169,21 @@ public class Server : MonoBehaviour
         peer.Send(0, ref packet);
     }
 
-    private void CreateAndSendPlayer(Peer peer)
+    private void CreateNewPlayer(Peer peer)
     {
         Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
-        PlayerData newPlayer = new PlayerData();
-        newPlayer.index = (int)peer.ID;
-        newPlayer.playerObject = player;
 
-        players.Add(newPlayer);
+        player.index = peer.ID;
+
+        player.Color = new Color(Random.Range(0, 255), Random.Range(0, 255), Random.Range(0, 255));
+
+        PlayerClient clientPlayer = new PlayerClient
+        {
+            peer = peer,
+            player = player,
+        };
+
+        players.Add(clientPlayer);
     }
 
 

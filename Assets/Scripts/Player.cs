@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 
     private PlayerInputs _inputs;
 
-    public int index;
+    public uint index;
     
     public struct PlayerStats
     {
@@ -67,7 +67,12 @@ public class Player : MonoBehaviour
         set { _inputs = value; }
     }
 
-    public void SetNewPlayerInfos(int id)
+    private void Start()
+    {
+        SetNewPlayerInfos();
+    }
+
+    public void SetNewPlayerInfos()
     {
         _position = gameObject.transform.position;
         _stats = new PlayerStats(10f, 100f, 100f, 20f);

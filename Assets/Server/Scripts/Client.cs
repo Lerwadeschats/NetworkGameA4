@@ -58,11 +58,11 @@ public class Client : MonoBehaviour
             return false;
         }
 
+        _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+        _player.name = playerName_Field.text;
         PlayerNamePacket playerNamePacket = new()
         {
-            name = playerName_Field.text,
-            index = (uint)_player.index
-            
+            name = _player.name,
         };
 
         List<byte> data = new List<byte>();
@@ -154,6 +154,16 @@ public class Client : MonoBehaviour
                     SceneMerger.instance.MergeScene();
                     DCMapGen.instance.Regenerate(info.seed);
 
+                }
+                break;
+
+            case Opcode.S_GameData:
+                {
+                    GameDataPacket gameData = GameDataPacket.Deserialize(data, offset);
+
+                    _player.index = gameData.playerIndex;
+
+                    
                 }
                 break;
         }
