@@ -184,8 +184,9 @@ public class Client : MonoBehaviour
                     PlayerPositionPacket playerPositionPacket = PlayerPositionPacket.Deserialize(data, offset);
                     foreach (PlayerPositionPacket.PlayerData playerPositionData in playerPositionPacket.players)
                     {
+
                         Player _currentPlayer = _allPlayers.Find(Player => Player.index == playerPositionData.playerIndex);
-                        print(_currentPlayer);
+                        
                         _currentPlayer._playerMovements.UpdatePosition(playerPositionData.position);
                         _currentPlayer._playerMovements.UpdateVelocity(playerPositionData.velocity);
                         _currentPlayer.Inputs = playerPositionData.inputs;
@@ -196,7 +197,7 @@ public class Client : MonoBehaviour
 
             case Opcode.S_PlayerList:
                 {
-                    ListPlayersPacket playerPositionPacket = ListPlayersPacket.Deserialize(data, offset);
+                    ListPlayersPacket playerListPacket = ListPlayersPacket.Deserialize(data, offset);
 
                     /*for (int i = 0; i < _allPlayers.Count; i++)
                     {
@@ -205,19 +206,31 @@ public class Client : MonoBehaviour
                         
                     }*/
 
-                    foreach (ListPlayersPacket.PlayerData packetPlayer in playerPositionPacket.playersData)
+                   
+
+                    foreach (ListPlayersPacket.PlayerData packetPlayer in playerListPacket.playersData)
                     {
 
                         Player playerData = _allPlayers.Find(player => player.index == packetPlayer.playerIndex);
+                        
                         if (playerData == null)
                         {
-                            Player player = new Player();
-                            
-                            //player.Color = packetPlayer.playerColor;
-                            player.Name = packetPlayer.playerName;
-                            player.index = packetPlayer.playerIndex;
+                            if (_player.index == packetPlayer.playerIndex)
+                            {
+                                _allPlayers.Add(_player);
+                            }
+                            else
+                            {
 
-                            _allPlayers.Add(player);
+                                Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+
+
+                                player.Name = packetPlayer.playerName;
+                                player.index = packetPlayer.playerIndex;
+
+                                _allPlayers.Add(player);
+                            }
+                            
                             //TODO: update les noms des joueurs visuellement
                         }
                     }

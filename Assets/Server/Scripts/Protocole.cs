@@ -166,7 +166,7 @@ namespace Protocols
                 str[i] = (char)byteArray[j + offset];
             }
             string val = new string(str);
-            offset += (int)length;
+            offset += (int)length*2;
             return val;
         }
         public static Color Deserialize_color(List<byte> byteArray, ref int offset)
@@ -243,7 +243,7 @@ namespace Protocols
             {
                 public string playerName;
                 public byte playerIndex;
-                public Color playerColor;
+                //public Color playerColor;
             }
             public List<PlayerData> playersData;
 
@@ -256,7 +256,7 @@ namespace Protocols
                 {
                     Serialize_str(ref byteArray, data.playerName);
                     Serialize_Uint8(ref byteArray, data.playerIndex);
-                    Serialize_color(ref byteArray, data.playerColor);
+                    //Serialize_color(ref byteArray, data.playerColor);
                 }
             }
             public static ListPlayersPacket Deserialize(List<byte> byteArray, int offset)
@@ -268,7 +268,7 @@ namespace Protocols
                 {
                     playerDataArray[i].playerName = Deserialize_str(byteArray, ref offset);
                     playerDataArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
-                    playerDataArray[i].playerColor = Deserialize_color(byteArray, ref offset);
+                    //playerDataArray[i].playerColor = Deserialize_color(byteArray, ref offset);
                 }
                 packet.playersData.AddRange(playerDataArray);
                 return packet;

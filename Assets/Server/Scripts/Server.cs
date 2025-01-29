@@ -98,7 +98,7 @@ public class Server : MonoBehaviour
                                 {
                                     playerName = player.player.Name, 
                                     playerIndex = (byte)player.player.index, 
-                                    playerColor = player.player.Color
+                                    //playerColor = player.player.Color
                                 };
 
                                 playerListPacket.playersData.Add(packetPlayer);
@@ -195,10 +195,9 @@ public class Server : MonoBehaviour
                                 playerName = player.player.Name,
                                 
                                 playerIndex = (byte)player.player.index,
-                                playerColor = player.player.Color
+                                //playerColor = player.player.Color
                             };
 
-                            print("dzadzadza: " + packetPlayer.playerName);
 
                             playerListPacket.playersData.Add(packetPlayer);
                         }
