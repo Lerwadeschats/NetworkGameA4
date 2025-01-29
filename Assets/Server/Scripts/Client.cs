@@ -206,7 +206,7 @@ public class Client : MonoBehaviour
                         
                     }*/
 
-                   
+                    
 
                     foreach (ListPlayersPacket.PlayerData packetPlayer in playerListPacket.playersData)
                     {
@@ -236,6 +236,16 @@ public class Client : MonoBehaviour
                     }
                     break;
 
+                }
+
+            case Opcode.S_PlayerDisconnect:
+                {
+
+                    PlayerDisconnectPacket playerDecoPlacket = PlayerDisconnectPacket.Deserialize(data, offset);
+                    Player playerToRemove = _allPlayers.Find(player => player.index == playerDecoPlacket.index);
+                    _allPlayers.Remove(playerToRemove);
+                    Destroy(playerToRemove);
+                    break;
                 }
                 
                 

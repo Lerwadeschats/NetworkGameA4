@@ -79,34 +79,36 @@ public class PlayerMovements : MonoBehaviour
     private void Update()
     {
         float moveInput = _movement.action.ReadValue<float>();
-
-        if (moveInput > 0)
+        if(_player != null && _player.Inputs != null)
         {
-            _moveDirection = 1;
-            _player.Inputs.moveRight = true;
-            _player.Inputs.moveLeft = false;
+            if (moveInput > 0)
+            {
+                _moveDirection = 1;
+                _player.Inputs.moveRight = true;
+                _player.Inputs.moveLeft = false;
 
-        }
-        else if (moveInput < 0)
-        {
-            _moveDirection = -1;
-            _player.Inputs.moveRight = false;
-            _player.Inputs.moveLeft = true;
-        }
-        else
-        {
-            _player.Inputs.moveRight = false;
-            _player.Inputs.moveLeft = false;
+            }
+            else if (moveInput < 0)
+            {
+                _moveDirection = -1;
+                _player.Inputs.moveRight = false;
+                _player.Inputs.moveLeft = true;
+            }
+            else
+            {
+                _player.Inputs.moveRight = false;
+                _player.Inputs.moveLeft = false;
+            }
+
+            _rb.velocity = _player.Velocity;
+            transform.position = _player.Position;
+            //print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
         }
 
-        _rb.velocity = _player.Velocity;
-        transform.position = _player.Position;
-        //print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
     }
 
     public void UpdatePhysics()
     {
-
         float moveDirection = 1;
 
         float moveInput = 1;

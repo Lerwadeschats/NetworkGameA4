@@ -86,13 +86,34 @@ public class Server : MonoBehaviour
                     // Un joueur s'est déconnecté
                     case EventType.Disconnect:
 
-                        ListPlayersPacket playerListPacket = new();
+                        PlayerClient playerToRemove = players.Find(p => p.peer.ID == eNetEvent.Peer.ID);
+
+                        PlayerDisconnectPacket playerDisconnectPacket = new PlayerDisconnectPacket();
+                        playerDisconnectPacket.index = (byte)playerToRemove.player.index;
                         
+                        foreach (PlayerClient player in players)
+                        {
+                            if (player.peer.IsSet && player.player.Name != "")
+                            {
+                                List<byte> playerToDCData = new List<byte>();
+                                playerDisconnectPacket.Serialize(ref playerToDCData);
+
+                                Packet packet = default;
+                                packet.Create(playerToDCData.ToArray(), PacketFlags.Reliable);
+
+                                player.peer.Send(0, ref packet);
+                            }
+
+                        }
+
+                        players.Remove(playerToRemove);
+                        Destroy(playerToRemove.player.gameObject);
+                        ListPlayersPacket playerListPacket = new();
+                        playerListPacket.playersData = new List<ListPlayersPacket.PlayerData>();
                         foreach (PlayerClient player in players)
 	{
                             if (player.peer.IsSet && player.player.Name != "") 
                             {
-                                // Oui, rajoutons-le à la liste
 
                                 ListPlayersPacket.PlayerData packetPlayer = new()
                                 {
