@@ -76,7 +76,7 @@ public class PlayerMovements : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         float moveInput = _movement.action.ReadValue<float>();
 
@@ -100,7 +100,8 @@ public class PlayerMovements : MonoBehaviour
         }
 
         _rb.velocity = _player.Velocity;
-        _rb.position = _player.Position;
+        transform.position = _player.Position;
+        print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
     }
 
     public void UpdatePhysics()
@@ -130,9 +131,10 @@ public class PlayerMovements : MonoBehaviour
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
 
-        print("moveRight : " + _player.Inputs.moveRight);
+        /*print("moveRight : " + _player.Inputs.moveRight);
         print("moveLeft : " + _player.Inputs.moveLeft);
-        print("moveRight : " + _player.Inputs.moveRight);
+        print("moveRight : " + _player.Inputs.moveRight);*/
+        
 
         if (Mathf.Abs(_player.Velocity.y) > _jumpThreshold)
         {
@@ -146,7 +148,6 @@ public class PlayerMovements : MonoBehaviour
             {
                 _rb.gravityScale = _baseGravityScale;
             }
-
         }
         else
         {
@@ -169,8 +170,8 @@ public class PlayerMovements : MonoBehaviour
 
         
 
-        _player.Velocity = _rb.velocity;
-        _player.Position = _rb.position;
+        /*_player.Velocity = _rb.velocity;
+        _player.Position = transform.position;*/
 
         
     }

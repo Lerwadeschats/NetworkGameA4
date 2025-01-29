@@ -166,7 +166,7 @@ public class Server : MonoBehaviour
                     {
                         playerIndex = peer
                     };
-
+                    playerFromIndex.player.Name = playerNameInfo.name;
 
                     List<byte> dataIndex = new List<byte>();
                     gameDataPacket.Serialize(ref dataIndex);
@@ -182,11 +182,13 @@ public class Server : MonoBehaviour
                     //On envoie la liste des joueurs
                     ListPlayersPacket playerListPacket = new();
 
+                    playerListPacket.playersData = new List<ListPlayersPacket.PlayerData>();
+
                     foreach (PlayerClient player in players)
                     {
                         if (player.peer.IsSet && player.player.Name != "")
                         {
-                            // Oui, rajoutons-le à la liste
+                            
 
                             ListPlayersPacket.PlayerData packetPlayer = new()
                             {
@@ -198,22 +200,25 @@ public class Server : MonoBehaviour
                             playerListPacket.playersData.Add(packetPlayer);
                         }
                     }
-                    foreach (PlayerClient player in players)
+
+                    foreach (PlayerClient playerClient in players)
                     {
-                        if (player.peer.IsSet && player.player.Name != "")
+                        if (playerClient.peer.IsSet && playerClient.player.Name != "")
                         {
                             List<byte> dataPlayers = new List<byte>();
                             playerListPacket.Serialize(ref dataPlayers);
 
                             Packet packetPlayers = default;
+                                
                             packetPlayers.Create(dataPlayers.ToArray(), PacketFlags.Reliable);
 
-                            player.peer.Send(0, ref packetPlayers);
+                            playerClient.peer.Send(0, ref packetPlayers);
                         }
 
                     }
+                    break;
                 }
-                break;
+                
             case Opcode.C_PlayerInputs:
                 {
                     PlayerInputsPacket inputsPackets = PlayerInputsPacket.Deserialize(data, offset);
@@ -222,8 +227,9 @@ public class Server : MonoBehaviour
                     PlayerInputs inputs = inputsPackets.inputs;
 
                     playerFromIndex.player.Inputs = inputs;
+                    break;
                 }
-                break;
+                
         }
     }
 
@@ -261,6 +267,7 @@ public class Server : MonoBehaviour
     //Tick function
     private void Tick(ref ServerData servData)
     {
+        SendPositionStatesPlayer();
         foreach (PlayerClient clientPlayer in players)
         {
             clientPlayer.player._playerMovements.UpdatePhysics();
@@ -272,19 +279,17 @@ public class Server : MonoBehaviour
     void SendPositionStatesPlayer()
     {
         PlayerPositionPacket posPacket = new PlayerPositionPacket();
-
+        posPacket.players = new List<PlayerPositionPacket.PlayerData>();
         foreach (PlayerClient clientData in players)
         {
             if (clientData.peer.IsSet && clientData.player != null)
             {
                 PlayerPositionPacket.PlayerData packetPlayer = new PlayerPositionPacket.PlayerData();
-
                 packetPlayer.playerIndex = (byte)clientData.player.index;
                 packetPlayer.position = clientData.player.Position;
                 packetPlayer.velocity = clientData.player.Velocity;
+                packetPlayer.inputs = clientData.player.Inputs;
                 posPacket.players.Add(packetPlayer);
-
-
             }
         }
 
@@ -292,8 +297,6 @@ public class Server : MonoBehaviour
 
         Packet packet = default;
         packet.Create(data.ToArray(), PacketFlags.Reliable);
-
-        
 
         foreach (PlayerClient clientPlayer in players)
         {

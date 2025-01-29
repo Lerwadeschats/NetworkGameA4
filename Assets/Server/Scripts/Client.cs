@@ -64,11 +64,13 @@ public class Client : MonoBehaviour
         }
         
         //On désactive l'UI affreuse svp
-        _canvas.gameObject.SetActive(false); 
+        
 
 
         _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
         _player.Name = playerName_Field.text;
+
+        _canvas.gameObject.SetActive(false);
         PlayerNamePacket playerNamePacket = new()
         {
             name = _player.Name,
@@ -186,6 +188,7 @@ public class Client : MonoBehaviour
 
                         _currentPlayer._playerMovements.UpdatePosition(playerPositionData.position);
                         _currentPlayer._playerMovements.UpdateVelocity(playerPositionData.velocity);
+                        _currentPlayer.Inputs = playerPositionData.inputs;
                     }
                 }
                 break;
