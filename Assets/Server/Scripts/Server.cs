@@ -107,6 +107,7 @@ public class Server : MonoBehaviour
                         }
 
                         players.Remove(playerToRemove);
+
                         Destroy(playerToRemove.player.gameObject);
                         ListPlayersPacket playerListPacket = new();
                         playerListPacket.playersData = new List<ListPlayersPacket.PlayerData>();
