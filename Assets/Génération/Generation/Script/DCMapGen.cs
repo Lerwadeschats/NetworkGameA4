@@ -44,6 +44,7 @@ public class DCMapGen : MonoBehaviour
     private void Start()
     {
         GameManager.instance.Lobby = gameObject.transform.GetChild(0).gameObject.GetComponent<Room>();
+        //Regenerate(45);
     }
     public void Regenerate(ulong newSeed)
     {
@@ -52,8 +53,8 @@ public class DCMapGen : MonoBehaviour
 
         seed = newSeed;
         _rand = new System.Random((int)newSeed);
-        print(_rand.Next(0, 100));
-        print((int)seed);
+        //print(_rand.Next(0, 100));
+        //print((int)seed);
 
         _focusToGenerate.Clear();
         _camera.Targets.Clear();
@@ -74,7 +75,7 @@ public class DCMapGen : MonoBehaviour
             RetryRoom:
             if(possibleRoom.Count == 0) 
             {
-                print("OutOfRooms " + isMain);
+                //print("OutOfRooms " + isMain);
                 if (isMain)
                 {
                     if (transform.childCount < _nbMinOfRoom) Regenerate(seed);
@@ -86,10 +87,7 @@ public class DCMapGen : MonoBehaviour
             int roomSeed = _rand.Next(0, possibleRoom.Count);
             GameObject go = Instantiate(possibleRoom[roomSeed]);
             GameObject goCopy = possibleRoom[roomSeed];
-            if (roomSeed == possibleRoom.Count - 1)
-            {
-                Debug.Log(roomSeed);
-            }
+         
             Room room = go.GetComponent<Room>();
             List<Exit> roomExits = room.GetExits().ToList();
             List<Exit> matchingExits = roomExits.Where(ex => ex._type == focus._compatibleType).ToList();
@@ -103,22 +101,22 @@ public class DCMapGen : MonoBehaviour
 
             int exitSeed = _rand.Next(0, matchingExits.Count);
             Exit exit = matchingExits[exitSeed];
-            go.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, endCol, isMain? (float)i / _nbMaxOfRoom : (float)i / _nbOfRoomBranch);
+            //go.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, endCol, isMain? (float)i / _nbMaxOfRoom : (float)i / _nbOfRoomBranch);
             go.transform.parent = parent;
             go.transform.position = focus.transform.position - exit.transform.position;
             go.name += " "+ i;
             Physics2D.simulationMode = SimulationMode2D.Script;
             Physics2D.Simulate(0f);
 
-            Collider2D[] contact = Physics2D.OverlapBoxAll(go.transform.position, go.transform.localScale, 0f);
+            Collider2D[] contact = Physics2D.OverlapBoxAll(go.transform.position, go.transform.localScale, 0f,3);
             contact = contact.Where(col => col.name != go.name).ToArray();
 
-            if (contact.Length > 0) // Room is touching another one
+            /*if (contact.Length > 0) // Room is touching another one
             {
                 Destroy(go);
                 possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                 goto RetryRoom; 
-            }
+            }*/
 
             roomExits = roomExits.Where(ex => ex._type != focus._compatibleType).ToList();
             RetryExit:
@@ -157,11 +155,11 @@ public class DCMapGen : MonoBehaviour
                 _focusToGenerate.Add(roomExits[exitIndex]);
             }
         }
-        if (transform.childCount < _nbMinOfRoom)
+/*        if (transform.childCount < _nbMinOfRoom)
         {
             Regenerate(seed);
             return;
-        }
+        }*/
         if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
         _hasMainFinish = isMain;
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
