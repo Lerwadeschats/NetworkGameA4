@@ -50,7 +50,7 @@ public class Builder
     }
 
 
-    [MenuItem("Build/Build Both")]
+    [MenuItem("Build/Build Both %g")]
     public static void DoBoth()
     {
         CreateServerBuild();
