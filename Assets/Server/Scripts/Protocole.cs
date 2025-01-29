@@ -190,7 +190,8 @@ namespace Protocols
             S_PlayerDeath,
             S_PlayerList,
             S_PlayersPosition,
-            S_PlayerStats
+            S_PlayerStats,
+            S_PlayerDisconnect
         };
         #endregion
         #region packets
@@ -210,6 +211,26 @@ namespace Protocols
             {
                 PlayerNamePacket packet;
                 packet.name = Deserialize_str(byteArray, ref offset);
+                return packet;
+            }
+        };
+
+        public struct PlayerDisconnectPacket
+        {
+            static Opcode opcode = Opcode.S_PlayerDisconnect;
+
+            public byte index;
+
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_Uint8(ref byteArray, index);
+
+            }
+            public static PlayerDisconnectPacket Deserialize(List<byte> byteArray, int offset)
+            {
+                PlayerDisconnectPacket packet;
+                packet.index = Deserialize_Uint8(byteArray, ref offset);
                 return packet;
             }
         };
