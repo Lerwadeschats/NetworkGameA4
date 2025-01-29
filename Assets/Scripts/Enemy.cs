@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
         _hpValue = 100f;
         _maxHpValue = 100f;
         _attack = 20f;
-        _speed = 10f;
+        _speed = 1f;
     }
 
     public float HpValue
@@ -51,6 +51,19 @@ public class Enemy : MonoBehaviour
 
     float _baseScaleX = 1;
 
+    public uint index;
+
+    [SerializeField]
+    private bool _isActive;
+
+    public bool IsActive()
+    {
+        return _isActive;
+    }
+
+    public Vector2 GetVelocity() { return _rb.velocity; }
+    public void SetVelocity(Vector2 newVelocity) { _rb.velocity = newVelocity; }
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -67,11 +80,16 @@ public class Enemy : MonoBehaviour
 
         if(target != null)
         {
+            _isActive = true;
             Vector2 directionVector = target.gameObject.transform.position - gameObject.transform.position;
             if (directionVector.x <= 0)
                 dirMovement = -1;
             else
                 dirMovement = 1;
+        }
+        else
+        {
+            _isActive = false;
         }
         if(dirMovement != 0)
         {
@@ -118,5 +136,7 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, _minDetectionRange);
 
     }
+
+    
 
 }

@@ -57,9 +57,9 @@ public class DCMapGen : MonoBehaviour
         //print((int)seed);
 
         _focusToGenerate.Clear();
-        _camera.Targets.Clear();
+        //_camera.Targets.Clear();
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
-        _camera.Targets.Add(transform.GetChild(0).gameObject);
+        //_camera.Targets.Add(transform.GetChild(0).gameObject);
         GenerateBranch(true, transform.GetChild(0).GetChild(_rand.Next(0, 2)).GetComponent<Exit>(), Color.red);
     }
 
@@ -142,7 +142,7 @@ public class DCMapGen : MonoBehaviour
                 }
             }
             
-            _camera.Targets.Add(go);
+            //_camera.Targets.Add(go);
             focus = roomExits[exitIndex];
             roomExits.RemoveAt(exitIndex);
             int chanetobranch = _rand.Next(0, 100);

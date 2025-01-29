@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
 using static Protocols.Protocole;
+using static Protocols.Protocole.PlayerPositionPacket;
 
 public class Client : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class Client : MonoBehaviour
     private Player _player;
 
     private List<Player> _allPlayers = new List<Player>();
+
+    private List<Enemy> allEnemies = new List<Enemy>();
 
     public bool Connect(string addressString)
     {
@@ -68,6 +71,8 @@ public class Client : MonoBehaviour
 
 
         _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+        Camera.main.GetComponent<Cam>().Targets.Clear();
+        Camera.main.GetComponent<Cam>().Targets.Add(_player.gameObject);
         _player.Name = playerName_Field.text;
 
         _canvas.gameObject.SetActive(false);
@@ -131,6 +136,7 @@ public class Client : MonoBehaviour
                     case ENet6.EventType.Disconnect:
                         Debug.Log("Disconnect");
                         serverPeer = null;
+                        Destroy(this);
                         break;
 
                     case ENet6.EventType.Receive:
@@ -164,6 +170,7 @@ public class Client : MonoBehaviour
 
                     SceneMerger.instance.MergeScene();
                     DCMapGen.instance.Regenerate(info.seed);
+                    allEnemies.AddRange(FindObjectsOfType<Enemy>());
                     break;
                 }
                 
@@ -245,6 +252,19 @@ public class Client : MonoBehaviour
                     Player playerToRemove = _allPlayers.Find(player => player.index == playerDecoPlacket.index);
                     _allPlayers.Remove(playerToRemove);
                     Destroy(playerToRemove);
+                    break;
+                }
+
+            case Opcode.S_EnemiesActive:
+                {
+                    ActiveEnemiesDataPacket activeEnemies = ActiveEnemiesDataPacket.Deserialize(data, offset);
+                    
+                    foreach(ActiveEnemiesDataPacket.EnemyData enemyData in activeEnemies.enemyData)
+                    {
+                        Enemy enemyToFind = allEnemies.Find(enemy => enemy.index == enemyData.enemyIndex);
+                        enemyToFind.transform.position = enemyData.position;
+                        enemyToFind.SetVelocity(Vector2.zero);
+                    }
                     break;
                 }
                 
