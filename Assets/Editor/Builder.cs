@@ -13,7 +13,6 @@ public class Builder
     public static readonly string[] serverScenesPath = { "Assets/Server/Scenes/ServerHost.unity", "Assets/Génération/Generation/Scenes/Generation.unity" };
     public static readonly string[] clientScenesPath = { "Assets/Server/Scenes/Client.unity", "Assets/Génération/Generation/Scenes/Generation.unity" };
 
-    public static Texture2D icon;
     public static string serverIconPath = "Assets/Icon/iconfinder-technologymachineelectronicdevice29-4026431_113337.png";
     public static string clientIconPath = "Assets/Icon/pngwing.com.png";
 
@@ -22,7 +21,7 @@ public class Builder
     {
         PlayerSettings.productName = "Server";
 
-        icon = AssetDatabase.LoadAssetAtPath<Texture2D>(serverIconPath);
+        Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>(serverIconPath);
         Texture2D[] t = new Texture2D[8] { icon, null, null, null, null, null, null, null };
 
         PlayerSettings.SetIcons(NamedBuildTarget.Standalone, t, IconKind.Any);
@@ -38,7 +37,7 @@ public class Builder
     {
         PlayerSettings.productName = "Client";
 
-        icon = AssetDatabase.LoadAssetAtPath<Texture2D>(clientIconPath);
+        Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>(clientIconPath);
         Texture2D[] t = new Texture2D[8] { icon, null, null, null, null, null, null, null };
 
         PlayerSettings.SetIcons(NamedBuildTarget.Standalone, t, IconKind.Any);
@@ -57,11 +56,19 @@ public class Builder
         //UnityEngine.Debug.Log("Server built in " + serverPath);
     }
 
-    [MenuItem("Build/Run Last Server %h")]
+    [MenuItem("Build/Run Last Server %y")]
     public static void RunServer()
     {
         System.Diagnostics.Process process = new System.Diagnostics.Process();
         process.StartInfo.FileName = "A:\\Builds\\Server/Server.exe";
+        process.Start();
+    }
+
+    [MenuItem("Build/Run Last Client %h")]
+    public static void RunClient()
+    {
+        System.Diagnostics.Process process = new System.Diagnostics.Process();
+        process.StartInfo.FileName = "A:\\Builds\\client/Client.exe";
         process.Start();
     }
 
