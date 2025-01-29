@@ -152,10 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed20614d140eabd48beabcbfce02391d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nbMaxOfRoom: 35
+  _nbMaxOfRoom: 10
   _nbMinOfRoom: 1
   _nbOfRoomBranch: 10
-  _branchNumber: 12
+  _branchNumber: 3
   _chanceToBranch: 20
   _rooms:
   - {fileID: 695298301670951213, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
