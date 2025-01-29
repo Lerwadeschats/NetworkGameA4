@@ -153,19 +153,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nbMaxOfRoom: 35
-  _nbMinOfRoom: 35
-  _nbOfRoomBranch: 15
+  _nbMinOfRoom: 1
+  _nbOfRoomBranch: 10
   _branchNumber: 12
   _chanceToBranch: 20
   _rooms:
-  - {fileID: 695298301670951213, guid: 7796140879ab79f4eabbdac025108164, type: 3}
-  - {fileID: 7603298720839972217, guid: 0b92cfa4f98fad847b950ed239b59ca1, type: 3}
-  - {fileID: 8693213186086745485, guid: 2ee337b0a9e7cc74f8ace369d7da94a3, type: 3}
-  - {fileID: 4117697092661097047, guid: b4c7b7aaf43096a4896d9dcc9a284939, type: 3}
-  - {fileID: 2968616722266852400, guid: fb7dff800770bfb49b8697243eadcdc2, type: 3}
-  - {fileID: 5362654637123025068, guid: 31ec396010e32624bac3c45a5482791e, type: 3}
-  - {fileID: 695298301670951213, guid: f45f5fd8969a7464db9cafb0d9e57385, type: 3}
-  - {fileID: 695298301670951213, guid: 8d305a5382ab8654f9467ab140938f2a, type: 3}
+  - {fileID: 695298301670951213, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
+  - {fileID: 7603298720839972217, guid: e80accb9b3a7b4f4292852fb6e2cff09, type: 3}
+  - {fileID: 8693213186086745485, guid: f446f239d5cdfb64a926596f90bff91a, type: 3}
   DebugSeed: 0
 --- !u!4 &593118155
 Transform:

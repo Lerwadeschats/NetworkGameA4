@@ -1316,7 +1316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targets: []
-  _offset: {x: 0, y: 0, z: -10}
+  _offset: {x: 0, y: 0, z: -300}
   _velocity: {x: 0, y: 0, z: 0}
   _SmoothTime: 0.5
   _minZoom: 5
