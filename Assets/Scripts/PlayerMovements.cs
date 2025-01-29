@@ -101,7 +101,7 @@ public class PlayerMovements : MonoBehaviour
 
         _rb.velocity = _player.Velocity;
         transform.position = _player.Position;
-        print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
+        //print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
     }
 
     public void UpdatePhysics()

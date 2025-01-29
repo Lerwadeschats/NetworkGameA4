@@ -188,14 +188,17 @@ public class Server : MonoBehaviour
                     {
                         if (player.peer.IsSet && player.player.Name != "")
                         {
-                            
+
 
                             ListPlayersPacket.PlayerData packetPlayer = new()
                             {
                                 playerName = player.player.Name,
+                                
                                 playerIndex = (byte)player.player.index,
                                 playerColor = player.player.Color
                             };
+
+                            print("dzadzadza: " + packetPlayer.playerName);
 
                             playerListPacket.playersData.Add(packetPlayer);
                         }
@@ -294,7 +297,7 @@ public class Server : MonoBehaviour
         }
 
         List<byte> data = new List<byte>();
-
+        posPacket.Serialize(ref data);
         Packet packet = default;
         packet.Create(data.ToArray(), PacketFlags.Reliable);
 
@@ -326,6 +329,7 @@ public class Server : MonoBehaviour
 
     void HandleLog(string logString, string stackTrace, LogType type)
     {
+        if (stack.Length > 2000) ClearConsole();
         logString = logString.Replace("UnityEngine", "||");
         logString = logString.Split("||")[0];
         textLogger.text = "> " + logString + "\n" + stack;

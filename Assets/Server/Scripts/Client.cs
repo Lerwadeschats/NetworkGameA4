@@ -164,9 +164,9 @@ public class Client : MonoBehaviour
 
                     SceneMerger.instance.MergeScene();
                     DCMapGen.instance.Regenerate(info.seed);
-
+                    break;
                 }
-                break;
+                
 
             case Opcode.S_GameData:
                 {
@@ -174,35 +174,36 @@ public class Client : MonoBehaviour
 
                     _player.index = gameData.playerIndex;
 
+                    break;
                     //Debug.Log("Received index #" +  gameData.playerIndex + " from server.");
                 }
-                break;
+                
 
             case Opcode.S_PlayersPosition:
                 {
                     PlayerPositionPacket playerPositionPacket = PlayerPositionPacket.Deserialize(data, offset);
-
                     foreach (PlayerPositionPacket.PlayerData playerPositionData in playerPositionPacket.players)
                     {
                         Player _currentPlayer = _allPlayers.Find(Player => Player.index == playerPositionData.playerIndex);
-
+                        print(_currentPlayer);
                         _currentPlayer._playerMovements.UpdatePosition(playerPositionData.position);
                         _currentPlayer._playerMovements.UpdateVelocity(playerPositionData.velocity);
                         _currentPlayer.Inputs = playerPositionData.inputs;
                     }
+                    break;
                 }
-                break;
+                
 
             case Opcode.S_PlayerList:
                 {
                     ListPlayersPacket playerPositionPacket = ListPlayersPacket.Deserialize(data, offset);
 
-                    for (int i = 0; i < _allPlayers.Count; i++)
+                    /*for (int i = 0; i < _allPlayers.Count; i++)
                     {
                         ListPlayersPacket.PlayerData playerData = playerPositionPacket.playersData.Find(playerFromIndex => playerFromIndex.playerIndex == _allPlayers[i].index);
 
                         
-                    }
+                    }*/
 
                     foreach (ListPlayersPacket.PlayerData packetPlayer in playerPositionPacket.playersData)
                     {
@@ -212,16 +213,18 @@ public class Client : MonoBehaviour
                         {
                             Player player = new Player();
                             
-                            player.Color = packetPlayer.playerColor;
+                            //player.Color = packetPlayer.playerColor;
                             player.Name = packetPlayer.playerName;
                             player.index = packetPlayer.playerIndex;
 
+                            _allPlayers.Add(player);
                             //TODO: update les noms des joueurs visuellement
                         }
                     }
+                    break;
 
                 }
-                break;
+                
                 
         }
 
