@@ -76,6 +76,8 @@ public class Cam : MonoBehaviour
         //print(MaxDist / _zoomLimiter + " ::::::::: " + _zoomCurve.Evaluate(MaxDist / _zoomLimiter));
         _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, newZoom, Time.fixedDeltaTime);
     }
+
+    
     private void MoveOnRoom(Room room)
     {
         room._boxCollider.enabled = true;
@@ -91,6 +93,8 @@ public class Cam : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }
     }
+
+
     private void Zoom()
     {
         float MaxDist = GetMaxDist();

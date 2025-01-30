@@ -7,6 +7,7 @@ using Protocols;
 using TMPro;
 using UnityEngine;
 using static Protocols.Protocole;
+using static Protocols.Protocole.PlayerPositionPacket;
 using Event = ENet6.Event;
 using EventType = ENet6.EventType;
 using Random = UnityEngine.Random;
@@ -25,6 +26,7 @@ public class Server : MonoBehaviour
     private ulong seed;
 
     private List<PlayerClient> players = new List<PlayerClient>();
+    private List<Enemy> enemies = new List<Enemy>();
 
     struct PlayerClient
     {
@@ -32,7 +34,6 @@ public class Server : MonoBehaviour
         public Player player;
 
     }
-
 
     private void Start()
     {
@@ -77,7 +78,7 @@ public class Server : MonoBehaviour
                 {
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
-
+                        UpdateEnemies();
                         SendSeedToClient(eNetEvent.Peer);
                         CreateNewPlayer(eNetEvent.Peer);
                         print($"Peer # {eNetEvent.Peer.ID} connected! \n Sended Seed To Client");
@@ -261,6 +262,15 @@ public class Server : MonoBehaviour
     {
         List<byte> data = new List<byte>();
         WorldInitPacket info = new() { seed = seed };
+        info.allEnemies = new List<WorldInitPacket.EnemyData>();
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            WorldInitPacket.EnemyData newEnemy = new WorldInitPacket.EnemyData();
+            newEnemy.index = (byte)enemies[i].index;
+            newEnemy.position = enemies[i].transform.position;
+            info.allEnemies.Add(newEnemy);
+        }
+        
         info.Serialize(ref data);
         Debug.Log((ulong)seed);
         Packet packet = default;
@@ -286,7 +296,45 @@ public class Server : MonoBehaviour
         players.Add(clientPlayer);
     }
 
+    private void UpdateEnemies()
+    {
+        enemies.Clear();
+        Enemy[] allEnemies = FindObjectsOfType<Enemy>();
+        for (int i = 0; i < allEnemies.Length; i++)
+        {
+            allEnemies[i].index = i;
+        }
+        enemies.AddRange(allEnemies);
+    }
 
+    private void SendActiveEnemies()
+    {
+        
+        ActiveEnemiesDataPacket enemiesDataPacket = new ActiveEnemiesDataPacket();
+        enemiesDataPacket.enemyData = new List<ActiveEnemiesDataPacket.EnemyData>();
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy.IsActive())
+            {
+                
+                ActiveEnemiesDataPacket.EnemyData activeEnemy = new ActiveEnemiesDataPacket.EnemyData();
+                activeEnemy.enemyIndex = enemy.index;
+                activeEnemy.position = enemy.transform.position;
+                activeEnemy.velocity = enemy.GetVelocity();
+                enemiesDataPacket.enemyData.Add(activeEnemy);
+            }
+        }
+
+        List<byte> data = new List<byte>();
+        enemiesDataPacket.Serialize(ref data);
+        Packet packet = default;
+        packet.Create(data.ToArray(), PacketFlags.Reliable);
+
+        foreach (PlayerClient clientData in players)
+        {
+            clientData.peer.Send(0, ref packet);
+        }
+    }
 
     //Tick function
     private void Tick(ref ServerData servData)
@@ -296,6 +344,8 @@ public class Server : MonoBehaviour
         {
             clientPlayer.player._playerMovements.UpdatePhysics();
         }
+
+        SendActiveEnemies();
 
         //Send PlayerPos
     }

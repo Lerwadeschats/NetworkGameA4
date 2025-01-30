@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6912913361108989573}
   - component: {fileID: 8503392244878076575}
   - component: {fileID: 4528585162642115254}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7817441606869214912}
   - {fileID: 3635997638010294733}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movement: {fileID: 1407669446997857517, guid: fe02c4177f0200748b269000cc46d575, type: 3}
-  _jumpForce: 650
+  _jumpForce: 300
   _jumpThreshold: 0.001
   _gravityScaleFall: 5
   _dashForce: 15000

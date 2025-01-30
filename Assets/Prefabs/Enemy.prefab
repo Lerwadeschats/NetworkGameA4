@@ -530,7 +530,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -606,6 +606,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minDetectionRange: 2
+  index: 0
+  _isActive: 0
 --- !u!1 &8891867607094942668
 GameObject:
   m_ObjectHideFlags: 0

@@ -37,6 +37,8 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField]
     float _dashForce;
 
+    float _baseScaleX = 1;
+
 
     private void Awake()
     {
@@ -45,6 +47,7 @@ public class PlayerMovements : MonoBehaviour
         _baseGravityScale = _rb.gravityScale;
         _canDash = true;
         _moveDirection = 1;
+        _baseScaleX = transform.localScale.x;
 
     }
 
@@ -100,8 +103,8 @@ public class PlayerMovements : MonoBehaviour
                 _player.Inputs.moveLeft = false;
             }
 
-            _rb.velocity = _player.Velocity;
-            transform.position = _player.Position;
+            /*_rb.velocity = _player.Velocity;
+            transform.position = _player.Position;*/
             //print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
         }
 
@@ -129,7 +132,7 @@ public class PlayerMovements : MonoBehaviour
             moveInput = 0;
         }
 
-        gameObject.transform.localScale = new Vector3(moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+        gameObject.transform.localScale = new Vector3(_baseScaleX * moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
 
@@ -170,22 +173,22 @@ public class PlayerMovements : MonoBehaviour
             _rb.AddForce(newForce);
         }
 
-        
 
-        /*_player.Velocity = _rb.velocity;
-        _player.Position = transform.position;*/
 
-        
+        _player.Velocity = _rb.velocity;
+        _player.Position = transform.position;
+
+
     }
 
     public void UpdateVelocity(Vector2 velocity)
     {
-        _player.Velocity = velocity;
+        _rb.velocity = velocity;
     }
 
     public void UpdatePosition(Vector2 position)
     {
-        _player.Position = position;
+        transform.position = position;
     }
 
     public void UpdateStats(PlayerStats stats)

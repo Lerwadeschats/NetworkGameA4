@@ -55,7 +55,7 @@ public class DCMapGen : MonoBehaviour
         _rand = new System.Random((int)newSeed);
 
         _focusToGenerate.Clear();
-        _camera.Targets.Clear();
+        //_camera.Targets.Clear();
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
         _camera.Targets.Add(transform.GetChild(0).gameObject);
         int LorR = _rand.Next(0, 2);
@@ -149,8 +149,8 @@ public class DCMapGen : MonoBehaviour
                     goto RetryExit;
                 }
             }
-
-            _camera.Targets.Add(go);
+            
+            //_camera.Targets.Add(go);
             focus = roomExits[exitIndex];
             focus.UseExit();
             roomExits.RemoveAt(exitIndex);
