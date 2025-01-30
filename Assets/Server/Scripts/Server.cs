@@ -272,7 +272,6 @@ public class Server : MonoBehaviour
     }
     public void SendEndToAll()
     {
-        print("hey");
         foreach (PlayerClient player in players)
         {
             EndGamePacket endGamePacket = new();
@@ -283,6 +282,8 @@ public class Server : MonoBehaviour
             packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
             player.peer.Send(0, ref packet);
         }
+
+        Application.Quit();
     }
     private void SendSeedToClient(Peer peer)
     {

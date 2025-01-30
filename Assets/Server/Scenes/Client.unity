@@ -2420,6 +2420,7 @@ MonoBehaviour:
   playerName_Field: {fileID: 1825605712}
   UIConnect: {fileID: 378417176}
   UIWin: {fileID: 645403534}
+  imagefeddo: {fileID: 1441221822}
   winnerText: {fileID: 1705776192}
   allActiveEnemies: []
 --- !u!4 &1996209525
