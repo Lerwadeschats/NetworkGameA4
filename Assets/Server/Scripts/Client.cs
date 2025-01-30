@@ -319,7 +319,7 @@ public class Client : MonoBehaviour
                 {
                     // faire s'afficher une merde avec le nom qu'on peut retrouver grâce à l'index en gros!
                     EndGamePacket end = EndGamePacket.Deserialize(data, offset);
-                    winnerText.text = "Winning Player is :" + _allPlayers[end.winnerIndex].name;
+                    winnerText.text = "Winning Player is :" + _allPlayers[end.winnerIndex].Name;
                     UIWin.SetActive(true);
                     break;
                 }
