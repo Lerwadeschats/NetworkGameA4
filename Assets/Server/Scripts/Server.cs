@@ -469,8 +469,7 @@ public class Server : MonoBehaviour
     void HandleLog(string logString, string stackTrace, LogType type)
     {
         if (stack.Length > 2000) ClearConsole();
-        logString = logString.Replace("UnityEngine", "||");
-        logString = logString.Split("||")[0];
+        logString = logString.Split("UnityEngine")[0];
         textLogger.text = "> " + logString + "\n" + stack;
         stack = logString + "\n" + stack;
     }

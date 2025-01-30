@@ -16,9 +16,10 @@ public class Client : MonoBehaviour
     public TMP_InputField hostIP_Field;
     public TMP_InputField playerName_Field;
 
-    [SerializeField]
-    private Transform _canvas;
+    public GameObject UIConnect;
+    public GameObject UIWin;
 
+    public TextMeshProUGUI winnerText;
 
     private ENet6.Host enetHost = null;
     private ENet6.Peer? serverPeer = null;
@@ -77,7 +78,7 @@ public class Client : MonoBehaviour
         Camera.main.GetComponent<Cam>().Targets.Add(_player.gameObject);
         _player.Name = playerName_Field.text;
 
-        _canvas.gameObject.SetActive(false);
+        UIConnect.gameObject.SetActive(false);
         PlayerNamePacket playerNamePacket = new()
         {
             name = _player.Name,
@@ -334,8 +335,8 @@ public class Client : MonoBehaviour
                 {
                     // faire s'afficher une merde avec le nom qu'on peut retrouver grâce à l'index en gros!
                     EndGamePacket end = EndGamePacket.Deserialize(data, offset);
-                    //End Input
-                    // end.winner UI C FINI
+                    winnerText.text = "Winning Player is :" + _allPlayers[end.winnerIndex].name;
+                    UIWin.SetActive(true);
                     break;
                 }
                 
