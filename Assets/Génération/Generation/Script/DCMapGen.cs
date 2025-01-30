@@ -191,7 +191,7 @@ public class DCMapGen : MonoBehaviour
         _hasMainFinish = isMain;
         foreach(Collider2D c in collider2Ds)
         {
-            c.transform.GetComponent<Rigidbody2D>().simulated = false;
+            //if(c) c.transform.GetComponent<Rigidbody2D>().simulated = false;
         }
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
     }
