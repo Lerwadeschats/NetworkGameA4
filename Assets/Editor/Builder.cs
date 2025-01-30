@@ -60,7 +60,7 @@ public class Builder
     public static void RunServer()
     {
         System.Diagnostics.Process process = new System.Diagnostics.Process();
-        process.StartInfo.FileName = "A:\\Builds\\Server/Server.exe";
+        process.StartInfo.FileName = "\\Builds\\Server/Server.exe";
         process.Start();
     }
 
@@ -68,7 +68,7 @@ public class Builder
     public static void RunClient()
     {
         System.Diagnostics.Process process = new System.Diagnostics.Process();
-        process.StartInfo.FileName = "A:\\Builds\\client/Client.exe";
+        process.StartInfo.FileName = "Builds\\client/Client.exe";
         process.Start();
     }
 

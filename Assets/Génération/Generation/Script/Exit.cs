@@ -8,6 +8,13 @@ public class Exit : MonoBehaviour
     public ExitType _type;
     public ExitType _compatibleType;
 
+    public bool isUsed = true;
+    public GameObject portePrefab;
+
+    private void Start()
+    {
+        if(isUsed) Destroy(portePrefab);
+    }
     public bool CanPlaceARoom()
     {
         Vector3 v3 = Vector3.zero;
@@ -47,6 +54,14 @@ public class Exit : MonoBehaviour
                 _compatibleType = ExitType.Right; break;
         }
     }
+
+    public void UseExit()
+    {
+        isUsed = true;
+        Destroy(portePrefab);
+    }
+
+
 }
 namespace ExitTypeNameSpace
 {

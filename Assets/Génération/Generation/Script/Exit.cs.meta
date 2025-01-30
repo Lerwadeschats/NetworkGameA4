@@ -3,8 +3,9 @@ guid: b8ce4e70189233c4f956c852237750e1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
-  executionOrder: 0
+  defaultReferences:
+  - portePrefab: {fileID: 4111883815454165316, guid: 7becfde93baee3d4a95730d5adfd7372, type: 3}
+  executionOrder: 1000
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

@@ -186,9 +186,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 593118155}
     m_Modifications:
+    - target: {fileID: 170313034863325364, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
+      propertyPath: isUsed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 695298301670951213, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
       propertyPath: m_Name
       value: New Room1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4520047750307109904, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
+      propertyPath: isUsed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7213420651905747382, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
       propertyPath: m_LocalPosition.x
