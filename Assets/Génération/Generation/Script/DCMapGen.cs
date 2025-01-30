@@ -32,7 +32,7 @@ public class DCMapGen : MonoBehaviour
 
     bool _hasMainFinish = false;
 
-    List<Room> _branches = new List<Room>();
+    public List<Room> _branches = new List<Room>();
 
 
     System.Random _rand;
@@ -43,6 +43,8 @@ public class DCMapGen : MonoBehaviour
 
     //C DEGUELASSE BOUERK 
     public List<Collider2D> collider2Ds = new List<Collider2D>();
+
+    public GameObject fin;
 
     private void Start()
     {
@@ -60,8 +62,8 @@ public class DCMapGen : MonoBehaviour
 
         _focusToGenerate.Clear();
         //_camera.Targets.Clear();
+        //_camera.Targets.Add(transform.GetChild(0).gameObject);
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
-        _camera.Targets.Add(transform.GetChild(0).gameObject);
         int LorR = _rand.Next(0, 2);
         transform.GetChild(0).GetChild(LorR).GetComponent<Exit>().UseExit();
         GenerateBranch(true, transform.GetChild(0).GetChild(LorR).GetComponent<Exit>(), Color.red);
@@ -69,6 +71,7 @@ public class DCMapGen : MonoBehaviour
 
     private void GenerateBranch(bool isMain, Exit focus, Color endCol)
     {
+        Room room = new();
         Physics2D.simulationMode = SimulationMode2D.Script;
         int numberOfRooms = isMain ? _nbMaxOfRoom : _nbOfRoomBranch;
         int numberOfbranchCreated = 0;
@@ -92,7 +95,7 @@ public class DCMapGen : MonoBehaviour
             GameObject go = Instantiate(possibleRoom[roomSeed]);
             GameObject goCopy = possibleRoom[roomSeed];
 
-            Room room = go.GetComponent<Room>();
+            room = go.GetComponent<Room>();
             List<Exit> roomExits = room.GetExits().ToList();
             List<Exit> matchingExits = roomExits.Where(ex => ex._type == focus._compatibleType).ToList();
 
@@ -181,13 +184,15 @@ public class DCMapGen : MonoBehaviour
                 _focusToGenerate.Add(roomExits[exitIndex]);
             }
         }
-        /*        if (transform.childCount < _nbMinOfRoom)
-                {
-                    Regenerate(seed);
-                    return;
-                }*/
+
+        if(isMain) Instantiate(fin, room.transform);
+
         if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
         _hasMainFinish = isMain;
+        foreach(Collider2D c in collider2Ds)
+        {
+            c.transform.GetComponent<Rigidbody2D>().simulated = false;
+        }
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
     }
 
