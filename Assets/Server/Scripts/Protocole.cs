@@ -457,153 +457,155 @@ namespace Protocols
                 return packet;
             }
 
-            public struct ActiveEnemiesDataPacket
+            
+        }
+
+        public struct ActiveEnemiesDataPacket
+        {
+
+            static Opcode opcode = Opcode.S_EnemiesActive;
+            public struct EnemyData
             {
-
-                static Opcode opcode = Opcode.S_EnemiesActive;
-                public struct EnemyData
-                {
-                    public Vector2 position;
-                    public Vector2 velocity;
-                    public int enemyIndex;
-                    public float enemyHp;
-                    /*public bool isAtking;*/
-                }
-
-                public List<EnemyData> enemyData;
-
-                public void Serialize(ref List<byte> byteArray)
-                {
-                    Serialize_Uint8(ref byteArray, (byte)opcode);
-
-                    Serialize_int32(ref byteArray, enemyData.Count);
-                    foreach (EnemyData enemy in enemyData)
-                    {
-                        Serialize_f(ref byteArray, enemy.position.x);
-                        Serialize_f(ref byteArray, enemy.position.y);
-                        
-                        Serialize_f(ref byteArray, enemy.velocity.x);
-                        Serialize_f(ref byteArray, enemy.velocity.y);
-                        Serialize_int32(ref byteArray, enemy.enemyIndex);
-                        Serialize_f(ref byteArray, enemy.enemyHp);
-                        /*byte inputByte = 0;
-                        if (enemy.isAtking)
-                            inputByte |= 1 << 0;
-                        Serialize_Uint8(ref byteArray, inputByte);*/
-                    }
-
-                }
-
-                public static ActiveEnemiesDataPacket Deserialize(List<byte> byteArray, int offset)
-                {
-                    ActiveEnemiesDataPacket packet;
-                    packet.enemyData = new List<EnemyData>();
-                    EnemyData[] enemyArray = new EnemyData[Deserialize_int32(byteArray, ref offset)];
-                    for (int i = 0; i < enemyArray.Length; i++)
-                    {
-                        
-                        enemyArray[i].position.x = Deserialize_f(byteArray, ref offset);
-                        enemyArray[i].position.y = Deserialize_f(byteArray, ref offset);
-
-                        enemyArray[i].velocity.x = Deserialize_f(byteArray, ref offset);
-                        enemyArray[i].velocity.y = Deserialize_f(byteArray, ref offset);
-                        enemyArray[i].enemyIndex = Deserialize_int32(byteArray, ref offset);
-                        enemyArray[i].enemyHp = Deserialize_f(byteArray, ref offset);
-
-                        /*byte inputByte = Deserialize_Uint8(byteArray, ref offset);
-                        enemyArray[i].isAtking = (inputByte & (1 << 0)) != 0;*/
-
-                    }
-                    packet.enemyData.AddRange(enemyArray);
-                   
-                    return packet;
-                }
+                public Vector2 position;
+                public Vector2 velocity;
+                public int enemyIndex;
+                public float enemyHp;
+                /*public bool isAtking;*/
             }
 
-           
+            public List<EnemyData> enemyData;
 
-
-            public struct PlayerStatsPacket
+            public void Serialize(ref List<byte> byteArray)
             {
-                static Opcode opcode = Opcode.S_PlayerStats;
-                List<PlayerStatData> playerStatsList;
-                struct PlayerStatData
-                {
-                    public byte playerIndex;
-                    public Player.PlayerStats playerStats;
-                }
-                byte statsindex;
+                Serialize_Uint8(ref byteArray, (byte)opcode);
 
-                public void Serialize(ref List<byte> byteArray)
+                Serialize_int32(ref byteArray, enemyData.Count);
+                foreach (EnemyData enemy in enemyData)
                 {
-                    Serialize_Uint8(ref byteArray, (byte)opcode);
-                    Serialize_int32(ref byteArray, playerStatsList.Count);
-                    foreach (PlayerStatData player in playerStatsList)
-                    {
-                        Serialize_Uint8(ref byteArray, player.playerIndex);
-                        Serialize_f(ref byteArray, player.playerStats.hpValue);
-                        Serialize_f(ref byteArray, player.playerStats.maxHpValue);
-                        Serialize_f(ref byteArray, player.playerStats.speed);
-                        Serialize_f(ref byteArray, player.playerStats.attackValue);
-                    }
-                    Serialize_Uint8(ref byteArray, statsindex);
-                }
-                public static PlayerStatsPacket Deserialize(List<byte> byteArray, int offset)
-                {
-                    PlayerStatsPacket packet;
-                    packet.playerStatsList = new List<PlayerStatData>();
-                    PlayerStatData[] playersArray = new PlayerStatData[Deserialize_int32(byteArray, ref offset)];
-                    for (int i = 0; i < playersArray.Length; i++)
-                    {
-                        playersArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
-                        playersArray[i].playerStats.hpValue = Deserialize_f(byteArray, ref offset);
-                        playersArray[i].playerStats.maxHpValue = Deserialize_f(byteArray, ref offset);
-                        playersArray[i].playerStats.speed = Deserialize_f(byteArray, ref offset);
-                        playersArray[i].playerStats.attackValue = Deserialize_f(byteArray, ref offset);
-                        //inputs
-                    }
-                    packet.playerStatsList.AddRange(playersArray);
-                    packet.statsindex = Deserialize_Uint8(byteArray, ref offset);
-                    return packet;
-                }
-            }
-            public struct EndGamePacket
-            {
-                static Opcode opcode=Opcode.S_EndGame;
-                public byte winnerIndex;
+                    Serialize_f(ref byteArray, enemy.position.x);
+                    Serialize_f(ref byteArray, enemy.position.y);
 
-                public void Serialize(ref List<byte> byteArray)
-                {
-                    Serialize_Uint8(ref byteArray, (byte)opcode);
-                    Serialize_Uint8(ref byteArray, winnerIndex);
-                }
-                public static EndGamePacket Deserialize(List<byte> byteArray, int offset)
-                {
-                    EndGamePacket packet;
-                    packet.winnerIndex = Deserialize_Uint8(byteArray,ref offset);
-                    return packet;
+                    Serialize_f(ref byteArray, enemy.velocity.x);
+                    Serialize_f(ref byteArray, enemy.velocity.y);
+                    Serialize_int32(ref byteArray, enemy.enemyIndex);
+                    Serialize_f(ref byteArray, enemy.enemyHp);
+                    /*byte inputByte = 0;
+                    if (enemy.isAtking)
+                        inputByte |= 1 << 0;
+                    Serialize_Uint8(ref byteArray, inputByte);*/
                 }
 
             }
 
-            public struct DeadEnemyPacket
+            public static ActiveEnemiesDataPacket Deserialize(List<byte> byteArray, int offset)
             {
-                static Opcode opcode = Opcode.S_EnemyDead;
-                public byte deadIndex;
-
-                public void Serialize(ref List<byte> byteArray)
+                ActiveEnemiesDataPacket packet;
+                packet.enemyData = new List<EnemyData>();
+                EnemyData[] enemyArray = new EnemyData[Deserialize_int32(byteArray, ref offset)];
+                for (int i = 0; i < enemyArray.Length; i++)
                 {
-                    Serialize_Uint8(ref byteArray, (byte)opcode);
-                    Serialize_Uint8(ref byteArray, deadIndex);
-                }
-                public static DeadEnemyPacket Deserialize(List<byte> byteArray, int offset)
-                {
-                    DeadEnemyPacket packet;
-                    packet.deadIndex = Deserialize_Uint8(byteArray, ref offset);
-                    return packet;
-                }
 
+                    enemyArray[i].position.x = Deserialize_f(byteArray, ref offset);
+                    enemyArray[i].position.y = Deserialize_f(byteArray, ref offset);
+
+                    enemyArray[i].velocity.x = Deserialize_f(byteArray, ref offset);
+                    enemyArray[i].velocity.y = Deserialize_f(byteArray, ref offset);
+                    enemyArray[i].enemyIndex = Deserialize_int32(byteArray, ref offset);
+                    enemyArray[i].enemyHp = Deserialize_f(byteArray, ref offset);
+
+                    /*byte inputByte = Deserialize_Uint8(byteArray, ref offset);
+                    enemyArray[i].isAtking = (inputByte & (1 << 0)) != 0;*/
+
+                }
+                packet.enemyData.AddRange(enemyArray);
+
+                return packet;
             }
+        }
+
+
+
+
+        public struct PlayerStatsPacket
+        {
+            static Opcode opcode = Opcode.S_PlayerStats;
+            public List<PlayerStatData> playerStatsList;
+            public struct PlayerStatData
+            {
+                public byte playerIndex;
+                public Player.PlayerStats playerStats;
+            }
+            byte statsindex;
+
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_int32(ref byteArray, playerStatsList.Count);
+                foreach (PlayerStatData player in playerStatsList)
+                {
+                    Serialize_Uint8(ref byteArray, player.playerIndex);
+                    Serialize_f(ref byteArray, player.playerStats.hpValue);
+                    Serialize_f(ref byteArray, player.playerStats.maxHpValue);
+                    Serialize_f(ref byteArray, player.playerStats.speed);
+                    Serialize_f(ref byteArray, player.playerStats.attackValue);
+                }
+                Serialize_Uint8(ref byteArray, statsindex);
+            }
+            public static PlayerStatsPacket Deserialize(List<byte> byteArray, int offset)
+            {
+                PlayerStatsPacket packet;
+                packet.playerStatsList = new List<PlayerStatData>();
+                PlayerStatData[] playersArray = new PlayerStatData[Deserialize_int32(byteArray, ref offset)];
+                for (int i = 0; i < playersArray.Length; i++)
+                {
+                    playersArray[i].playerIndex = Deserialize_Uint8(byteArray, ref offset);
+                    playersArray[i].playerStats.hpValue = Deserialize_f(byteArray, ref offset);
+                    playersArray[i].playerStats.maxHpValue = Deserialize_f(byteArray, ref offset);
+                    playersArray[i].playerStats.speed = Deserialize_f(byteArray, ref offset);
+                    playersArray[i].playerStats.attackValue = Deserialize_f(byteArray, ref offset);
+                    //inputs
+                }
+                packet.playerStatsList.AddRange(playersArray);
+                packet.statsindex = Deserialize_Uint8(byteArray, ref offset);
+                return packet;
+            }
+        }
+        public struct EndGamePacket
+        {
+            static Opcode opcode = Opcode.S_EndGame;
+            public byte winnerIndex;
+
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_Uint8(ref byteArray, winnerIndex);
+            }
+            public static EndGamePacket Deserialize(List<byte> byteArray, int offset)
+            {
+                EndGamePacket packet;
+                packet.winnerIndex = Deserialize_Uint8(byteArray, ref offset);
+                return packet;
+            }
+
+        }
+
+        public struct DeadEnemyPacket
+        {
+            static Opcode opcode = Opcode.S_EnemyDead;
+            public byte deadIndex;
+
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_Uint8(ref byteArray, deadIndex);
+            }
+            public static DeadEnemyPacket Deserialize(List<byte> byteArray, int offset)
+            {
+                DeadEnemyPacket packet;
+                packet.deadIndex = Deserialize_Uint8(byteArray, ref offset);
+                return packet;
+            }
+
         }
 
 

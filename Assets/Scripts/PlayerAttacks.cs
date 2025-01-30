@@ -54,6 +54,7 @@ public class PlayerAttacks : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy" || (other.gameObject.tag == "Player" && other.gameObject != _player.gameObject))
         {
+            
             _canHit = true;
             
             _hittedEntities.Add(other.gameObject.GetComponent<DamageManager>());

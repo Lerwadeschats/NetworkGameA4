@@ -404,10 +404,40 @@ public class Server : MonoBehaviour
 
         SendActiveEnemies();
         GetPlayerAttacks();
-
+        SendPlayerStats();
         //Send PlayerPos
     }
 
+    void SendPlayerStats()
+    {
+        PlayerStatsPacket playerStatsPacket = new PlayerStatsPacket();
+        playerStatsPacket.playerStatsList = new List<PlayerStatsPacket.PlayerStatData>();
+        foreach (PlayerClient clientData in players)
+        {
+            PlayerStatsPacket.PlayerStatData playerStatData = new PlayerStatsPacket.PlayerStatData();
+            playerStatData.playerIndex = (byte)clientData.player.index;
+            playerStatData.playerStats = new Player.PlayerStats()
+            {
+                attackValue = clientData.player.Stats.attackValue,
+                hpValue = clientData.player.Stats.hpValue,
+                maxHpValue = clientData.player.Stats.maxHpValue,
+                speed = clientData.player.Stats.speed,
+            };
+
+            playerStatsPacket.playerStatsList.Add(playerStatData);
+        }
+
+        List<byte> data = new List<byte>();
+        playerStatsPacket.Serialize(ref data);
+        Packet packet = default;
+        packet.Create(data.ToArray(), PacketFlags.Reliable);
+
+        foreach (PlayerClient clientPlayer in players)
+        {
+            clientPlayer.peer.Send(0, ref packet);
+        }
+
+    }
     void SendPositionStatesPlayer()
     {
         PlayerPositionPacket posPacket = new PlayerPositionPacket();

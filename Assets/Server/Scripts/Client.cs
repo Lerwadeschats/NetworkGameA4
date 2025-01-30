@@ -357,6 +357,34 @@ public class Client : MonoBehaviour
                     }
                     break;
                 }
+
+            case Opcode.S_PlayerStats:
+                {
+                    PlayerStatsPacket playerListPacket = PlayerStatsPacket.Deserialize(data, offset);
+
+                    foreach (PlayerStatsPacket.PlayerStatData packetPlayer in playerListPacket.playerStatsList)
+                    {
+
+                        Player playerData = _allPlayers.Find(player => player.index == packetPlayer.playerIndex);
+                        if(playerData.Stats.hpValue != packetPlayer.playerStats.hpValue)
+                        {
+                            Debug.Log("hpvalue: " + playerData.Stats.hpValue);
+                        }
+                        playerData.Stats = new Player.PlayerStats
+                        {
+                            attackValue = packetPlayer.playerStats.attackValue,
+                            hpValue = packetPlayer.playerStats.hpValue,
+                            
+                            maxHpValue = packetPlayer.playerStats.maxHpValue,
+                            speed = packetPlayer.playerStats.speed,
+                        };
+
+                        
+
+
+                    }
+                    break;
+                }
         }
 
                 
