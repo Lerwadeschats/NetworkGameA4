@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using static Protocols.Protocole;
 using static Protocols.Protocole.PlayerPositionPacket;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class Client : MonoBehaviour
 {
@@ -186,7 +187,9 @@ public class Client : MonoBehaviour
                         {
                             allActiveEnemies[i].index = info.allEnemies[i].index;
                             allActiveEnemies[i].gameObject.name = "Enemy #" + info.allEnemies[i].index;
+                            allActiveEnemies[i].gameObject.transform.position = info.allEnemies[i].position;
                         }
+                       
                     }
 
                     /*foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
@@ -197,8 +200,21 @@ public class Client : MonoBehaviour
                             foundEnemy.index = enemyData.index;
                         }
                     }*/
+                    for (int i = 0; i < allActiveEnemies.Count; i++)
+                    {
+                        if (allActiveEnemies[i].index == -1)
+                        {
+                            Destroy(allActiveEnemies[i].gameObject);
+                            allActiveEnemies.Remove(allActiveEnemies[i]);
+                            if (i < allActiveEnemies.Count)
+                            {
+                                i--;
+                            }
+                            //allActiveEnemies[i].transform.GetComponentInChildren<SpriteRenderer>().color = Color.black;
 
-                    foreach(Enemy enemy in allActiveEnemies)
+                        }
+                    }
+                    /*foreach (Enemy enemy in allActiveEnemies)
                     {
                         if(enemy.index == -1)
                         {
@@ -206,7 +222,7 @@ public class Client : MonoBehaviour
                             Destroy(enemy);
 
                         }
-                    }
+                    }*/
 
                     break;
                 }

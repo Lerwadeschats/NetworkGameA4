@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour
 
     float _baseScaleX = 1;
 
-    public int index = -1;
+    public int index;
 
     [SerializeField]
     private bool _isActive;
@@ -76,6 +76,7 @@ public class Enemy : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         NewEnemySetup();
         _baseScaleX = gameObject.transform.localScale.x;
+        index = -1;
     }
 
     private void Update()
