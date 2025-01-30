@@ -41,6 +41,9 @@ public class DCMapGen : MonoBehaviour
 
     public bool DebugSeed = false;
 
+    //C DEGUELASSE BOUERK 
+    public List<Collider2D> collider2Ds = new List<Collider2D>();
+
     private void Start()
     {
         GameManager.instance.Lobby = gameObject.transform.GetChild(0).gameObject.GetComponent<Room>();
@@ -48,6 +51,7 @@ public class DCMapGen : MonoBehaviour
     }
     public void Regenerate(ulong newSeed)
     {
+        collider2Ds.Clear();
         _focusToGenerate = new List<Exit>();
         _camera = Camera.main.GetComponent<Cam>();
 
@@ -98,7 +102,6 @@ public class DCMapGen : MonoBehaviour
                 possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                 goto RetryRoom;
             }
-
             int exitSeed = _rand.Next(0, matchingExits.Count);
             Exit exit = matchingExits[exitSeed];
             //go.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, endCol, isMain? (float)i / _nbMaxOfRoom : (float)i / _nbOfRoomBranch);
@@ -106,25 +109,36 @@ public class DCMapGen : MonoBehaviour
             go.transform.parent = parent;
             go.transform.position = focus.transform.position - exit.transform.position;
             go.name += " " + i;
-            Physics2D.simulationMode = SimulationMode2D.Script;
-            Physics2D.Simulate(0f);
 
-            Collider2D[] contact = Physics2D.OverlapBoxAll(go.transform.position, go.transform.localScale, 0f, 3);
-            contact = contact.Where(col => col.name != go.name).ToArray();
+            Physics2D.simulationMode = SimulationMode2D.Script;
+
+           
+            //print(Physics2D.IsTouchingLayers(room._boxCollider,3));
+            //Collider2D[] contact = Physics2D.OverlapBoxAll(go.transform.position, go.transform.localScale, 0f, 3);
+            //contact = contact.Where(col => col.name != go.name).ToArray();
+
 
             // Room is touching another one
             bool oui = false;
-            foreach (Collider2D cont in contact)
+            foreach(Collider2D cont in collider2Ds)
             {
-                if (cont.CompareTag("Room"))
+                if(cont != null )
                 {
-                    DestroyImmediate(go);
-                    possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
-                    oui = true;
-                    break;
+                    Physics2D.Simulate(0.01f);
+                    bool aaaaa = Physics2D.IsTouching(room._boxCollider, cont);
+
+                    print("doin' " + aaaaa);
+                    if (aaaaa) oui = true;
                 }
             }
-            if (oui) goto RetryRoom;
+            if (oui)
+            {
+                print("oui");
+                DestroyImmediate(go);
+                possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
+                goto RetryRoom;
+            
+            }
 
             roomExits = roomExits.Where(ex => ex._type != focus._compatibleType).ToList();
         RetryExit:
@@ -134,6 +148,8 @@ public class DCMapGen : MonoBehaviour
                 possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                 goto RetryRoom;
             }
+            collider2Ds.Add(room._boxCollider);
+
             int exitIndex = -1;
             foreach (Exit ex in roomExits) // test if exit is legal
             {
