@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
         set 
         {
             _hpValue = value;
-            if( _hpValue <= 0)
+            if(HpValue <= 0)
             {
                 Death();
             }
@@ -111,6 +111,7 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
+        Server.Instance.OnEnemyDeath(index);
         DestroyImmediate(gameObject);
     }
 

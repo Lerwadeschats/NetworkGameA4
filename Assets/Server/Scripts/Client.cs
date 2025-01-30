@@ -326,9 +326,10 @@ public class Client : MonoBehaviour
                             enemyToFind.SetVelocity(Vector2.zero); // pour éviter qu'ils poussent mais jsp
                             enemyToFind.HpValue = enemyData.enemyHp;
                         }
-                        
-                       
                     }
+
+                    
+                    
                     break;
                 }
             case Opcode.S_EndGame:
@@ -339,7 +340,18 @@ public class Client : MonoBehaviour
                     UIWin.SetActive(true);
                     break;
                 }
-                
+            case Opcode.S_EnemyDead:
+                {
+                    DeadEnemyPacket deathPacket = DeadEnemyPacket.Deserialize(data, offset);
+
+                    Enemy deadEnemy = allActiveEnemies.Find(enemy => enemy.index == deathPacket.deadIndex);
+                    if(deadEnemy != null)
+                    {
+                        allActiveEnemies.Remove(deadEnemy);
+                        Destroy(deadEnemy.gameObject);
+                    }
+                    break;
+                }
         }
 
                 

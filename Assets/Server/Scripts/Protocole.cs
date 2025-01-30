@@ -194,7 +194,8 @@ namespace Protocols
             S_EnemiesActive,
             S_PlayerStats,
             S_PlayerDisconnect,
-            S_EndGame
+            S_EndGame,
+            S_EnemyDead
         };
         #endregion
         #region packets
@@ -584,7 +585,28 @@ namespace Protocols
                 }
 
             }
+
+            public struct DeadEnemyPacket
+            {
+                static Opcode opcode = Opcode.S_EnemyDead;
+                public byte deadIndex;
+
+                public void Serialize(ref List<byte> byteArray)
+                {
+                    Serialize_Uint8(ref byteArray, (byte)opcode);
+                    Serialize_Uint8(ref byteArray, deadIndex);
+                }
+                public static DeadEnemyPacket Deserialize(List<byte> byteArray, int offset)
+                {
+                    DeadEnemyPacket packet;
+                    packet.deadIndex = Deserialize_Uint8(byteArray, ref offset);
+                    return packet;
+                }
+
+            }
         }
+
+
     }
     #endregion
  }
