@@ -177,7 +177,7 @@ public class Server : MonoBehaviour
         {
             Tick(ref _serverData);
             //TOMIDIFYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyy
-            nextTick += 1;
+            nextTick += 17;
         }
 
     }
@@ -270,12 +270,12 @@ public class Server : MonoBehaviour
                 
         }
     }
-    public void SendEndToAll()
+    public void SendEndToAll(byte hopla)
     {
         foreach (PlayerClient player in players)
         {
             EndGamePacket endGamePacket = new();
-            endGamePacket.winnerIndex = (byte)endGoal.winnerIndex;
+            endGamePacket.winnerIndex = hopla;
             List<byte> dataIndex = new List<byte>();
             endGamePacket.Serialize(ref dataIndex);
             Packet packet = default;

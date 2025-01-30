@@ -11,8 +11,7 @@ public class End : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             end = true;
-            winnerIndex = collision.gameObject.GetComponent<Player>().index;
-            Server.Instance.SendEndToAll();
+            Server.Instance?.SendEndToAll((byte)collision.gameObject.GetComponent<Player>().index);
         }
     }
 

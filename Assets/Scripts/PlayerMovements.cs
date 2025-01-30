@@ -53,6 +53,7 @@ public class PlayerMovements : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        return;
         if (context.performed && _canJump)
         {
             _player.Inputs.jump = true;
@@ -67,6 +68,7 @@ public class PlayerMovements : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        return;
         if (context.performed && _canDash)
         {
             _player.Inputs.dash = true;
@@ -81,6 +83,24 @@ public class PlayerMovements : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.D)) _player.Inputs.moveRight = true;
+        if (Input.GetKeyDown(KeyCode.A)) _player.Inputs.moveLeft = true;
+        if (Input.GetKeyDown(KeyCode.LeftShift)) _player.Inputs.dash = true;
+        if (Input.GetKeyDown(KeyCode.Space)) _player.Inputs.jump = true;
+        if (Input.GetMouseButtonDown(0)) _player.Inputs.attack = true;
+        if (Input.GetMouseButtonDown(1)) _player.Inputs.block = true;
+
+
+
+        if (Input.GetKeyUp(KeyCode.D)) _player.Inputs.moveRight = false;
+        if (Input.GetKeyUp(KeyCode.A)) _player.Inputs.moveLeft = false;
+        if (Input.GetKeyUp(KeyCode.LeftShift)) _player.Inputs.dash = false;
+        if (Input.GetKeyUp(KeyCode.Space)) _player.Inputs.jump = false;
+        if (Input.GetMouseButtonUp(0)) _player.Inputs.attack = false;
+        if (Input.GetMouseButtonUp(1)) _player.Inputs.block = false;
+        return;
+
+        print("hey");
         float moveInput = _movement.action.ReadValue<float>();
         if(_player != null && _player.Inputs != null)
         {
@@ -118,7 +138,6 @@ public class PlayerMovements : MonoBehaviour
 
         if (_player.Inputs.moveRight && !_player.Inputs.moveLeft)   
         {
-            
             moveDirection = 1;
             moveInput = 1;
         }
@@ -136,10 +155,6 @@ public class PlayerMovements : MonoBehaviour
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
 
-        /*print("moveRight : " + _player.Inputs.moveRight);
-        print("moveLeft : " + _player.Inputs.moveLeft);
-        print("moveRight : " + _player.Inputs.moveRight);*/
-        
 
         if (Mathf.Abs(_player.Velocity.y) > _jumpThreshold)
         {
