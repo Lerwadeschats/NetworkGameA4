@@ -262,6 +262,15 @@ public class Server : MonoBehaviour
     {
         List<byte> data = new List<byte>();
         WorldInitPacket info = new() { seed = seed };
+        info.allEnemies = new List<WorldInitPacket.EnemyData>();
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            WorldInitPacket.EnemyData newEnemy = new WorldInitPacket.EnemyData();
+            newEnemy.index = (byte)enemies[i].index;
+            newEnemy.position = enemies[i].transform.position;
+            info.allEnemies.Add(newEnemy);
+        }
+        
         info.Serialize(ref data);
         Debug.Log((ulong)seed);
         Packet packet = default;
@@ -293,7 +302,7 @@ public class Server : MonoBehaviour
         Enemy[] allEnemies = FindObjectsOfType<Enemy>();
         for (int i = 0; i < allEnemies.Length; i++)
         {
-            allEnemies[i].index = (uint)i;
+            allEnemies[i].index = i;
         }
         enemies.AddRange(allEnemies);
     }
@@ -309,14 +318,14 @@ public class Server : MonoBehaviour
             {
                 
                 ActiveEnemiesDataPacket.EnemyData activeEnemy = new ActiveEnemiesDataPacket.EnemyData();
-                activeEnemy.enemyIndex = (short)enemy.index;
+                activeEnemy.enemyIndex = enemy.index;
                 activeEnemy.position = enemy.transform.position;
                 activeEnemy.velocity = enemy.GetVelocity();
                 enemiesDataPacket.enemyData.Add(activeEnemy);
             }
         }
-        
-        /*List<byte> data = new List<byte>();
+
+        List<byte> data = new List<byte>();
         enemiesDataPacket.Serialize(ref data);
         Packet packet = default;
         packet.Create(data.ToArray(), PacketFlags.Reliable);
@@ -324,7 +333,7 @@ public class Server : MonoBehaviour
         foreach (PlayerClient clientData in players)
         {
             clientData.peer.Send(0, ref packet);
-        }*/
+        }
     }
 
     //Tick function

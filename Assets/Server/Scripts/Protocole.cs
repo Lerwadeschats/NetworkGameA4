@@ -342,15 +342,41 @@ namespace Protocols
             static Opcode opcode = Opcode.S_WorldInit;
             public ulong seed;
 
+            public struct EnemyData
+            {
+                public byte index;
+                public Vector2 position;
+            }
+
+            public List<EnemyData> allEnemies;
+
             public void Serialize(ref List<byte> byteArray)
             {
                 Serialize_Uint8(ref byteArray, (byte)opcode);
+                Serialize_int32(ref byteArray, allEnemies.Count);
+                foreach (EnemyData enemyData in allEnemies)
+                {
+                    Serialize_Uint8(ref byteArray, enemyData.index);
+                    Serialize_f(ref byteArray, enemyData.position.x);
+                    Serialize_f(ref byteArray, enemyData.position.y);
+                }
                 Serialize_Uint64(ref byteArray, seed);
             }
             public static WorldInitPacket Deserialize(List<byte> byteArray, int offset)
             {
                 WorldInitPacket packet;
+
+                packet.allEnemies = new List<EnemyData>();
+                EnemyData[] enemiesIndexArray = new EnemyData[Deserialize_int32(byteArray, ref offset)];
+                for (int i = 0; i < enemiesIndexArray.Length; i++)
+                {
+                    enemiesIndexArray[i].index = Deserialize_Uint8(byteArray, ref offset);
+                    enemiesIndexArray[i].position.x = Deserialize_f(byteArray, ref offset);
+                    enemiesIndexArray[i].position.y = Deserialize_f(byteArray, ref offset);
+                }
+                packet.allEnemies.AddRange(enemiesIndexArray);
                 packet.seed = Deserialize_Uint64(byteArray, ref offset);
+
                 return packet;
             }
         }
@@ -436,7 +462,7 @@ namespace Protocols
                 {
                     public Vector2 position;
                     public Vector2 velocity;
-                    public short enemyIndex;
+                    public int enemyIndex;
                     /*public bool isAtking;*/
                 }
 
@@ -446,14 +472,13 @@ namespace Protocols
                 {
                     Serialize_Uint8(ref byteArray, (byte)opcode);
                     Serialize_int32(ref byteArray, enemyData.Count);
-                    Debug.Log("EnemyData.Count = " + enemyData.Count);
                     foreach (EnemyData enemy in enemyData)
                     {
                         Serialize_f(ref byteArray, enemy.position.x);
                         Serialize_f(ref byteArray, enemy.position.y);
                         Serialize_f(ref byteArray, enemy.velocity.x);
                         Serialize_f(ref byteArray, enemy.velocity.y);
-                        Serialize_int16(ref byteArray, enemy.enemyIndex);
+                        Serialize_int32(ref byteArray, enemy.enemyIndex);
 
                         /*byte inputByte = 0;
                         if (enemy.isAtking)

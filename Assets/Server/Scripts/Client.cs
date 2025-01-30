@@ -26,7 +26,8 @@ public class Client : MonoBehaviour
 
     private List<Player> _allPlayers = new List<Player>();
 
-    private List<Enemy> allEnemies = new List<Enemy>();
+    [SerializeField]
+    private List<Enemy> allActiveEnemies = new List<Enemy>();
 
     public bool Connect(string addressString)
     {
@@ -167,10 +168,43 @@ public class Client : MonoBehaviour
                 {
                     WorldInitPacket info = WorldInitPacket.Deserialize(data, offset);
                     Debug.Log("World Sedd : " + info.seed);
-
+                    
                     SceneMerger.instance.MergeScene();
                     DCMapGen.instance.Regenerate(info.seed);
-                    allEnemies.AddRange(FindObjectsOfType<Enemy>());
+                    Enemy[] aaaaaaaaaaz = new Enemy[info.allEnemies.Count];
+                   
+                    int i = 0;
+                    foreach(Enemy enemy in FindObjectsOfType<Enemy>())
+                    {
+                        if(enemy != null && i < aaaaaaaaaaz.Length)
+                        {
+                            aaaaaaaaaaz[i] = enemy;
+                            i++;
+                        }
+                        
+                    }
+                    allActiveEnemies.AddRange(aaaaaaaaaaz);
+
+                    foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
+                    {
+                        Enemy foundEnemy = allActiveEnemies.Find(enemy => enemy.transform.position == (Vector3)enemyData.position);
+                        if(foundEnemy != null)
+                        {
+                            foundEnemy.index = enemyData.index;
+                        }
+                    }
+
+                    foreach(Enemy enemy in allActiveEnemies)
+                    {
+                        if(enemy.index == -1)
+                        {
+                            allActiveEnemies.Remove(enemy);
+                            Destroy(enemy);
+
+                        }
+                    }
+
+                    print(allActiveEnemies.Count);
                     break;
                 }
                 
@@ -257,14 +291,19 @@ public class Client : MonoBehaviour
 
             case Opcode.S_EnemiesActive:
                 {
+
+                    
                     ActiveEnemiesDataPacket activeEnemies = ActiveEnemiesDataPacket.Deserialize(data, offset);
                     
-                    foreach(ActiveEnemiesDataPacket.EnemyData enemyData in activeEnemies.enemyData)
+                    /*foreach(ActiveEnemiesDataPacket.EnemyData enemyData in activeEnemies.enemyData)
                     {
-                        Enemy enemyToFind = allEnemies.Find(enemy => enemy.index == enemyData.enemyIndex);
+
+                        //Il trouve rien parce que allActiveEnemies y a pas les index;
+                        Enemy enemyToFind = allActiveEnemies.Find(enemy => enemy.index == enemyData.enemyIndex);
+                        
                         enemyToFind.transform.position = enemyData.position;
-                        enemyToFind.SetVelocity(Vector2.zero);
-                    }
+                        enemyToFind.SetVelocity(Vector2.zero); // pour éviter qu'ils poussent mais jsp
+                    }*/
                     break;
                 }
                 

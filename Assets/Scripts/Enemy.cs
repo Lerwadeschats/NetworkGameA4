@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
 
     float _baseScaleX = 1;
 
-    public uint index;
+    public int index = -1;
 
     [SerializeField]
     private bool _isActive;
