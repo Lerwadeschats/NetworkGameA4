@@ -1,11 +1,12 @@
 using ENet6;
 using Protocols;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR;
+using UnityEngine.UI;
 using static Protocols.Protocole;
 using static Protocols.Protocole.PlayerPositionPacket;
 
@@ -17,6 +18,7 @@ public class Client : MonoBehaviour
 
     public GameObject UIConnect;
     public GameObject UIWin;
+    public Image imagefeddo;
 
     public TextMeshProUGUI winnerText;
 
@@ -319,8 +321,9 @@ public class Client : MonoBehaviour
                 {
                     // faire s'afficher une merde avec le nom qu'on peut retrouver grâce à l'index en gros!
                     EndGamePacket end = EndGamePacket.Deserialize(data, offset);
-                    winnerText.text = "Winning Player is :" + _allPlayers[end.winnerIndex].Name;
+                    winnerText.text = "Winning Player is : " + _allPlayers[end.winnerIndex].Name;
                     UIWin.SetActive(true);
+                    StartCoroutine(CloseApp());
                     break;
                 }
                 
@@ -329,7 +332,13 @@ public class Client : MonoBehaviour
                 
         
     }
+    private IEnumerator CloseApp()
+    {
+        imagefeddo.color = imagefeddo.color + new Color(0.05f, 0.05f, 0.05f, 0f);
+        yield return new WaitForSeconds(4);
 
+        Application.Quit();
+    }
     private void Update()
     {
         if(_player != null && _player.Inputs != null)
