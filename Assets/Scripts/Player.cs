@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -58,7 +60,11 @@ public class Player : MonoBehaviour
     public string Name
     {
         get { return _name; }
-        set { _name = value; }
+        set 
+        { 
+            _name = value;
+            _nickName.text = value;
+        }
     }
 
     public PlayerStats Stats
@@ -72,10 +78,10 @@ public class Player : MonoBehaviour
         get { return _inputs; }
         set { _inputs = value; }
     }
-    private void Awake()
-    {
 
-    }
+    [SerializeField]
+    TextMeshProUGUI _nickName;
+    
     private void Start()
     {
         SetNewPlayerInfos();

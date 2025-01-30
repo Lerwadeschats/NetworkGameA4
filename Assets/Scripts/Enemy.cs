@@ -25,6 +25,10 @@ public class Enemy : MonoBehaviour
         get { return _hpValue; }
         set 
         {
+            if(_hpValue > value)
+            {
+                Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+            }
             _hpValue = value;
             if(HpValue <= 0)
             {
@@ -59,6 +63,8 @@ public class Enemy : MonoBehaviour
     float _baseScaleX = 1;
 
     public int index;
+
+    public ParticleSystem DamagesParticles;
 
     [SerializeField]
     private bool _isActive;
