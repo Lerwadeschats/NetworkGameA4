@@ -29,6 +29,7 @@ public class Server : MonoBehaviour
 
     [SerializeField]
     private List<Enemy> enemies = new List<Enemy>();
+    private End endGoal;
 
     struct PlayerClient
     {
@@ -63,6 +64,7 @@ public class Server : MonoBehaviour
         seed = (ulong)Random.Range(0, 999999);
 
         StartCoroutine(SceneMerger.instance.CreateAndMergeSceneServerSide(seed));
+        endGoal = FindAnyObjectByType<End>();
     }
 
     // Update is called once per frame
@@ -168,6 +170,19 @@ public class Server : MonoBehaviour
             Tick(ref _serverData);
             //TOMIDIFYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyy
             nextTick += 1;
+        }
+        if (endGoal.end)
+        {
+            foreach (PlayerClient player in players)
+            {
+                EndGamePacket endGamePacket = new();
+                endGamePacket.winnerIndex = (byte)endGoal.winnerIndex;
+                List<byte> dataIndex = new List<byte>();
+                endGamePacket.Serialize(ref dataIndex);
+                Packet packet = default;
+                packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
+                player.peer.Send(0, ref packet);
+            }
         }
     }
 
