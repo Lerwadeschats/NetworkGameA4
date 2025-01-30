@@ -94,7 +94,7 @@ public class DCMapGen : MonoBehaviour
 
             if (matchingExits.Count == 0) // No exits Match
             {
-                Destroy(go);
+                DestroyImmediate(go);
                 possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                 goto RetryRoom;
             }
@@ -118,7 +118,7 @@ public class DCMapGen : MonoBehaviour
             {
                 if (cont.CompareTag("Room"))
                 {
-                    Destroy(go);
+                    DestroyImmediate(go);
                     possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                     oui = true;
                     break;
@@ -130,7 +130,7 @@ public class DCMapGen : MonoBehaviour
         RetryExit:
             if (roomExits.Count == 0) // Room do not have any exits left
             {
-                Destroy(go);
+                DestroyImmediate(go);
                 possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                 goto RetryRoom;
             }
@@ -144,7 +144,7 @@ public class DCMapGen : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(ex.gameObject);
+                    DestroyImmediate(ex.gameObject);
                     roomExits.RemoveAt(exitIndex);
                     goto RetryExit;
                 }

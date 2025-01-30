@@ -172,7 +172,13 @@ public class Client : MonoBehaviour
                     SceneMerger.instance.MergeScene();
                     DCMapGen.instance.Regenerate(info.seed);
                     
-                    allActiveEnemies.AddRange(FindObjectsOfType<Enemy>());
+                    allActiveEnemies = FindObjectsOfType<Enemy>(false).ToList();
+                    foreach(Enemy a  in allActiveEnemies)
+                    {
+                        Debug.Log(a.transform.parent.name);
+                        if (a.transform.parent) Debug.Log("Fail");
+                        else Debug.Log("Oui");
+                    }
 
                     foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
                     {
@@ -193,7 +199,6 @@ public class Client : MonoBehaviour
                         }
                     }
 
-                    print(allActiveEnemies.Count);
                     break;
                 }
                 

@@ -68,7 +68,7 @@ public class Builder
     public static void RunClient()
     {
         System.Diagnostics.Process process = new System.Diagnostics.Process();
-        process.StartInfo.FileName = "Builds\\client/Client.exe";
+        process.StartInfo.FileName = "\\Builds\\client/Client.exe";
         process.Start();
     }
 
