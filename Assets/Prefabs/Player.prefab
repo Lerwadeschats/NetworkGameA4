@@ -96,7 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movement: {fileID: 1407669446997857517, guid: fe02c4177f0200748b269000cc46d575, type: 3}
   _jumpForce: 300
-  _jumpThreshold: 0.001
+  _jumpThreshold: 0.1
   _gravityScaleFall: 5
   _dashForce: 15000
 --- !u!114 &6912913361108989573

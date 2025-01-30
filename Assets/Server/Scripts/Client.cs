@@ -20,6 +20,8 @@ public class Client : MonoBehaviour
 
     public TextMeshProUGUI winnerText;
 
+    PlayerInputs _lastInputs;
+
     private ENet6.Host enetHost = null;
     private ENet6.Peer? serverPeer = null;
 
@@ -234,7 +236,7 @@ public class Client : MonoBehaviour
                         
                         _currentPlayer._playerMovements.UpdatePosition(playerPositionData.position);
                         _currentPlayer._playerMovements.UpdateVelocity(playerPositionData.velocity);
-                        _currentPlayer.Inputs = playerPositionData.inputs;
+                        _lastInputs= playerPositionData.inputs;
                     }
                     break;
                 }
@@ -347,7 +349,7 @@ public class Client : MonoBehaviour
             // On simule la physique côté client, de la même façon que le serveur
             foreach (Player player in _allPlayers)
             {
-                PlayerInputs inputs = player.Inputs;
+                PlayerInputs inputs = _lastInputs;
 
                 player._playerMovements.UpdatePhysics();
             }
