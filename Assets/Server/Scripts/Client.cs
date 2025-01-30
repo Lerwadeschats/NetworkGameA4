@@ -171,19 +171,8 @@ public class Client : MonoBehaviour
                     
                     SceneMerger.instance.MergeScene();
                     DCMapGen.instance.Regenerate(info.seed);
-                    Enemy[] aaaaaaaaaaz = new Enemy[info.allEnemies.Count];
-                   
-                    int i = 0;
-                    foreach(Enemy enemy in FindObjectsOfType<Enemy>())
-                    {
-                        if(enemy != null && i < aaaaaaaaaaz.Length)
-                        {
-                            aaaaaaaaaaz[i] = enemy;
-                            i++;
-                        }
-                        
-                    }
-                    allActiveEnemies.AddRange(aaaaaaaaaaz);
+                    
+                    allActiveEnemies.AddRange(FindObjectsOfType<Enemy>());
 
                     foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
                     {
