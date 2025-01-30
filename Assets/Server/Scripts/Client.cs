@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Protocols.Protocole;
 using static Protocols.Protocole.PlayerPositionPacket;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class Client : MonoBehaviour
 {
@@ -191,7 +192,9 @@ public class Client : MonoBehaviour
                         {
                             allActiveEnemies[i].index = info.allEnemies[i].index;
                             allActiveEnemies[i].gameObject.name = "Enemy #" + info.allEnemies[i].index;
+                            allActiveEnemies[i].gameObject.transform.position = info.allEnemies[i].position;
                         }
+                       
                     }
 
                     /*foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
@@ -202,8 +205,21 @@ public class Client : MonoBehaviour
                             foundEnemy.index = enemyData.index;
                         }
                     }*/
+                    for (int i = 0; i < allActiveEnemies.Count; i++)
+                    {
+                        if (allActiveEnemies[i].index == -1)
+                        {
+                            Destroy(allActiveEnemies[i].gameObject);
+                            allActiveEnemies.Remove(allActiveEnemies[i]);
+                            if (i < allActiveEnemies.Count)
+                            {
+                                i--;
+                            }
+                            //allActiveEnemies[i].transform.GetComponentInChildren<SpriteRenderer>().color = Color.black;
 
-                    foreach(Enemy enemy in allActiveEnemies)
+                        }
+                    }
+                    /*foreach (Enemy enemy in allActiveEnemies)
                     {
                         if(enemy.index == -1)
                         {
@@ -211,7 +227,7 @@ public class Client : MonoBehaviour
                             Destroy(enemy);
 
                         }
-                    }
+                    }*/
 
                     break;
                 }
@@ -314,9 +330,10 @@ public class Client : MonoBehaviour
                             enemyToFind.SetVelocity(Vector2.zero); // pour éviter qu'ils poussent mais jsp
                             enemyToFind.HpValue = enemyData.enemyHp;
                         }
-                        
-                       
                     }
+
+                    
+                    
                     break;
                 }
             case Opcode.S_EndGame:
@@ -328,7 +345,18 @@ public class Client : MonoBehaviour
                     StartCoroutine(CloseApp());
                     break;
                 }
-                
+            case Opcode.S_EnemyDead:
+                {
+                    DeadEnemyPacket deathPacket = DeadEnemyPacket.Deserialize(data, offset);
+
+                    Enemy deadEnemy = allActiveEnemies.Find(enemy => enemy.index == deathPacket.deadIndex);
+                    if(deadEnemy != null)
+                    {
+                        allActiveEnemies.Remove(deadEnemy);
+                        Destroy(deadEnemy.gameObject);
+                    }
+                    break;
+                }
         }
 
                 

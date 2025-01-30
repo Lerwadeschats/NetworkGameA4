@@ -25,8 +25,12 @@ public class Enemy : MonoBehaviour
         get { return _hpValue; }
         set 
         {
+            if(_hpValue > value)
+            {
+                Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+            }
             _hpValue = value;
-            if( _hpValue <= 0)
+            if(HpValue <= 0)
             {
                 Death();
             }
@@ -58,7 +62,9 @@ public class Enemy : MonoBehaviour
 
     float _baseScaleX = 1;
 
-    public int index = -1;
+    public int index;
+
+    public ParticleSystem DamagesParticles;
 
     [SerializeField]
     private bool _isActive;
@@ -76,6 +82,7 @@ public class Enemy : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         NewEnemySetup();
         _baseScaleX = gameObject.transform.localScale.x;
+        index = -1;
     }
 
     private void Update()
@@ -110,6 +117,7 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
+        Server.Instance.OnEnemyDeath(index);
         DestroyImmediate(gameObject);
     }
 

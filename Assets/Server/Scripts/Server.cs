@@ -386,6 +386,10 @@ public class Server : MonoBehaviour
         {
             clientData.peer.Send(0, ref packet);
         }
+
+        
+
+        
     }
 
     //Tick function
@@ -433,6 +437,21 @@ public class Server : MonoBehaviour
         }
     }
 
+    public void OnEnemyDeath(int index)
+    {
+        DeadEnemyPacket deadPacket = new DeadEnemyPacket();
+        deadPacket.deadIndex = (byte)index;
+
+        List<byte> data = new List<byte>();
+        deadPacket.Serialize(ref data);
+        Packet packet = default;
+        packet.Create(data.ToArray(), PacketFlags.Reliable);
+        foreach (PlayerClient clientData in players)
+        {
+            clientData.peer.Send(0, ref packet);
+
+        }
+    }
     void GetPlayerAttacks()
     {
         foreach(PlayerClient client in players)
@@ -484,5 +503,11 @@ public class Server : MonoBehaviour
         stack = "";
         Debug.Log("\nConsole Cleared");
 
+    }
+
+    public void SendDeathEnemyPacket(Enemy enemy)
+    {
+
+        Destroy(enemy.gameObject);
     }
 }

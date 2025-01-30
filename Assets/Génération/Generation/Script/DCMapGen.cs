@@ -188,6 +188,7 @@ public class DCMapGen : MonoBehaviour
         if (isMain)
         {
             End eeee = Instantiate(fin, room.transform.position,Quaternion.identity,null).GetComponent<End>();
+            
         }
         if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
         _hasMainFinish = isMain;
