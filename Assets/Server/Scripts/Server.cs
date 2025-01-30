@@ -26,6 +26,8 @@ public class Server : MonoBehaviour
     private ulong seed;
 
     private List<PlayerClient> players = new List<PlayerClient>();
+
+    [SerializeField]
     private List<Enemy> enemies = new List<Enemy>();
 
     struct PlayerClient
@@ -78,7 +80,7 @@ public class Server : MonoBehaviour
                 {
                     // Un nouveau joueur s'est connecté
                     case EventType.Connect:
-                        UpdateEnemies();
+                        ResetEnemiesList();
                         SendSeedToClient(eNetEvent.Peer);
                         CreateNewPlayer(eNetEvent.Peer);
                         print($"Peer # {eNetEvent.Peer.ID} connected! \n Sended Seed To Client");
@@ -296,7 +298,7 @@ public class Server : MonoBehaviour
         players.Add(clientPlayer);
     }
 
-    private void UpdateEnemies()
+    private void ResetEnemiesList()
     {
         enemies.Clear();
         Enemy[] allEnemies = FindObjectsOfType<Enemy>();
@@ -307,23 +309,48 @@ public class Server : MonoBehaviour
         enemies.AddRange(allEnemies);
     }
 
+    private void UpdateEnemies()
+    {
+        
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if (enemies[i] == null)
+            {
+                enemies.Remove(enemies[i]);
+                i--;
+            }
+            
+        }
+    }
+
     private void SendActiveEnemies()
     {
         
         ActiveEnemiesDataPacket enemiesDataPacket = new ActiveEnemiesDataPacket();
         enemiesDataPacket.enemyData = new List<ActiveEnemiesDataPacket.EnemyData>();
-        foreach (Enemy enemy in enemies)
+        if (enemies.Count > 0)
         {
-            if (enemy.IsActive())
+            foreach (Enemy enemy in enemies)
             {
-                
+                /*if (enemy.IsActive())
+                {
+                    ActiveEnemiesDataPacket.EnemyData activeEnemy = new ActiveEnemiesDataPacket.EnemyData();
+                    activeEnemy.enemyIndex = enemy.index;
+                    activeEnemy.position = enemy.transform.position;
+                    activeEnemy.velocity = enemy.GetVelocity();
+                    activeEnemy.enemyHp = enemy.HpValue;
+                    enemiesDataPacket.enemyData.Add(activeEnemy);
+                }*/
+
                 ActiveEnemiesDataPacket.EnemyData activeEnemy = new ActiveEnemiesDataPacket.EnemyData();
                 activeEnemy.enemyIndex = enemy.index;
                 activeEnemy.position = enemy.transform.position;
                 activeEnemy.velocity = enemy.GetVelocity();
+                activeEnemy.enemyHp = enemy.HpValue;
                 enemiesDataPacket.enemyData.Add(activeEnemy);
             }
         }
+
 
         List<byte> data = new List<byte>();
         enemiesDataPacket.Serialize(ref data);
@@ -339,6 +366,7 @@ public class Server : MonoBehaviour
     //Tick function
     private void Tick(ref ServerData servData)
     {
+        UpdateEnemies();
         SendPositionStatesPlayer();
         foreach (PlayerClient clientPlayer in players)
         {
@@ -346,6 +374,7 @@ public class Server : MonoBehaviour
         }
 
         SendActiveEnemies();
+        GetPlayerAttacks();
 
         //Send PlayerPos
     }
@@ -360,6 +389,7 @@ public class Server : MonoBehaviour
             {
                 PlayerPositionPacket.PlayerData packetPlayer = new PlayerPositionPacket.PlayerData();
                 packetPlayer.playerIndex = (byte)clientData.player.index;
+                
                 packetPlayer.position = clientData.player.Position;
                 packetPlayer.velocity = clientData.player.Velocity;
                 packetPlayer.inputs = clientData.player.Inputs;
@@ -378,6 +408,20 @@ public class Server : MonoBehaviour
         }
     }
 
+    void GetPlayerAttacks()
+    {
+        foreach(PlayerClient client in players)
+        {
+            if (client.player.Inputs.attack)
+            {
+                for (int i = 0; i < client.player._playerAttacks.GetHittedEntities().Count; i++)
+                {
+                    client.player._playerAttacks.GetHittedEntities()[i].OnBeingAttacked(client.player.Stats.attackValue);
+                }
+            }
+        }
+        
+    }
     private void OnApplicationQuit()
     {
         ENet6.Library.Deinitialize();

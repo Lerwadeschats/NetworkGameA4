@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class DamageManager : MonoBehaviour
 {
-
-    public virtual void OnTakingDamanges(float damages) { }
+    public ParticleSystem DamagesParticles;
+    public virtual void OnTakingDamanges(float damages)
+    {
+        Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+    }
     
 
     public virtual void OnBeingAttacked(float damages) { }

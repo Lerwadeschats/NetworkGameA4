@@ -39,7 +39,7 @@ public class PlayerMovements : MonoBehaviour
 
     float _baseScaleX = 1;
 
-
+    float moveDirection = 1;
     private void Awake()
     {
         _player = gameObject.GetComponent<Player>();
@@ -112,7 +112,7 @@ public class PlayerMovements : MonoBehaviour
 
     public void UpdatePhysics()
     {
-        float moveDirection = 1;
+        
 
         float moveInput = 1;
 

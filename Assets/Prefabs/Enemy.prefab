@@ -592,6 +592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87b53e1d2ae9407499f4d97229084b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DamagesParticles: {fileID: 2019395955450859565, guid: 3e1d04d1528c2164eb72994ad01ffbdb, type: 3}
   _slider: {fileID: 9069228478775628160}
 --- !u!114 &4125637232205874564
 MonoBehaviour:

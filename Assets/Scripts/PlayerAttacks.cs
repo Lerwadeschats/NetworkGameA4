@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerAttacks : MonoBehaviour
 {
@@ -11,22 +10,24 @@ public class PlayerAttacks : MonoBehaviour
 
 
     bool _canHit = false;
+    bool _isOnCooldown = false;
     bool _canBlock = true;
 
     [SerializeField]
     List<DamageManager> _hittedEntities = new List<DamageManager>();
 
+    public List<DamageManager> GetHittedEntities()
+    {
+        return _hittedEntities;
+    }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && _canHit)
+        if (context.performed && _canHit && !_isOnCooldown)
         {
             _player.Inputs.attack = true;
-            for (int i = 0; i < _hittedEntities.Count; i++)
-            {
-
-                _hittedEntities[i].OnBeingAttacked(_player.Stats.attackValue);
-            }
-
+            _isOnCooldown = true;
+            StartCoroutine(AttackCooldown());
         }
         else if (context.canceled)
         {
@@ -34,6 +35,8 @@ public class PlayerAttacks : MonoBehaviour
             _player.Inputs.attack = false;
         }
     }
+
+   
 
     public void OnBlock(InputAction.CallbackContext context)
     {
@@ -69,6 +72,19 @@ public class PlayerAttacks : MonoBehaviour
 
             _hittedEntities.Remove(other.gameObject.GetComponent<DamageManager>());
         }
+    }
+
+    IEnumerator AttackCooldown()
+    {
+        float timer = 0.5f;
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+
+        _isOnCooldown = false;
+
     }
 
 }
