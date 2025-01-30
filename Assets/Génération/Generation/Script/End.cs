@@ -12,6 +12,7 @@ public class End : MonoBehaviour
         {
             end = true;
             winnerIndex = collision.gameObject.GetComponent<Player>().index;
+            Server.Instance.SendEndToAll();
         }
     }
 

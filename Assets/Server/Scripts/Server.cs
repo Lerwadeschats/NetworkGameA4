@@ -14,6 +14,15 @@ using Random = UnityEngine.Random;
 
 public class Server : MonoBehaviour
 {
+    public static Server Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else DestroyImmediate(this);
+    }
+
+
+
     public TextMeshProUGUI textLogger;
     class ServerData
     {
@@ -29,7 +38,7 @@ public class Server : MonoBehaviour
 
     [SerializeField]
     private List<Enemy> enemies = new List<Enemy>();
-    private End endGoal;
+    public End endGoal;
 
     struct PlayerClient
     {
@@ -64,7 +73,6 @@ public class Server : MonoBehaviour
         seed = (ulong)Random.Range(0, 999999);
 
         StartCoroutine(SceneMerger.instance.CreateAndMergeSceneServerSide(seed));
-        endGoal = FindAnyObjectByType<End>();
     }
 
     // Update is called once per frame
@@ -171,19 +179,7 @@ public class Server : MonoBehaviour
             //TOMIDIFYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyy
             nextTick += 1;
         }
-        if (endGoal.end)
-        {
-            foreach (PlayerClient player in players)
-            {
-                EndGamePacket endGamePacket = new();
-                endGamePacket.winnerIndex = (byte)endGoal.winnerIndex;
-                List<byte> dataIndex = new List<byte>();
-                endGamePacket.Serialize(ref dataIndex);
-                Packet packet = default;
-                packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
-                player.peer.Send(0, ref packet);
-            }
-        }
+
     }
 
     private void HandleFromClient(uint peer, byte[] bytes)
@@ -274,7 +270,20 @@ public class Server : MonoBehaviour
                 
         }
     }
-
+    public void SendEndToAll()
+    {
+        print("hey");
+        foreach (PlayerClient player in players)
+        {
+            EndGamePacket endGamePacket = new();
+            endGamePacket.winnerIndex = (byte)endGoal.winnerIndex;
+            List<byte> dataIndex = new List<byte>();
+            endGamePacket.Serialize(ref dataIndex);
+            Packet packet = default;
+            packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
+            player.peer.Send(0, ref packet);
+        }
+    }
     private void SendSeedToClient(Peer peer)
     {
         List<byte> data = new List<byte>();

@@ -317,6 +317,9 @@ public class Client : MonoBehaviour
             case Opcode.S_EndGame:
                 {
                     // faire s'afficher une merde avec le nom qu'on peut retrouver grâce à l'index en gros!
+                    EndGamePacket end = EndGamePacket.Deserialize(data, offset);
+                    //End Input
+                    // end.winner UI C FINI
                     break;
                 }
                 

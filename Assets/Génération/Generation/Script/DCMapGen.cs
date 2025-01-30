@@ -185,8 +185,11 @@ public class DCMapGen : MonoBehaviour
             }
         }
 
-        if(isMain) Instantiate(fin, room.transform);
-
+        if (isMain)
+        {
+            End eeee = Instantiate(fin, room.transform.position,Quaternion.identity,null).GetComponent<End>();
+            Server.Instance.endGoal = eeee;
+        }
         if (isMain) foreach (Exit e in _focusToGenerate) GenerateBranch(false, e, Color.blue);
         _hasMainFinish = isMain;
         foreach(Collider2D c in collider2Ds)
