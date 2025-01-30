@@ -300,7 +300,11 @@ public class Client : MonoBehaviour
                     }*/
                     break;
                 }
-                
+            case Opcode.S_EndGame:
+                {
+                    // faire s'afficher une merde avec le nom qu'on peut retrouver grâce à l'index en gros!
+                    break;
+                }
                 
         }
 

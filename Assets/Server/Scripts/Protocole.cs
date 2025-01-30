@@ -560,7 +560,7 @@ namespace Protocols
             public struct EndGamePacket
             {
                 static Opcode opcode=Opcode.S_EndGame;
-                byte winnerIndex;
+                public byte winnerIndex;
 
                 public void Serialize(ref List<byte> byteArray)
                 {
@@ -570,7 +570,7 @@ namespace Protocols
                 public static EndGamePacket Deserialize(List<byte> byteArray, int offset)
                 {
                     EndGamePacket packet;
-                    packet.winnerIndex = Deserialize_Uint8(byteArray, offset);
+                    packet.winnerIndex = Deserialize_Uint8(byteArray,ref offset);
                     return packet;
                 }
 
