@@ -192,7 +192,8 @@ namespace Protocols
             S_PlayersPosition,
             S_EnemiesActive,
             S_PlayerStats,
-            S_PlayerDisconnect
+            S_PlayerDisconnect,
+            S_EndGame
         };
         #endregion
         #region packets
@@ -555,6 +556,24 @@ namespace Protocols
                     packet.statsindex = Deserialize_Uint8(byteArray, ref offset);
                     return packet;
                 }
+            }
+            public struct EndGamePacket
+            {
+                static Opcode opcode=Opcode.S_EndGame;
+                byte winnerIndex;
+
+                public void Serialize(ref List<byte> byteArray)
+                {
+                    Serialize_Uint8(ref byteArray, (byte)opcode);
+                    Serialize_Uint8(ref byteArray, winnerIndex);
+                }
+                public static EndGamePacket Deserialize(List<byte> byteArray, int offset)
+                {
+                    EndGamePacket packet;
+                    packet.winnerIndex = Deserialize_Uint8(byteArray, offset);
+                    return packet;
+                }
+
             }
         }
     }
