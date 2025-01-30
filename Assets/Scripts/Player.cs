@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 
 
     public PlayerMovements _playerMovements;
+    public PlayerAttacks _playerAttacks;
 
 
     
@@ -73,7 +74,7 @@ public class Player : MonoBehaviour
     }
     private void Awake()
     {
-        _playerMovements = GetComponent<PlayerMovements>();
+
     }
     private void Start()
     {
@@ -83,7 +84,7 @@ public class Player : MonoBehaviour
     public void SetNewPlayerInfos()
     {
         _position = gameObject.transform.position;
-        _stats = new PlayerStats(10f, 100f, 100f, 20f);
+        _stats = new PlayerStats(10f, 100f, 100f, 10f);
         _inputs = new PlayerInputs();
     }
 }

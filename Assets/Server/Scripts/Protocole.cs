@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
 using System.Reflection;
+using UnityEngine.InputSystem.Interactions;
 
 namespace Protocols
 {
@@ -463,6 +464,7 @@ namespace Protocols
                     public Vector2 position;
                     public Vector2 velocity;
                     public int enemyIndex;
+                    public float enemyHp;
                     /*public bool isAtking;*/
                 }
 
@@ -471,20 +473,23 @@ namespace Protocols
                 public void Serialize(ref List<byte> byteArray)
                 {
                     Serialize_Uint8(ref byteArray, (byte)opcode);
+
                     Serialize_int32(ref byteArray, enemyData.Count);
                     foreach (EnemyData enemy in enemyData)
                     {
                         Serialize_f(ref byteArray, enemy.position.x);
                         Serialize_f(ref byteArray, enemy.position.y);
+                        
                         Serialize_f(ref byteArray, enemy.velocity.x);
                         Serialize_f(ref byteArray, enemy.velocity.y);
                         Serialize_int32(ref byteArray, enemy.enemyIndex);
-
+                        Serialize_f(ref byteArray, enemy.enemyHp);
                         /*byte inputByte = 0;
                         if (enemy.isAtking)
                             inputByte |= 1 << 0;
                         Serialize_Uint8(ref byteArray, inputByte);*/
                     }
+
                 }
 
                 public static ActiveEnemiesDataPacket Deserialize(List<byte> byteArray, int offset)
@@ -494,11 +499,15 @@ namespace Protocols
                     EnemyData[] enemyArray = new EnemyData[Deserialize_int32(byteArray, ref offset)];
                     for (int i = 0; i < enemyArray.Length; i++)
                     {
+                        
                         enemyArray[i].position.x = Deserialize_f(byteArray, ref offset);
                         enemyArray[i].position.y = Deserialize_f(byteArray, ref offset);
+
                         enemyArray[i].velocity.x = Deserialize_f(byteArray, ref offset);
                         enemyArray[i].velocity.y = Deserialize_f(byteArray, ref offset);
-                        enemyArray[i].enemyIndex = Deserialize_int16(byteArray, ref offset);
+                        enemyArray[i].enemyIndex = Deserialize_int32(byteArray, ref offset);
+                        enemyArray[i].enemyHp = Deserialize_f(byteArray, ref offset);
+
                         /*byte inputByte = Deserialize_Uint8(byteArray, ref offset);
                         enemyArray[i].isAtking = (inputByte & (1 << 0)) != 0;*/
 

@@ -23,7 +23,14 @@ public class Enemy : MonoBehaviour
     public float HpValue
     {
         get { return _hpValue; }
-        set { _hpValue = value; }
+        set 
+        {
+            _hpValue = value;
+            if( _hpValue <= 0)
+            {
+                Death();
+            }
+        }
     }
 
     public float MaxHpValue
@@ -103,7 +110,7 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
-        Destroy(gameObject);
+        DestroyImmediate(gameObject);
     }
 
     public Player GetTarget()

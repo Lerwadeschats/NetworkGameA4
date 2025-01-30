@@ -173,21 +173,30 @@ public class Client : MonoBehaviour
                     DCMapGen.instance.Regenerate(info.seed);
                     
                     allActiveEnemies = FindObjectsOfType<Enemy>(false).ToList();
-                    foreach(Enemy a  in allActiveEnemies)
+                    /*foreach(Enemy a  in allActiveEnemies)
                     {
                         Debug.Log(a.transform.parent.name);
                         if (a.transform.parent) Debug.Log("Fail");
                         else Debug.Log("Oui");
+                    }*/
+
+                    for (int i = 0; i < info.allEnemies.Count; i++)
+                    {
+                        if (allActiveEnemies[i] != null)
+                        {
+                            allActiveEnemies[i].index = info.allEnemies[i].index;
+                            allActiveEnemies[i].gameObject.name = "Enemy #" + info.allEnemies[i].index;
+                        }
                     }
 
-                    foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
+                    /*foreach (WorldInitPacket.EnemyData enemyData in info.allEnemies)
                     {
                         Enemy foundEnemy = allActiveEnemies.Find(enemy => enemy.transform.position == (Vector3)enemyData.position);
                         if(foundEnemy != null)
                         {
                             foundEnemy.index = enemyData.index;
                         }
-                    }
+                    }*/
 
                     foreach(Enemy enemy in allActiveEnemies)
                     {
@@ -288,16 +297,21 @@ public class Client : MonoBehaviour
 
                     
                     ActiveEnemiesDataPacket activeEnemies = ActiveEnemiesDataPacket.Deserialize(data, offset);
-                    
-                    /*foreach(ActiveEnemiesDataPacket.EnemyData enemyData in activeEnemies.enemyData)
-                    {
 
-                        //Il trouve rien parce que allActiveEnemies y a pas les index;
-                        Enemy enemyToFind = allActiveEnemies.Find(enemy => enemy.index == enemyData.enemyIndex);
+                    foreach (ActiveEnemiesDataPacket.EnemyData enemyData in activeEnemies.enemyData)
+                    {
                         
-                        enemyToFind.transform.position = enemyData.position;
-                        enemyToFind.SetVelocity(Vector2.zero); // pour éviter qu'ils poussent mais jsp
-                    }*/
+                        Enemy enemyToFind = allActiveEnemies.Find(enemy => enemy.index == enemyData.enemyIndex);
+                        if(enemyToFind != null)
+                        {
+                            
+                            enemyToFind.transform.position = enemyData.position;
+                            enemyToFind.SetVelocity(Vector2.zero); // pour éviter qu'ils poussent mais jsp
+                            enemyToFind.HpValue = enemyData.enemyHp;
+                        }
+                        
+                       
+                    }
                     break;
                 }
                 

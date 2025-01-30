@@ -25,19 +25,15 @@ public class EnemyDamageManager : DamageManager
         base.OnTakingDamanges(damages);
 
         float newHp = _enemy.HpValue - damages;
-        if (newHp <= 0)
-        {
-            _enemy.Death();
-            newHp = 0;
-        }
-            
-        _enemy.HpValue = newHp;
-
         
+        _enemy.HpValue = newHp;
+        
+       
     }
 
     private void Update()
     {
+        
         _slider.value = _enemy.HpValue / _enemy.MaxHpValue;
     }
 }
