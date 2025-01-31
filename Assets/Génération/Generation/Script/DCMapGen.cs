@@ -53,6 +53,8 @@ public class DCMapGen : MonoBehaviour
     }
     public void Regenerate(ulong newSeed)
     {
+        Physics2D.simulationMode = SimulationMode2D.Script;
+
         collider2Ds.Clear();
         _focusToGenerate = new List<Exit>();
         _camera = Camera.main.GetComponent<Cam>();
@@ -72,7 +74,6 @@ public class DCMapGen : MonoBehaviour
     private void GenerateBranch(bool isMain, Exit focus, Color endCol)
     {
         Room room = new();
-        Physics2D.simulationMode = SimulationMode2D.Script;
         int numberOfRooms = isMain ? _nbMaxOfRoom : _nbOfRoomBranch;
         int numberOfbranchCreated = 0;
         Transform parent = isMain ? focus.transform.parent.parent : focus.transform.parent;
@@ -196,7 +197,6 @@ public class DCMapGen : MonoBehaviour
         {
             //if(c) c.transform.GetComponent<Rigidbody2D>().simulated = false;
         }
-        Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
     }
 
 

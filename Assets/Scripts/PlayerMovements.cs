@@ -194,6 +194,7 @@ public class PlayerMovements : MonoBehaviour
         _player.Position = transform.position;
 
 
+
     }
 
     public void UpdateVelocity(Vector2 velocity)

@@ -176,7 +176,7 @@ public class Server : MonoBehaviour
         if (now >= nextTick)
         {
             Tick(ref _serverData);
-            //TOMIDIFYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyy
+            //17 ms
             nextTick += 17;
         }
 
@@ -396,11 +396,12 @@ public class Server : MonoBehaviour
     private void Tick(ref ServerData servData)
     {
         UpdateEnemies();
-        SendPositionStatesPlayer();
         foreach (PlayerClient clientPlayer in players)
         {
             clientPlayer.player._playerMovements.UpdatePhysics();
         }
+        Physics2D.Simulate(1f/60f);
+        SendPositionStatesPlayer();
 
         SendActiveEnemies();
         GetPlayerAttacks();
