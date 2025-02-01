@@ -12,9 +12,15 @@ public class Collider2pieds : MonoBehaviour
         {
             _movements.IsOnGround = true;
         }
-        else
+       
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
         {
             _movements.IsOnGround = false;
         }
+        
     }
 }

@@ -131,7 +131,7 @@ public class DCMapGen : MonoBehaviour
                     Physics2D.Simulate(0.01f);
                     bool aaaaa = Physics2D.IsTouching(room._boxCollider, cont);
 
-                    print("doin' " + aaaaa);
+                    //print("doin' " + aaaaa);
                     if (aaaaa) oui = true;
                 }
             }

@@ -21,8 +21,6 @@ public class PlayerMovements : MonoBehaviour
 
     [SerializeField]
     float _jumpForce, _jumpThreshold;
-
-    bool _canJump;
     
 
     [SerializeField]
@@ -30,8 +28,8 @@ public class PlayerMovements : MonoBehaviour
 
     float _baseGravityScale;
 
-
-    //Dash
+    bool _isOnGround;
+    bool _canJump;
     bool _canDash;
 
     [SerializeField]
@@ -39,16 +37,16 @@ public class PlayerMovements : MonoBehaviour
 
     float _baseScaleX = 1;
 
-    bool _isOnGround;
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
     public bool IsOnGround { get => _isOnGround; set => _isOnGround = value; }
+    public bool CanJump { get => _canJump; set => _canJump = value; }
+    public bool CanDash { get => _canDash; set => _canDash = value; }
 
     private void Awake()
     {
         _player = gameObject.GetComponent<Player>();
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _baseGravityScale = _rb.gravityScale;
-        _canDash = true;
         _moveDirection = 1;
         _baseScaleX = transform.localScale.x;
 
@@ -99,9 +97,6 @@ public class PlayerMovements : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftShift)) _player.Inputs.dash = false;
         if (Input.GetKeyUp(KeyCode.Space)) _player.Inputs.jump = false;
         
-
-
-        UpdatePhysics();
         return;
 
         /*print("hey");
@@ -136,9 +131,10 @@ public class PlayerMovements : MonoBehaviour
 
     public void UpdatePhysics()
     {
-        
 
         float moveInput = 1;
+
+        print("IsOnGround = " + IsOnGround + "/// Can jump = " + CanJump + "/// Can dash = " + CanDash);
 
         if (_player.Inputs.moveRight && !_player.Inputs.moveLeft)   
         {
@@ -161,8 +157,6 @@ public class PlayerMovements : MonoBehaviour
         gameObject.transform.localScale = new Vector3(_baseScaleX * _moveDirection, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
         Vector2 newVelocity = new Vector2(moveInput * _player.Stats.speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
-
-        print(_canJump);
 
         if (!_isOnGround)
         {
@@ -200,8 +194,9 @@ public class PlayerMovements : MonoBehaviour
 
         if (_canJump && _player.Inputs.jump)
         {
+            
             _player.animator.SetTrigger("Jump");
-            Vector2 newForce = _player.Velocity + Vector2.up * _jumpForce;
+            Vector2 newForce = new Vector2(0, _jumpForce);
             _rb.AddForce(newForce);
         }
 

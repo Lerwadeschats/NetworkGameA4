@@ -393,6 +393,9 @@ namespace Protocols
                 public Vector2 position;
                 public Vector2 velocity;
                 public PlayerInputs inputs;
+                public bool isOnGround;
+                public bool canJump;
+                public bool canDash;
             };
 
             public List<PlayerData> players;
@@ -424,7 +427,19 @@ namespace Protocols
                         inputByte |= 1 << 4;
                     if (player.inputs.block)
                         inputByte |= 1 << 5;
+
                     Serialize_Uint8(ref byteArray, inputByte);
+
+                    byte conditionByte = 0;
+                    if (player.isOnGround)
+                        conditionByte |= 1 << 0;
+                    if (player.canJump)
+                        conditionByte |= 1 << 0;
+                    if (player.canDash)
+                        conditionByte |= 1 << 0;
+
+                    Serialize_Uint8(ref byteArray, conditionByte);
+
                 }
                 
 
@@ -450,6 +465,11 @@ namespace Protocols
                     playersArray[i].inputs.attack = (inputByte & (1 << 3)) != 0;
                     playersArray[i].inputs.dash = (inputByte & (1 << 4)) != 0;
                     playersArray[i].inputs.block = (inputByte & (1 << 5)) != 0;
+
+                    byte conditionByte = Deserialize_Uint8(byteArray, ref offset);
+                    playersArray[i].isOnGround = (conditionByte & (1 << 0)) != 0;
+                    playersArray[i].canJump = (conditionByte & (1 << 1)) != 0;
+                    playersArray[i].canDash = (conditionByte & (1 << 2)) != 0;
                 }
                 packet.players.AddRange(playersArray);
                 

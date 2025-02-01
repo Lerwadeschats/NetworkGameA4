@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movement: {fileID: 1407669446997857517, guid: fe02c4177f0200748b269000cc46d575, type: 3}
-  _jumpForce: 300
+  _jumpForce: 650
   _jumpThreshold: 0.01
   _gravityScaleFall: 5
   _dashForce: 800
@@ -616,7 +616,7 @@ Transform:
   m_GameObject: {fileID: 2534431912229170974}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.058, y: -0.468, z: 0}
+  m_LocalPosition: {x: -0.058, y: -0.504, z: 0}
   m_LocalScale: {x: 1.01, y: 0.29, z: 1.31}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -651,7 +651,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

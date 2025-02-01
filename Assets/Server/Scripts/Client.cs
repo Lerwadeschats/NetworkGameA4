@@ -255,6 +255,9 @@ public class Client : MonoBehaviour
                         _currentPlayer._playerMovements.UpdatePosition(playerPositionData.position);
                         _currentPlayer._playerMovements.UpdateVelocity(playerPositionData.velocity);
                         _lastInputs= playerPositionData.inputs;
+                        _currentPlayer._playerMovements.IsOnGround = playerPositionData.isOnGround;
+                        _currentPlayer._playerMovements.CanJump = playerPositionData.canJump;
+                        _currentPlayer._playerMovements.CanDash = playerPositionData.canDash;
                     }
                     break;
                 }

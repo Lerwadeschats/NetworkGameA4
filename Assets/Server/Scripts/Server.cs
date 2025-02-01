@@ -452,6 +452,9 @@ public class Server : MonoBehaviour
                 packetPlayer.position = clientData.player.Position;
                 packetPlayer.velocity = clientData.player.Velocity;
                 packetPlayer.inputs = clientData.player.Inputs;
+                packetPlayer.isOnGround = clientData.player._playerMovements.IsOnGround;
+                packetPlayer.canJump = clientData.player._playerMovements.CanJump;
+                packetPlayer.canDash = clientData.player._playerMovements.CanDash;
                 posPacket.players.Add(packetPlayer);
             }
         }
