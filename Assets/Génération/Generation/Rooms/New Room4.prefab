@@ -1370,6 +1370,8 @@ MonoBehaviour:
   _pos: {x: 5, y: 2.5, z: 0}
   _type: 3
   _compatibleType: 2
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &3562133366799407711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,6 +1419,8 @@ MonoBehaviour:
   _pos: {x: -5, y: -2.5, z: 0}
   _type: 2
   _compatibleType: 3
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &4117697092661097047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1618,6 +1622,8 @@ MonoBehaviour:
   _pos: {x: 2.5, y: -5, z: 0}
   _type: 1
   _compatibleType: 0
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &6259453395800638426
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,7 +1636,7 @@ GameObject:
   - component: {fileID: 3321352935474759534}
   m_Layer: 0
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1710,3 +1716,5 @@ MonoBehaviour:
   _pos: {x: 2.5, y: 5, z: 0}
   _type: 0
   _compatibleType: 1
+  isUsed: 1
+  portePrefab: {fileID: 0}

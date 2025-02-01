@@ -20,12 +20,28 @@ public class PlayerAttacks : MonoBehaviour
         return _hittedEntities;
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    /*public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.performed && _canHit && !_isOnCooldown)
         {
             _player.Inputs.attack = true;
             _isOnCooldown = true;
+            int attackID = Random.Range(0, 2);
+            switch (attackID)
+            {
+                case 0:
+                    _player.animator.SetTrigger("Attack1");
+                    break;
+
+                case 1:
+                    _player.animator.SetTrigger("Attack2");
+                    break;
+
+                case 2:
+                    _player.animator.SetTrigger("Attack3");
+                    break;
+            }
+            
             StartCoroutine(AttackCooldown());
         }
         else if (context.canceled)
@@ -33,11 +49,44 @@ public class PlayerAttacks : MonoBehaviour
 
             _player.Inputs.attack = false;
         }
+    }*/
+
+    public void OnAttack()
+    {
+        
+        _player.Inputs.attack = true;
+        _isOnCooldown = true;
+        int attackID = Random.Range(0, 2);
+        switch (attackID)
+        {
+            case 0:
+                _player.animator.SetTrigger("Attack1");
+                break;
+
+            case 1:
+                _player.animator.SetTrigger("Attack2");
+                break;
+
+            case 2:
+                _player.animator.SetTrigger("Attack3");
+                break;
+        }
+
+        StartCoroutine(AttackCooldown());
+        
+        
     }
 
-   
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) OnAttack();
+        if (Input.GetMouseButtonDown(1)) OnBlock(true);
 
-    public void OnBlock(InputAction.CallbackContext context)
+        if (Input.GetMouseButtonUp(0)) _player.Inputs.attack = false;
+        if (Input.GetMouseButtonUp(1)) OnBlock(false);
+    }
+
+    /*public void OnBlock(InputAction.CallbackContext context)
     {
         if(context.performed && _canBlock)
         {
@@ -47,6 +96,17 @@ public class PlayerAttacks : MonoBehaviour
         {
             _player.Inputs.block = false;
         }
+    }*/
+
+    public void OnBlock(bool isBlocking)
+    {
+        _player.Inputs.block = isBlocking;
+        _player.animator.SetBool("IdleBlock", isBlocking);
+        if (isBlocking)
+        {
+            _player.animator.SetTrigger("Block");
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)

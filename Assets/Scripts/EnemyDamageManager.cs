@@ -17,12 +17,12 @@ public class EnemyDamageManager : DamageManager
     public override void OnBeingAttacked(float damages)
     {
         base.OnBeingAttacked(damages);
-        OnTakingDamanges(damages);
+        OnTakingDamages(damages);
     }
 
-    public override void OnTakingDamanges(float damages)
+    public override void OnTakingDamages(float damages)
     {
-        base.OnTakingDamanges(damages);
+        base.OnTakingDamages(damages);
 
         float newHp = _enemy.HpValue - damages;
         

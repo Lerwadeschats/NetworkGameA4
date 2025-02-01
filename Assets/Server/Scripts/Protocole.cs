@@ -408,7 +408,7 @@ namespace Protocols
                     Serialize_f(ref byteArray, player.position.x);
                     Serialize_f(ref byteArray, player.position.y);
                     Serialize_f(ref byteArray, player.velocity.x);
-                    Serialize_f(ref byteArray, player.position.y);
+                    Serialize_f(ref byteArray, player.velocity.y);
                     
                     byte inputByte = 0;
                     if (player.inputs.moveLeft)

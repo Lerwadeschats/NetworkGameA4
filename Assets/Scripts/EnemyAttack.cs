@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class EnemyAttack : MonoBehaviour
 {
@@ -25,7 +26,8 @@ public class EnemyAttack : MonoBehaviour
 
     private void Update()
     {
-        if(_arePlayerInRange && _canHit)
+        
+        if (_arePlayerInRange && _canHit)
         {
             for (int i = 0; i < _hittedPlayers.Count; i++)
             {
@@ -71,4 +73,6 @@ public class EnemyAttack : MonoBehaviour
         _canHit = true;
 
     }
+
+    
 }

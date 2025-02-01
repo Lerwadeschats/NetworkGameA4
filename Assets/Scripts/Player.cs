@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-
+    [SerializeField]
     private Vector2 _velocity;
     private Vector2 _position;
     private string _name;
@@ -20,8 +20,7 @@ public class Player : MonoBehaviour
 
     public PlayerMovements _playerMovements;
     public PlayerAttacks _playerAttacks;
-
-    public ParticleSystem DamagesParticles;
+    public PlayerDamageManager _playerDamages;
     
     public struct PlayerStats
     {
@@ -74,7 +73,7 @@ public class Player : MonoBehaviour
         {
             if (_stats.hpValue > value.hpValue)
             {
-                Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+                _playerDamages.GetHurtEffects();
             }
             
             _stats = value; 
@@ -94,6 +93,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI _nickName;
+
+    public Animator animator;
     
     private void Start()
     {
@@ -109,7 +110,7 @@ public class Player : MonoBehaviour
 
     void Respawn()
     {
-        gameObject.transform.position = GameManager.instance.Lobby.transform.GetChild(0).position;
+        gameObject.transform.position = GameManager.instance.GetSpawnPosition();
         SetNewPlayerInfos();
     }
 }

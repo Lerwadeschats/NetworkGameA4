@@ -17,12 +17,12 @@ public class PlayerDamageManager : DamageManager
     public override void OnBeingAttacked(float damages)
     {
         base.OnBeingAttacked(damages);
-        OnTakingDamanges(damages);
+        OnTakingDamages(damages);
     }
 
-    public override void OnTakingDamanges(float damages)
+    public override void OnTakingDamages(float damages)
     {
-        base.OnTakingDamanges(damages);
+        base.OnTakingDamages(damages);
         float newHp = _player.Stats.hpValue - damages;
         if (newHp < 0)
             newHp = 0;
@@ -31,6 +31,12 @@ public class PlayerDamageManager : DamageManager
         _player.Stats = newStats;
 
         
+    }
+
+    public override void GetHurtEffects()
+    {
+        base.GetHurtEffects();
+        _player.animator.SetTrigger("Hurt");
     }
 
     private void Update()
