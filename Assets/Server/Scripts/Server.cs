@@ -282,8 +282,7 @@ public class Server : MonoBehaviour
             packet.Create(dataIndex.ToArray(), PacketFlags.Reliable);
             player.peer.Send(0, ref packet);
         }
-
-        Application.Quit();
+        StartCoroutine(Quit());
     }
     private void SendSeedToClient(Peer peer)
     {
@@ -540,5 +539,10 @@ public class Server : MonoBehaviour
     {
 
         Destroy(enemy.gameObject);
+    }
+    System.Collections.IEnumerator Quit()
+    {
+        yield return new WaitForSeconds(3);
+        Application.Quit();
     }
 }
