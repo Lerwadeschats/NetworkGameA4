@@ -76,7 +76,7 @@ public class DCMapGen : MonoBehaviour
         Room room = new();
         int numberOfRooms = isMain ? _nbMaxOfRoom : _nbOfRoomBranch;
         int numberOfbranchCreated = 0;
-        Transform parent = isMain ? focus.transform.parent.parent : focus.transform.parent;
+        Transform parent = focus.transform.parent.parent ;
         for (int i = 1; i <= numberOfRooms; i++)
         {
             List<GameObject> possibleRoom = _rooms;
@@ -109,7 +109,7 @@ public class DCMapGen : MonoBehaviour
             int exitSeed = _rand.Next(0, matchingExits.Count);
             Exit exit = matchingExits[exitSeed];
             //go.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, endCol, isMain? (float)i / _nbMaxOfRoom : (float)i / _nbOfRoomBranch);
-            exit.UseExit();
+            
             go.transform.parent = parent;
             go.transform.position = focus.transform.position - exit.transform.position;
             go.name += " " + i;
@@ -169,9 +169,9 @@ public class DCMapGen : MonoBehaviour
                     goto RetryExit;
                 }
             }
-            
             //_camera.Targets.Add(go);
             focus = roomExits[exitIndex];
+            exit.UseExit();
             focus.UseExit();
             roomExits.RemoveAt(exitIndex);
             int chanetobranch = _rand.Next(0, 100);

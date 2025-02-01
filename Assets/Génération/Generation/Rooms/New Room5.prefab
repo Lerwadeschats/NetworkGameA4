@@ -1592,6 +1592,8 @@ MonoBehaviour:
   _pos: {x: 5, y: -2.5, z: 0}
   _type: 3
   _compatibleType: 2
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &997136906921261213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1639,6 +1641,8 @@ MonoBehaviour:
   _pos: {x: -2.5, y: 5, z: 0}
   _type: 0
   _compatibleType: 1
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &2968616722266852400
 GameObject:
   m_ObjectHideFlags: 0
@@ -1651,9 +1655,10 @@ GameObject:
   - component: {fileID: 1955862496512242899}
   - component: {fileID: -1010134485646847595}
   - component: {fileID: -8320654112835628179}
+  - component: {fileID: 7232251664780344046}
   m_Layer: 3
   m_Name: New Room5
-  m_TagString: Untagged
+  m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1758,15 +1763,15 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2968616722266852400}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 247
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1776,7 +1781,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1796,6 +1801,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.99, y: 0.99}
   m_EdgeRadius: 0
+--- !u!50 &7232251664780344046
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2968616722266852400}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1 &5083180037986862908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,6 +1875,8 @@ MonoBehaviour:
   _pos: {x: -5, y: 2.5, z: 0}
   _type: 2
   _compatibleType: 3
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &8554584945098752061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1935,6 +1969,8 @@ MonoBehaviour:
   _pos: {x: 2.5, y: -5, z: 0}
   _type: 1
   _compatibleType: 0
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1001 &3276757191989753950
 PrefabInstance:
   m_ObjectHideFlags: 0
