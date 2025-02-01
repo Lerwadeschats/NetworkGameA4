@@ -218,11 +218,15 @@ MonoBehaviour:
   _nbMinOfRoom: 1
   _nbOfRoomBranch: 10
   _branchNumber: 3
-  _chanceToBranch: 20
+  _chanceToBranch: 100
   _rooms:
   - {fileID: 695298301670951213, guid: 9c3a588effcfaca47902adaea9e30580, type: 3}
   - {fileID: 7603298720839972217, guid: e80accb9b3a7b4f4292852fb6e2cff09, type: 3}
   - {fileID: 8693213186086745485, guid: f446f239d5cdfb64a926596f90bff91a, type: 3}
+  - {fileID: 4117697092661097047, guid: 7ee6777cb76af0f45bb2dfdc074d4cd5, type: 3}
+  - {fileID: 2968616722266852400, guid: 23fcc1ca0c77ee64dab25560972c47a6, type: 3}
+  - {fileID: 5362654637123025068, guid: 0f51189b2a63e494ebfbfcfbf4587547, type: 3}
+  - {fileID: 5362654637123025068, guid: 9cd3a40fa4bea9448a6f08afa85950a4, type: 3}
   _branches: []
   DebugSeed: 0
   collider2Ds: []

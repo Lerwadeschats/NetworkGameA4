@@ -47,6 +47,8 @@ MonoBehaviour:
   _pos: {x: -2.4965851, y: 2.5194001, z: 0}
   _type: 2
   _compatibleType: 3
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &1460489177213119578
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +96,8 @@ MonoBehaviour:
   _pos: {x: 7.488, y: 2.5194001, z: 0}
   _type: 3
   _compatibleType: 2
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &4700265081302329566
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +145,8 @@ MonoBehaviour:
   _pos: {x: 2.496, y: -2.4804, z: 0}
   _type: 3
   _compatibleType: 2
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &5898209762834270809
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,6 +194,8 @@ MonoBehaviour:
   _pos: {x: -7.48605, y: -2.4804, z: 0}
   _type: 2
   _compatibleType: 3
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &7617317577304193917
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +259,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7617317577304193917}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
