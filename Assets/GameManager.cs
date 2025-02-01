@@ -23,4 +23,9 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public Vector2 GetSpawnPosition()
+    {
+        return Lobby.transform.Find("SpawnPoint").position;
+    }
+
 }

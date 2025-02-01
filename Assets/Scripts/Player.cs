@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     public PlayerMovements _playerMovements;
     public PlayerAttacks _playerAttacks;
 
-
+    public ParticleSystem DamagesParticles;
     
     public struct PlayerStats
     {
@@ -70,7 +70,20 @@ public class Player : MonoBehaviour
     public PlayerStats Stats
     {
         get { return _stats; }
-        set { _stats = value; }
+        set 
+        {
+            if (_stats.hpValue > value.hpValue)
+            {
+                Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+            }
+            
+            _stats = value; 
+
+            if(_stats.hpValue <= 0)
+            {
+                Respawn();
+            }
+        }
     }
 
     public PlayerInputs Inputs
@@ -93,7 +106,15 @@ public class Player : MonoBehaviour
         _stats = new PlayerStats(10f, 100f, 100f, 10f);
         _inputs = new PlayerInputs();
     }
+
+    void Respawn()
+    {
+        gameObject.transform.position = GameManager.instance.Lobby.transform.GetChild(0).position;
+        SetNewPlayerInfos();
+    }
 }
+
+
 
 
 public class PlayerInputs

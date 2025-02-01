@@ -82,6 +82,7 @@ MonoBehaviour:
   index: 0
   _playerMovements: {fileID: 532076536305557433}
   _playerAttacks: {fileID: 7142529444902356166}
+  DamagesParticles: {fileID: 2019395955450859565, guid: 3e1d04d1528c2164eb72994ad01ffbdb, type: 3}
   _nickName: {fileID: 8293739564913925620}
 --- !u!114 &532076536305557433
 MonoBehaviour:
@@ -283,7 +284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c497332f57fe9474cb964e05d52dd8e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamagesParticles: {fileID: 2019395955450859565, guid: 3e1d04d1528c2164eb72994ad01ffbdb, type: 3}
   _slider: {fileID: 1170345465485081684}
 --- !u!1 &201989577876626837
 GameObject:
@@ -376,7 +376,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 4382313959816505132}
-  _hittedEntities: []
 --- !u!1 &980669432342401581
 GameObject:
   m_ObjectHideFlags: 0

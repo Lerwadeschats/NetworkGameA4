@@ -77,7 +77,7 @@ public class Client : MonoBehaviour
         
 
 
-        _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+        _player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.GetSpawnPosition(), Quaternion.identity).GetComponent<Player>();
         Camera.main.GetComponent<Cam>().Targets.Clear();
         Camera.main.GetComponent<Cam>().Targets.Add(_player.gameObject);
         _player.Name = playerName_Field.text;
@@ -287,7 +287,7 @@ public class Client : MonoBehaviour
                             else
                             {
 
-                                Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+                                Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.GetSpawnPosition(), Quaternion.identity).GetComponent<Player>();
 
 
                                 player.Name = packetPlayer.playerName;
@@ -370,6 +370,7 @@ public class Client : MonoBehaviour
                         {
                             Debug.Log("hpvalue: " + playerData.Stats.hpValue);
                         }
+
                         playerData.Stats = new Player.PlayerStats
                         {
                             attackValue = packetPlayer.playerStats.attackValue,

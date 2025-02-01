@@ -307,7 +307,7 @@ public class Server : MonoBehaviour
 
     private void CreateNewPlayer(Peer peer)
     {
-        Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.Lobby.transform.position, Quaternion.identity).GetComponent<Player>();
+        Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.GetSpawnPosition(), Quaternion.identity).GetComponent<Player>();
 
         player.index = peer.ID;
 

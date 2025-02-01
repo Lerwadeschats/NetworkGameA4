@@ -13,7 +13,6 @@ public class PlayerAttacks : MonoBehaviour
     bool _isOnCooldown = false;
     bool _canBlock = true;
 
-    [SerializeField]
     List<DamageManager> _hittedEntities = new List<DamageManager>();
 
     public List<DamageManager> GetHittedEntities()
