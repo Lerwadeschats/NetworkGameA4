@@ -1284,10 +1284,6 @@ PrefabInstance:
       propertyPath: _pos.y
       value: -2.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4689930329784974477, guid: 8dc2df76afa3c24418e1ab680124ea90, type: 3}
-      propertyPath: portePrefab
-      value: 
-      objectReference: {fileID: 5788887411627532270}
     - target: {fileID: 5258502652556331228, guid: 8dc2df76afa3c24418e1ab680124ea90, type: 3}
       propertyPath: m_Name
       value: ExtBR
@@ -1308,11 +1304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4e70189233c4f956c852237750e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &5788887411627532270 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3538251667687065483, guid: 8dc2df76afa3c24418e1ab680124ea90, type: 3}
-  m_PrefabInstance: {fileID: 7011021923599636581}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7642473961887041417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 811671408665092076, guid: 8dc2df76afa3c24418e1ab680124ea90, type: 3}
@@ -1390,19 +1381,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4125637232205874564, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
-      propertyPath: _minDetectionRange
-      value: 6.19
-      objectReference: {fileID: 0}
     - target: {fileID: 4515013071260172132, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5337739729165659634, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6726204682578974744, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
@@ -1503,10 +1486,6 @@ PrefabInstance:
     - target: {fileID: 3973216260503564063, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125637232205874564, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
-      propertyPath: _minDetectionRange
-      value: 6.19
       objectReference: {fileID: 0}
     - target: {fileID: 4515013071260172132, guid: 2884ea0a646d9c247802e8798ea9eaa3, type: 3}
       propertyPath: m_Layer

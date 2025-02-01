@@ -62,7 +62,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695298301670951213}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -147,6 +147,8 @@ MonoBehaviour:
   _pos: {x: -5, y: 0, z: 0}
   _type: 3
   _compatibleType: 2
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &3017000142618348148
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,6 +196,8 @@ MonoBehaviour:
   _pos: {x: 2.5, y: -2.5, z: 0}
   _type: 1
   _compatibleType: 0
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &4665387215666186984
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +245,8 @@ MonoBehaviour:
   _pos: {x: 5, y: 0, z: 0}
   _type: 3
   _compatibleType: 2
+  isUsed: 1
+  portePrefab: {fileID: 0}
 --- !u!1 &8194068802222791440
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,3 +294,5 @@ MonoBehaviour:
   _pos: {x: 2.5, y: 2.5, z: 0}
   _type: 0
   _compatibleType: 1
+  isUsed: 1
+  portePrefab: {fileID: 0}
