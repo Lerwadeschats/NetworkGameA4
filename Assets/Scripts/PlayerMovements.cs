@@ -134,8 +134,6 @@ public class PlayerMovements : MonoBehaviour
 
         float moveInput = 1;
 
-        print("IsOnGround = " + IsOnGround + "/// Can jump = " + CanJump + "/// Can dash = " + CanDash);
-
         if (_player.Inputs.moveRight && !_player.Inputs.moveLeft)   
         {
             _player.animator.SetInteger("AnimState", 1);
