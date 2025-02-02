@@ -164,7 +164,7 @@ public class DCMapGen : MonoBehaviour
                 }
                 else
                 {
-                    DestroyImmediate(ex.gameObject);
+                    //DestroyImmediate(ex.gameObject);
                     roomExits.RemoveAt(exitIndex);
                     goto RetryExit;
                 }
@@ -172,7 +172,9 @@ public class DCMapGen : MonoBehaviour
             //_camera.Targets.Add(go);
             focus = roomExits[exitIndex];
             exit.UseExit();
-            focus.UseExit();
+
+
+            if(i != numberOfRooms) focus.UseExit();
             roomExits.RemoveAt(exitIndex);
             int chanetobranch = _rand.Next(0, 100);
             if (roomExits.Count > 0 && isMain && chanetobranch < _chanceToBranch && numberOfbranchCreated < _branchNumber)
