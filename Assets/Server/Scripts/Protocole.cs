@@ -185,6 +185,7 @@ namespace Protocols
         {
             C_PlayerName,
             C_PlayerInputs,
+            C_GameStarted,
             S_PlayerNames,
             S_GameData,
             S_WorldInit,
@@ -195,7 +196,8 @@ namespace Protocols
             S_PlayerStats,
             S_PlayerDisconnect,
             S_EndGame,
-            S_EnemyDead
+            S_EnemyDead,
+            S_GameStarted
         };
         #endregion
         #region packets
@@ -218,7 +220,6 @@ namespace Protocols
                 return packet;
             }
         };
-
         public struct PlayerDisconnectPacket
         {
             static Opcode opcode = Opcode.S_PlayerDisconnect;
@@ -238,7 +239,6 @@ namespace Protocols
                 return packet;
             }
         };
-
         public struct GameDataPacket
         {
             static Opcode opcode = Opcode.S_GameData;
@@ -259,7 +259,6 @@ namespace Protocols
             }
 
         }
-
         public struct ListPlayersPacket
         {
             static Opcode opcode = Opcode.S_PlayerList;
@@ -479,7 +478,6 @@ namespace Protocols
 
             
         }
-
         public struct ActiveEnemiesDataPacket
         {
 
@@ -542,10 +540,6 @@ namespace Protocols
                 return packet;
             }
         }
-
-
-
-
         public struct PlayerStatsPacket
         {
             static Opcode opcode = Opcode.S_PlayerStats;
@@ -608,7 +602,6 @@ namespace Protocols
             }
 
         }
-
         public struct DeadEnemyPacket
         {
             static Opcode opcode = Opcode.S_EnemyDead;
@@ -627,8 +620,25 @@ namespace Protocols
             }
 
         }
+        
+        public struct StartedTheGame
+        {
+            static Opcode opcode = Opcode.C_GameStarted;
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+            }
 
+        }
+        public struct StartTheGame
+        {
+            static Opcode opcode = Opcode.S_GameStarted;
+            public void Serialize(ref List<byte> byteArray)
+            {
+                Serialize_Uint8(ref byteArray, (byte)opcode);
+            }
 
+        }
     }
     #endregion
  }

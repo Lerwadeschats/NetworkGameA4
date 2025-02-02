@@ -110,7 +110,7 @@ public class Server : MonoBehaviour
 
                         PlayerDisconnectPacket playerDisconnectPacket = new PlayerDisconnectPacket();
                         playerDisconnectPacket.index = (byte)playerToRemove.player.index;
-                        
+
                         foreach (PlayerClient player in players)
                         {
                             if (player.peer.IsSet && player.player.Name != "")
@@ -132,14 +132,14 @@ public class Server : MonoBehaviour
                         ListPlayersPacket playerListPacket = new();
                         playerListPacket.playersData = new List<ListPlayersPacket.PlayerData>();
                         foreach (PlayerClient player in players)
-	{
-                            if (player.peer.IsSet && player.player.Name != "") 
+                        {
+                            if (player.peer.IsSet && player.player.Name != "")
                             {
 
                                 ListPlayersPacket.PlayerData packetPlayer = new()
                                 {
-                                    playerName = player.player.Name, 
-                                    playerIndex = (byte)player.player.index, 
+                                    playerName = player.player.Name,
+                                    playerIndex = (byte)player.player.index,
                                     //playerColor = player.player.Color
                                 };
 
@@ -147,7 +147,7 @@ public class Server : MonoBehaviour
                             }
                         }
                         foreach (PlayerClient player in players)
-						{
+                        {
                             if (player.peer.IsSet && player.player.Name != "")
                             {
                                 List<byte> dataIndex = new List<byte>();
@@ -158,7 +158,7 @@ public class Server : MonoBehaviour
 
                                 player.peer.Send(0, ref packet);
                             }
-                                
+
                         }
                         print($"Peer # {eNetEvent.Peer.ID} disconnected!");
                         break;
@@ -236,7 +236,7 @@ public class Server : MonoBehaviour
                             ListPlayersPacket.PlayerData packetPlayer = new()
                             {
                                 playerName = player.player.Name,
-                                
+
                                 playerIndex = (byte)player.player.index,
                                 //playerColor = player.player.Color
                             };
@@ -254,7 +254,7 @@ public class Server : MonoBehaviour
                             playerListPacket.Serialize(ref dataPlayers);
 
                             Packet packetPlayers = default;
-                                
+
                             packetPlayers.Create(dataPlayers.ToArray(), PacketFlags.Reliable);
 
                             playerClient.peer.Send(0, ref packetPlayers);
@@ -263,7 +263,7 @@ public class Server : MonoBehaviour
                     }
                     break;
                 }
-                
+
             case Opcode.C_PlayerInputs:
                 {
                     PlayerInputsPacket inputsPackets = PlayerInputsPacket.Deserialize(data, offset);
@@ -274,7 +274,22 @@ public class Server : MonoBehaviour
                     playerFromIndex.player.Inputs = inputs;
                     break;
                 }
-                
+            case Opcode.C_GameStarted:
+                {
+                    DCMapGen.instance.UnlockDoors();
+                    foreach (PlayerClient player in players)
+                    {
+                        List<byte> dataPlayers = new List<byte>();
+                        StartTheGame p;
+                        p.Serialize(ref dataPlayers);
+
+                        Packet packets = default;
+                        packets.Create(dataPlayers.ToArray(), PacketFlags.Reliable);
+
+                        player.peer.Send(0, ref packets);
+                    }
+                    break;
+                }
         }
     }
     public void SendEndToAll(byte hopla)
@@ -303,7 +318,7 @@ public class Server : MonoBehaviour
             newEnemy.position = enemies[i].transform.position;
             info.allEnemies.Add(newEnemy);
         }
-        
+
         info.Serialize(ref data);
         Debug.Log((ulong)seed);
         Packet packet = default;
@@ -342,7 +357,7 @@ public class Server : MonoBehaviour
 
     private void UpdateEnemies()
     {
-        
+
         for (int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i] == null)
@@ -350,13 +365,13 @@ public class Server : MonoBehaviour
                 enemies.Remove(enemies[i]);
                 i--;
             }
-            
+
         }
     }
 
     private void SendActiveEnemies()
     {
-        
+
         ActiveEnemiesDataPacket enemiesDataPacket = new ActiveEnemiesDataPacket();
         enemiesDataPacket.enemyData = new List<ActiveEnemiesDataPacket.EnemyData>();
         if (enemies.Count > 0)
@@ -393,9 +408,9 @@ public class Server : MonoBehaviour
             clientData.peer.Send(0, ref packet);
         }
 
-        
 
-        
+
+
     }
 
     //Tick function
@@ -406,7 +421,7 @@ public class Server : MonoBehaviour
         {
             clientPlayer.player._playerMovements.UpdatePhysics();
         }
-        Physics2D.Simulate(1f/60f);
+        Physics2D.Simulate(1f / 60f);
         SendPositionStatesPlayer();
 
         SendActiveEnemies();
@@ -455,7 +470,7 @@ public class Server : MonoBehaviour
             {
                 PlayerPositionPacket.PlayerData packetPlayer = new PlayerPositionPacket.PlayerData();
                 packetPlayer.playerIndex = (byte)clientData.player.index;
-                
+
                 packetPlayer.position = clientData.player.Position;
                 packetPlayer.velocity = clientData.player.Velocity;
                 packetPlayer.inputs = clientData.player.Inputs;
@@ -494,7 +509,7 @@ public class Server : MonoBehaviour
     }
     void GetPlayerAttacks()
     {
-        foreach(PlayerClient client in players)
+        foreach (PlayerClient client in players)
         {
             if (client.player.Inputs.attack)
             {
@@ -504,7 +519,7 @@ public class Server : MonoBehaviour
                 }
             }
         }
-        
+
     }
     private void OnApplicationQuit()
     {
