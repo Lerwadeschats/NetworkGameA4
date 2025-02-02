@@ -1035,6 +1035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExtL
       objectReference: {fileID: 0}
+    - target: {fileID: 2946946355227905238, guid: 1342bdd9489cd3845a53c5b91ac7f591, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6561626993920698226, guid: 1342bdd9489cd3845a53c5b91ac7f591, type: 3}
       propertyPath: _pos.x
       value: -5
@@ -1111,6 +1115,10 @@ PrefabInstance:
     - target: {fileID: 2354146215452688311, guid: 0085d5623ea931f4aa1b99000ddbfbdc, type: 3}
       propertyPath: m_Name
       value: ExtR
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354146215452688311, guid: 0085d5623ea931f4aa1b99000ddbfbdc, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 3110344552020720134, guid: 0085d5623ea931f4aa1b99000ddbfbdc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1237,6 +1245,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExtTL
       objectReference: {fileID: 0}
+    - target: {fileID: 8398699900092927752, guid: 14aa4ca12a524bc48b85249ca6712cd5, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1321,6 +1333,10 @@ PrefabInstance:
     - target: {fileID: 5258502652556331228, guid: 8dc2df76afa3c24418e1ab680124ea90, type: 3}
       propertyPath: m_Name
       value: ExtBR
+      objectReference: {fileID: 0}
+    - target: {fileID: 5258502652556331228, guid: 8dc2df76afa3c24418e1ab680124ea90, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
