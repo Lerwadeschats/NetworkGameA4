@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
             else
                 dirMovement = 1;
 
-            if(_directionVector.magnitude > _minAggroRange)
+            if(_directionVector.magnitude > _minAggroRange && _directionVector.magnitude > 1f)
             {
                 _directionVector = Vector2.zero;
             }
