@@ -181,8 +181,9 @@ public class DCMapGen : MonoBehaviour
             exit.UseExit();
 
 
-            if(i != numberOfRooms || i != 0) focus.UseExit();
-            roomExits.RemoveAt(exitIndex);
+            if (i == 0 || i == numberOfRooms) ;
+            else focus.UseExit(); roomExits.RemoveAt(exitIndex);
+
             int chanetobranch = _rand.Next(0, 100);
             if (roomExits.Count > 0 && isMain && chanetobranch < _chanceToBranch && numberOfbranchCreated < _branchNumber)
             {
