@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
     public void SetNewPlayerInfos()
     {
         _position = gameObject.transform.position;
-        _stats = new PlayerStats(10f, 100f, 100f, 10f);
+        _stats = new PlayerStats(10f, 100f, 100f, 7.5f);
         _inputs = new PlayerInputs();
     }
 
