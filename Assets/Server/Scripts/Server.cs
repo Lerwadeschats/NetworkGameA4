@@ -72,7 +72,7 @@ public class Server : MonoBehaviour
 
         print("Server is Runnin' on port : " + address.Port);
 
-        seed = 375834;//(ulong)Random.Range(0, 999999);
+        seed = (ulong)Random.Range(0, 999999);
 
         StartCoroutine(SceneMerger.instance.CreateAndMergeSceneServerSide(seed));
     }
