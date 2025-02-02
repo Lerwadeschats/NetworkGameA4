@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 
     public uint index = 255;
 
+    public bool isMain = true;
 
     public PlayerMovements _playerMovements;
     public PlayerAttacks _playerAttacks;

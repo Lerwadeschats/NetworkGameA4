@@ -316,7 +316,7 @@ public class Client : MonoBehaviour
                             {
 
                                 Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.GetSpawnPosition(), Quaternion.identity).GetComponent<Player>();
-
+                                player.isMain = false;
 
                                 player.Name = packetPlayer.playerName;
                                 player.index = packetPlayer.playerIndex;

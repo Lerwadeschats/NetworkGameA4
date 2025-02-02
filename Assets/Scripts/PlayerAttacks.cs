@@ -19,41 +19,8 @@ public class PlayerAttacks : MonoBehaviour
     {
         return _hittedEntities;
     }
-
-    /*public void OnAttack(InputAction.CallbackContext context)
-    {
-        if (context.performed && _canHit && !_isOnCooldown)
-        {
-            _player.Inputs.attack = true;
-            _isOnCooldown = true;
-            int attackID = Random.Range(0, 2);
-            switch (attackID)
-            {
-                case 0:
-                    _player.animator.SetTrigger("Attack1");
-                    break;
-
-                case 1:
-                    _player.animator.SetTrigger("Attack2");
-                    break;
-
-                case 2:
-                    _player.animator.SetTrigger("Attack3");
-                    break;
-            }
-            
-            StartCoroutine(AttackCooldown());
-        }
-        else if (context.canceled)
-        {
-
-            _player.Inputs.attack = false;
-        }
-    }*/
-
     public void OnAttack()
     {
-        
         _player.Inputs.attack = true;
         _isOnCooldown = true;
         int attackID = Random.Range(0, 2);
@@ -79,6 +46,7 @@ public class PlayerAttacks : MonoBehaviour
 
     private void Update()
     {
+        if (!_player.isMain) return;
         if (Input.GetMouseButtonDown(0)) OnAttack();
         if (Input.GetMouseButtonDown(1)) OnBlock(true);
 
