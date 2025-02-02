@@ -29,6 +29,7 @@ public class EnemyAttack : MonoBehaviour
         
         if (_arePlayerInRange && _canHit)
         {
+            _enemy.animator.SetTrigger("Attack");
             for (int i = 0; i < _hittedPlayers.Count; i++)
             {
                 _hittedPlayers[i].OnBeingAttacked(_enemy.Attack);

@@ -367,7 +367,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.29534578, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -378,7 +378,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5906916, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &2013231770374747926
 MonoBehaviour:
@@ -567,7 +567,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.40610063}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -578,7 +578,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.8122013}
   m_EdgeRadius: 0
 --- !u!114 &8764736789975077738
 MonoBehaviour:
@@ -606,10 +606,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0236367f02e3e794497ac2d381729e04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minDetectionRange: 2
+  _minDetectionRange: 6
+  _minAggroRange: 3
   index: 0
   DamagesParticles: {fileID: 2019395955450859565, guid: 3e1d04d1528c2164eb72994ad01ffbdb, type: 3}
-  _isActive: 0
+  animator: {fileID: 4827492127696642987}
 --- !u!1 &8891867607094942668
 GameObject:
   m_ObjectHideFlags: 0
