@@ -27,7 +27,10 @@ public class Enemy : MonoBehaviour
         {
             if(_hpValue > value)
             {
-                Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+
+                enemyDamageManager.GetHurtEffects();
+               
+
             }
             _hpValue = value;
             if(HpValue <= 0)
@@ -73,14 +76,14 @@ public class Enemy : MonoBehaviour
 
     public int index;
 
-    public ParticleSystem DamagesParticles;
+    public EnemyDamageManager enemyDamageManager;
 
     
     private bool _isActive;
 
     public Animator animator;
 
-    
+    Vector2 _directionVector;
 
     public Vector2 GetVelocity() { return _rb.velocity; }
     public void SetVelocity(Vector2 newVelocity) { _rb.velocity = newVelocity; }
@@ -100,21 +103,21 @@ public class Enemy : MonoBehaviour
 
 
         float dirMovement = 0;
-        Vector2 directionVector = Vector2.zero;
+        _directionVector = Vector2.zero;
 
         if (target != null)
         {
             IsActive = true;
-            directionVector = target.gameObject.transform.position - gameObject.transform.position;
+            _directionVector = target.gameObject.transform.position - gameObject.transform.position;
             
-            if (directionVector.x <= 0)
+            if (_directionVector.x <= 0)
                 dirMovement = -1;
             else
                 dirMovement = 1;
 
-            if(directionVector.magnitude > _minAggroRange)
+            if(_directionVector.magnitude > _minAggroRange)
             {
-                directionVector = Vector2.zero;
+                _directionVector = Vector2.zero;
             }
         }
         else
@@ -127,7 +130,7 @@ public class Enemy : MonoBehaviour
             
         }
 
-        Vector2 newVelocity = new Vector2(directionVector.x * _speed, _rb.velocity.y);
+        Vector2 newVelocity = new Vector2(_directionVector.x * _speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
         SetAnimationState();
 
@@ -168,7 +171,14 @@ public class Enemy : MonoBehaviour
     {
         if(Mathf.Abs(_rb.velocity.x) > 0)
         {
-            animator.SetInteger("AnimState", 2);
+            if(_directionVector.magnitude > 1f)
+            {
+                animator.SetInteger("AnimState", 2);
+            }
+            else
+            {
+                animator.SetInteger("AnimState", 1);
+            }
         }
         else
         {
