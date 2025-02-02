@@ -29,6 +29,7 @@ public class EnemyAttack : MonoBehaviour
         
         if (_arePlayerInRange && _canHit)
         {
+            _enemy.animator.SetTrigger("Attack");
             for (int i = 0; i < _hittedPlayers.Count; i++)
             {
                 _hittedPlayers[i].OnBeingAttacked(_enemy.Attack);
@@ -40,6 +41,7 @@ public class EnemyAttack : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
+        
         if (other.gameObject.tag == "Player")
         {
             _arePlayerInRange = true;

@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: JarioleCompany
-  productName: Client
+  companyName: DefaultCompany
+  productName: Server
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 1, g: 0, b: 0.85567, a: 1}
@@ -43,15 +43,17 @@ PlayerSettings:
   - logo: {fileID: 10404, guid: 0000000000000000f000000000000000, type: 0}
     duration: 2
   - logo: {fileID: 21300000, guid: 52a0391dbacf32f4aaa69c98fcc19da4, type: 3}
-    duration: 2
+    duration: 2.6
   - logo: {fileID: 21300000, guid: ee83a4bf2a03d86438ae16314ccc1839, type: 3}
-    duration: 2
+    duration: 2.8
+  - logo: {fileID: 21300000, guid: 7eed5a4fd5461c04fb86e02d7a02a7ed, type: 3}
+    duration: 2.4
   - logo: {fileID: 21300000, guid: 769b7d47e3ab80e499bd63b9bd0e5c39, type: 3}
-    duration: 2
+    duration: 2.4
   m_VirtualRealitySplashScreen: {fileID: 2800000, guid: 52a0391dbacf32f4aaa69c98fcc19da4, type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
-  defaultScreenWidth: 640
-  defaultScreenHeight: 640
+  defaultScreenWidth: 1024
+  defaultScreenHeight: 768
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
@@ -109,7 +111,7 @@ PlayerSettings:
   xboxEnableFitness: 0
   visibleInBackground: 1
   allowFullscreenSwitch: 1
-  fullscreenMode: 3
+  fullscreenMode: 2
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -164,7 +166,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.DefaultCompany.Client
+    Standalone: com.DefaultCompany.Server
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -296,7 +298,7 @@ PlayerSettings:
   - m_BuildTarget: Standalone
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: e3919b3bd63e74442aec15d0dbc7e914, type: 3}
+      m_Icon: {fileID: 2800000, guid: c30119fd23787664590610e985a43fba, type: 3}
       m_Width: 1024
       m_Height: 1024
       m_Kind: 0

@@ -27,7 +27,10 @@ public class Enemy : MonoBehaviour
         {
             if(_hpValue > value)
             {
-                Instantiate(DamagesParticles, this.gameObject.transform.position, Quaternion.identity);
+
+                enemyDamageManager.GetHurtEffects();
+               
+
             }
             _hpValue = value;
             if(HpValue <= 0)
@@ -55,24 +58,32 @@ public class Enemy : MonoBehaviour
         set { _speed = value; }
     }
 
+    public bool IsActive 
+    { 
+        get => _isActive; 
+        set => _isActive = value;
+    }
+
     Rigidbody2D _rb;
 
     [SerializeField]
     float _minDetectionRange = 10f;
 
+    [SerializeField]
+    float _minAggroRange = 10f;
+
     float _baseScaleX = 1;
 
     public int index;
 
-    public ParticleSystem DamagesParticles;
+    public EnemyDamageManager enemyDamageManager;
 
-    [SerializeField]
+    
     private bool _isActive;
 
-    public bool IsActive()
-    {
-        return _isActive;
-    }
+    public Animator animator;
+
+    Vector2 _directionVector;
 
     public Vector2 GetVelocity() { return _rb.velocity; }
     public void SetVelocity(Vector2 newVelocity) { _rb.velocity = newVelocity; }
@@ -90,34 +101,47 @@ public class Enemy : MonoBehaviour
         //Il va courser le joueur
         Player target = GetTarget();
 
-        float dirMovement = 0;
 
-        if(target != null)
+        float dirMovement = 0;
+        _directionVector = Vector2.zero;
+
+        if (target != null)
         {
-            _isActive = true;
-            Vector2 directionVector = target.gameObject.transform.position - gameObject.transform.position;
-            if (directionVector.x <= 0)
+            IsActive = true;
+            _directionVector = target.gameObject.transform.position - gameObject.transform.position;
+            
+            if (_directionVector.x <= 0)
                 dirMovement = -1;
             else
                 dirMovement = 1;
+
+            if(_directionVector.magnitude > _minAggroRange && _directionVector.magnitude > 1f)
+            {
+                _directionVector = Vector2.zero;
+            }
         }
         else
         {
-            _isActive = false;
+            IsActive = false;
         }
         if(dirMovement != 0)
         {
-            gameObject.transform.localScale = new Vector3(dirMovement * _baseScaleX, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+            gameObject.transform.localScale = new Vector3(-dirMovement * _baseScaleX, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+            
         }
-        
-        Vector2 newVelocity = new Vector2(dirMovement * _speed, _rb.velocity.y);
+
+        Vector2 newVelocity = new Vector2(_directionVector.x * _speed, _rb.velocity.y);
         _rb.velocity = newVelocity;
+        SetAnimationState();
+
+
 
     }
 
     public void Death()
     {
         Server.Instance.OnEnemyDeath(index);
+        
         DestroyImmediate(gameObject);
     }
 
@@ -143,12 +167,40 @@ public class Enemy : MonoBehaviour
         return nearestPlayer;
     }
 
-    
+    void SetAnimationState()
+    {
+        if(Mathf.Abs(_rb.velocity.x) > 0)
+        {
+            if(_directionVector.magnitude > 1f)
+            {
+                animator.SetInteger("AnimState", 2);
+            }
+            else
+            {
+                animator.SetInteger("AnimState", 1);
+            }
+        }
+        else
+        {
+            if (IsActive)
+            {
+                animator.SetInteger("AnimState", 1);
+            }
+            else
+            {
+                animator.SetInteger("AnimState", 0);
+
+            }
+        }
+    }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _minDetectionRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, _minAggroRange);
 
     }
 
