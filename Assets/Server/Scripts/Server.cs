@@ -17,6 +17,8 @@ public class Server : MonoBehaviour
     public static Server Instance { get; private set; }
     private void Awake()
     {
+        Physics2D.simulationMode = SimulationMode2D.Script;
+
         if (Instance == null) Instance = this;
         else DestroyImmediate(this);
     }
