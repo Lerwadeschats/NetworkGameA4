@@ -86,7 +86,6 @@ public class PlayerMovements : MonoBehaviour
 
     private void Update()
     {
-        if (!_player.isMain) return;
 
         if (Input.GetKeyDown(KeyCode.D)) _player.Inputs.moveRight = true;
         if (Input.GetKeyDown(KeyCode.A)) _player.Inputs.moveLeft = true;

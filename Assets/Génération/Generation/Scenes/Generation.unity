@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -227,7 +227,10 @@ MonoBehaviour:
   - {fileID: 2968616722266852400, guid: 23fcc1ca0c77ee64dab25560972c47a6, type: 3}
   - {fileID: 5362654637123025068, guid: 0f51189b2a63e494ebfbfcfbf4587547, type: 3}
   - {fileID: 5362654637123025068, guid: 9cd3a40fa4bea9448a6f08afa85950a4, type: 3}
-  - {fileID: 7617317577304193917, guid: 5e6b8240fadae0146ae85caaaed2b9fb, type: 3}
+  - {fileID: 695298301670951213, guid: 9831125c17a7d554bad85b0c3a5e6901, type: 3}
+  - {fileID: 5362654637123025068, guid: e468eb38991358446b3838b05c0873e3, type: 3}
+  - {fileID: 7603298720839972217, guid: 9991c4da3d05b41488a025a0a83d25b3, type: 3}
+  - {fileID: 695298301670951213, guid: b0a86baa76e659d4a840c9edeebf0303, type: 3}
   _branches: []
   DebugSeed: 0
   collider2Ds: []

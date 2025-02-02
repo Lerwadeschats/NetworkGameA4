@@ -59,8 +59,6 @@ public class DCMapGen : MonoBehaviour
 
     public void Regenerate(ulong newSeed)
     {
-        Physics2D.simulationMode = SimulationMode2D.Script;
-
         collider2Ds.Clear();
         _focusToGenerate = new List<Exit>();
         _camera = Camera.main.GetComponent<Cam>();
@@ -72,7 +70,7 @@ public class DCMapGen : MonoBehaviour
         
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
         
-        int LorR = _rand.Next(0, 2);
+        int LorR = _rand.Next(0, 4);
         firstExit = transform.GetChild(0).GetChild(LorR).GetComponent<Exit>();
         
         GenerateBranch(true, firstExit, Color.red);
@@ -80,7 +78,7 @@ public class DCMapGen : MonoBehaviour
 
     private void GenerateBranch(bool isMain, Exit focus, Color endCol)
     {
-        Room room = new();
+        Room room = null;
         int numberOfRooms = isMain ? _nbMaxOfRoom : _nbOfRoomBranch;
         int numberOfbranchCreated = 0;
         Transform parent = focus.transform.parent.parent ;
@@ -121,7 +119,6 @@ public class DCMapGen : MonoBehaviour
             go.transform.position = focus.transform.position - exit.transform.position;
             go.name += " " + i;
 
-            Physics2D.simulationMode = SimulationMode2D.Script;
 
            
             //print(Physics2D.IsTouchingLayers(room._boxCollider,3));
@@ -144,7 +141,6 @@ public class DCMapGen : MonoBehaviour
             }
             if (oui)
             {
-                print("oui");
                 DestroyImmediate(go);
                 possibleRoom = possibleRoom.Where(ro => ro != goCopy).ToList();
                 goto RetryRoom;
@@ -180,8 +176,9 @@ public class DCMapGen : MonoBehaviour
             focus = roomExits[exitIndex];
             exit.UseExit();
 
+            if (i == 0 || i == numberOfRooms);
+            else focus.UseExit();
 
-            if(i != numberOfRooms || i != 0) focus.UseExit();
             roomExits.RemoveAt(exitIndex);
             int chanetobranch = _rand.Next(0, 100);
             if (roomExits.Count > 0 && isMain && chanetobranch < _chanceToBranch && numberOfbranchCreated < _branchNumber)

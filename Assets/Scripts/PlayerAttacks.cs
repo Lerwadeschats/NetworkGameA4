@@ -46,7 +46,6 @@ public class PlayerAttacks : MonoBehaviour
 
     private void Update()
     {
-        if (!_player.isMain) return;
         if (Input.GetMouseButtonDown(0)) OnAttack();
         if (Input.GetMouseButtonDown(1)) OnBlock(true);
 

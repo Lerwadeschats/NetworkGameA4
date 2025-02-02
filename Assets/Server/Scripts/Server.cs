@@ -17,6 +17,7 @@ public class Server : MonoBehaviour
     public static Server Instance { get; private set; }
     private void Awake()
     {
+        Physics2D.simulationMode = SimulationMode2D.Script;
         if (Instance == null) Instance = this;
         else DestroyImmediate(this);
     }
@@ -70,7 +71,7 @@ public class Server : MonoBehaviour
 
         print("Server is Runnin' on port : " + address.Port);
 
-        seed = 375834;//(ulong)Random.Range(0, 999999);
+        seed = (ulong)Random.Range(0, 999999);
 
         StartCoroutine(SceneMerger.instance.CreateAndMergeSceneServerSide(seed));
     }
