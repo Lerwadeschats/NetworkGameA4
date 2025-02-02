@@ -6,7 +6,7 @@ public class Collider2pieds : MonoBehaviour
 {
     [SerializeField]
     PlayerMovements _movements;
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Ground")
         {

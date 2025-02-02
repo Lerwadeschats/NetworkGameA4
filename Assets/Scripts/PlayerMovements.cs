@@ -27,10 +27,12 @@ public class PlayerMovements : MonoBehaviour
     float _gravityScaleFall = -1;
 
     float _baseGravityScale;
-
+    [SerializeField]
     bool _isOnGround;
+    [SerializeField]
     bool _canJump;
-    bool _canDash;
+     [SerializeField]
+     bool _canDash;
 
     [SerializeField]
     float _dashForce;

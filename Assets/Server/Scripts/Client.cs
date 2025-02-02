@@ -34,7 +34,8 @@ public class Client : MonoBehaviour
 
     [SerializeField]
     private List<Enemy> allActiveEnemies = new List<Enemy>();
-
+    float _phyTick = 0.016f;
+    float _elapsedSinceLastTick = 0;
     public bool Connect(string addressString)
     {
         ENet6.Address address = new ENet6.Address();
@@ -414,14 +415,19 @@ public class Client : MonoBehaviour
             Packet packet = default;
             packet.Create(data.ToArray(), PacketFlags.Reliable);
             serverPeer.Value.Send(0, ref packet);
-
-            // On simule la physique côté client, de la même façon que le serveur
-            foreach (Player player in _allPlayers)
+            _elapsedSinceLastTick += Time.deltaTime;
+            if (_elapsedSinceLastTick > _phyTick)
             {
-                PlayerInputs inputs = _lastInputs;
+                // On simule la physique côté client, de la même façon que le serveur
+                foreach (Player player in _allPlayers)
+                {
+                    PlayerInputs inputs = _lastInputs;
 
-                player._playerMovements.UpdatePhysics();
+                    player._playerMovements.UpdatePhysics();
+                }
+                _elapsedSinceLastTick = 0;
             }
+
         }
         
     }

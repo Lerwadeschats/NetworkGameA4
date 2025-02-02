@@ -227,6 +227,7 @@ MonoBehaviour:
   - {fileID: 2968616722266852400, guid: 23fcc1ca0c77ee64dab25560972c47a6, type: 3}
   - {fileID: 5362654637123025068, guid: 0f51189b2a63e494ebfbfcfbf4587547, type: 3}
   - {fileID: 5362654637123025068, guid: 9cd3a40fa4bea9448a6f08afa85950a4, type: 3}
+  - {fileID: 7617317577304193917, guid: 5e6b8240fadae0146ae85caaaed2b9fb, type: 3}
   _branches: []
   DebugSeed: 0
   collider2Ds: []
