@@ -31,6 +31,12 @@ public class EnemyDamageManager : DamageManager
        
     }
 
+    public override void GetHurtEffects()
+    {
+        base.GetHurtEffects();
+        _enemy.animator.SetTrigger("Hurt");
+    }
+
     private void Update()
     {
         
