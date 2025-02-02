@@ -38,7 +38,7 @@ public class DCMapGen : MonoBehaviour
     System.Random _rand;
 
     List<Exit> _focusToGenerate;
-
+    Exit firstExit;
     public bool DebugSeed = false;
 
     //C DEGUELASSE BOUERK 
@@ -51,6 +51,12 @@ public class DCMapGen : MonoBehaviour
         GameManager.instance.Lobby = gameObject.transform.GetChild(0).gameObject.GetComponent<Room>();
         //Regenerate(45);
     }
+
+    public void UnlockDoors()
+    {
+        firstExit.UseExit();
+    }
+
     public void Regenerate(ulong newSeed)
     {
         Physics2D.simulationMode = SimulationMode2D.Script;
@@ -63,12 +69,13 @@ public class DCMapGen : MonoBehaviour
         _rand = new System.Random((int)newSeed);
 
         _focusToGenerate.Clear();
-        //_camera.Targets.Clear();
-        //_camera.Targets.Add(transform.GetChild(0).gameObject);
+        
         for (int i = transform.childCount - 1; i > 0; i--) { Destroy(transform.GetChild(i).gameObject); }
+        
         int LorR = _rand.Next(0, 2);
-        transform.GetChild(0).GetChild(LorR).GetComponent<Exit>().UseExit();
-        GenerateBranch(true, transform.GetChild(0).GetChild(LorR).GetComponent<Exit>(), Color.red);
+        firstExit = transform.GetChild(0).GetChild(LorR).GetComponent<Exit>();
+        
+        GenerateBranch(true, firstExit, Color.red);
     }
 
     private void GenerateBranch(bool isMain, Exit focus, Color endCol)
@@ -174,7 +181,7 @@ public class DCMapGen : MonoBehaviour
             exit.UseExit();
 
 
-            if(i != numberOfRooms) focus.UseExit();
+            if(i != numberOfRooms || i != 0) focus.UseExit();
             roomExits.RemoveAt(exitIndex);
             int chanetobranch = _rand.Next(0, 100);
             if (roomExits.Count > 0 && isMain && chanetobranch < _chanceToBranch && numberOfbranchCreated < _branchNumber)

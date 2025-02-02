@@ -13,15 +13,19 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class Client : MonoBehaviour
 {
+    public GameObject UIConnect;
+    public GameObject UIWin;
+    public GameObject StartGame;
+
 
     public TMP_InputField hostIP_Field;
     public TMP_InputField playerName_Field;
 
-    public GameObject UIConnect;
-    public GameObject UIWin;
     public Image imagefeddo;
-
     public TextMeshProUGUI winnerText;
+
+    public TextMeshProUGUI nbPlayer;
+
 
     PlayerInputs _lastInputs;
 
@@ -83,7 +87,6 @@ public class Client : MonoBehaviour
         Camera.main.GetComponent<Cam>().Targets.Add(_player.gameObject);
         _player.Name = playerName_Field.text;
 
-        UIConnect.gameObject.SetActive(false);
         PlayerNamePacket playerNamePacket = new()
         {
             name = _player.Name,
@@ -111,7 +114,26 @@ public class Client : MonoBehaviour
     public void ConnectToWrittenIP()
     {
         if (playerName_Field.text == "") playerName_Field.text = "poule";
-        Connect(hostIP_Field.text);
+        if (Connect(hostIP_Field.text))
+        {
+            UIConnect.SetActive(false);
+            StartGame.SetActive(true);
+        }
+    }
+
+    public void StartGameButton()
+    {
+        StartGame.SetActive(false);
+
+        List<Byte> data = new List<Byte>();
+        StartedTheGame p;
+        p.Serialize(ref data);
+
+        Packet packet = default;
+
+        packet.Create(data.ToArray(),PacketFlags.Reliable);
+
+        serverPeer.Value.Send(0, ref packet);
     }
 
     private void OnApplicationQuit()
@@ -287,17 +309,20 @@ public class Client : MonoBehaviour
                             if (_player.index == packetPlayer.playerIndex)
                             {
                                 _allPlayers.Add(_player);
+                                nbPlayer.text = _allPlayers.Count + "Players in Game";
+
                             }
                             else
                             {
 
                                 Player player = Instantiate(GameManager.instance.PlayerPrefab, GameManager.instance.GetSpawnPosition(), Quaternion.identity).GetComponent<Player>();
-
+                                player.isMain = false;
 
                                 player.Name = packetPlayer.playerName;
                                 player.index = packetPlayer.playerIndex;
 
                                 _allPlayers.Add(player);
+                                nbPlayer.text = _allPlayers.Count + "Players in Game";
                             }
                             
                             //TODO: update les noms des joueurs visuellement
@@ -314,6 +339,8 @@ public class Client : MonoBehaviour
                     Player playerToRemove = _allPlayers.Find(player => player.index == playerDecoPlacket.index);
                     _allPlayers.Remove(playerToRemove);
                     Destroy(playerToRemove);
+                    nbPlayer.text = _allPlayers.Count + "Players in Game";
+
                     break;
                 }
 
@@ -390,14 +417,24 @@ public class Client : MonoBehaviour
                     }
                     break;
                 }
+            case Opcode.S_GameStarted:
+                {
+                    StartTheGame();
+                    break;
+                }
         }
 
                 
         
     }
+    void StartTheGame()
+    {
+        StartGame.SetActive(false);
+        DCMapGen.instance?.UnlockDoors();
+    }
     private IEnumerator CloseApp()
     {
-        imagefeddo.color = imagefeddo.color + new Color(0.05f, 0.05f, 0.05f, 0f);
+        imagefeddo.color = imagefeddo.color + new Color(0.5f, 0.5f, 0.5f, 0f);
         yield return new WaitForSeconds(4);
 
         Application.Quit();

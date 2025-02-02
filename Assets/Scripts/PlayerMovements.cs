@@ -86,49 +86,17 @@ public class PlayerMovements : MonoBehaviour
 
     private void Update()
     {
+        if (!_player.isMain) return;
+
         if (Input.GetKeyDown(KeyCode.D)) _player.Inputs.moveRight = true;
         if (Input.GetKeyDown(KeyCode.A)) _player.Inputs.moveLeft = true;
         if (Input.GetKeyDown(KeyCode.LeftShift)) _player.Inputs.dash = true;
         if (Input.GetKeyDown(KeyCode.Space)) _player.Inputs.jump = true;
         
-
-
-
         if (Input.GetKeyUp(KeyCode.D)) _player.Inputs.moveRight = false;
         if (Input.GetKeyUp(KeyCode.A)) _player.Inputs.moveLeft = false;
         if (Input.GetKeyUp(KeyCode.LeftShift)) _player.Inputs.dash = false;
         if (Input.GetKeyUp(KeyCode.Space)) _player.Inputs.jump = false;
-        
-        return;
-
-        /*print("hey");
-        float moveInput = _movement.action.ReadValue<float>();
-        if(_player != null && _player.Inputs != null)
-        {
-            if (moveInput > 0)
-            {
-                _moveDirection = 1;
-                _player.Inputs.moveRight = true;
-                _player.Inputs.moveLeft = false;
-
-            }
-            else if (moveInput < 0)
-            {
-                _moveDirection = -1;
-                _player.Inputs.moveRight = false;
-                _player.Inputs.moveLeft = true;
-            }
-            else
-            {
-                _player.Inputs.moveRight = false;
-                _player.Inputs.moveLeft = false;
-            }
-
-            *//*_rb.velocity = _player.Velocity;
-            transform.position = _player.Position;*//*
-            //print("Velocity : " + _player.Velocity + " // Pos : " + _player.Position);
-        }*/
-
     }
 
     public void UpdatePhysics()
